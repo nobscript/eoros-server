@@ -23,9 +23,10 @@
             --text-secondary: #a0a0c0;
             --text-muted: #6a6a8a;
             --border-color: #2a2a4a;
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --accent-glow: rgba(99, 102, 241, 0.2);
+            --accent: #fbbf24;
+            --accent-dark: #f59e0b;
+            --accent-hover: #fcd34d;
+            --accent-glow: rgba(251, 191, 36, 0.2);
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
@@ -45,7 +46,7 @@
             --text-muted: #8a8a9a;
             --border-color: #d0d2d8;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --accent-glow: rgba(99, 102, 241, 0.1);
+            --accent-glow: rgba(251, 191, 36, 0.15);
         }
 
         body {
@@ -57,7 +58,6 @@
             overflow-x: hidden;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -70,6 +70,25 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent);
+        }
+
+        /* ========== LOGO RAIO ========== */
+        .logo-thunder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: inherit;
+            line-height: 1;
+        }
+
+        .logo-thunder svg {
+            width: 1em;
+            height: 1em;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         /* ========== TELA DE APRESENTAÇÃO ========== */
@@ -114,10 +133,10 @@
         @keyframes float {
             0%,
             100% {
-                transform: translateY(0px);
+                transform: translateY(0px) rotate(0deg);
             }
             50% {
-                transform: translateY(-15px);
+                transform: translateY(-15px) rotate(5deg);
             }
         }
 
@@ -131,17 +150,35 @@
             }
         }
 
+        @keyframes thunderFlash {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.6)) drop-shadow(0 0 60px rgba(251, 191, 36, 0.3));
+            }
+        }
+
         .presentation-content .logo {
             font-size: 80px;
             display: block;
             margin-bottom: 16px;
-            animation: float 3s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite, thunderFlash 2s infinite;
+            color: var(--accent);
+        }
+
+        .presentation-content .logo svg {
+            width: 80px;
+            height: 80px;
+            stroke: var(--accent);
+            fill: var(--accent);
         }
 
         .presentation-content h1 {
             font-size: 52px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--accent), #a78bfa, var(--accent));
+            background: linear-gradient(135deg, var(--accent), #fcd34d, var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200% 200%;
@@ -178,7 +215,7 @@
             font-size: 18px;
             font-weight: 600;
             background: var(--accent);
-            color: white;
+            color: #0a0a12;
             border: none;
             border-radius: var(--radius);
             cursor: pointer;
@@ -190,10 +227,6 @@
             background: var(--accent-hover);
             transform: translateY(-2px);
             box-shadow: 0 8px 30px var(--accent-glow);
-        }
-
-        .presentation-content .enter-btn:active {
-            transform: translateY(0);
         }
 
         .presentation-content .version {
@@ -239,9 +272,17 @@
         }
 
         .login-container .login-header .icon {
-            font-size: 40px;
+            font-size: 48px;
             display: block;
             margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .login-container .login-header .icon svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--accent);
+            fill: var(--accent);
         }
 
         .login-container .login-header h2 {
@@ -317,7 +358,7 @@
             font-size: 16px;
             font-weight: 600;
             background: var(--accent);
-            color: white;
+            color: #0a0a12;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
@@ -327,10 +368,6 @@
         .login-container .login-btn:hover {
             background: var(--accent-hover);
             transform: translateY(-1px);
-        }
-
-        .login-container .login-btn:active {
-            transform: translateY(0);
         }
 
         .login-container .error-msg {
@@ -417,7 +454,7 @@
 
         .forgot-modal .modal-actions .btn-primary {
             background: var(--accent);
-            color: white;
+            color: #0a0a12;
         }
 
         .forgot-modal .modal-actions .btn-primary:hover {
@@ -455,6 +492,7 @@
             align-items: center;
             gap: 8px;
             overflow-y: auto;
+            flex-shrink: 0;
         }
 
         .sidebar .server-icon {
@@ -483,7 +521,20 @@
             border-color: var(--accent);
             border-radius: 14px;
             background: var(--accent);
+            color: #0a0a12;
+        }
+
+        .sidebar .server-icon .host-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: var(--success);
             color: white;
+            font-size: 8px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
         }
 
         .sidebar .server-icon.add {
@@ -504,6 +555,7 @@
             display: flex;
             flex-direction: column;
             background: var(--bg-primary);
+            min-width: 0;
         }
 
         .header {
@@ -522,6 +574,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            flex-wrap: wrap;
         }
 
         .header .left .user {
@@ -543,8 +596,8 @@
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            font-weight: 600;
-            color: white;
+            font-weight: 700;
+            color: #0a0a12;
             overflow: hidden;
         }
 
@@ -563,6 +616,16 @@
             content: '#';
             color: var(--text-muted);
             margin-right: 4px;
+        }
+
+        .header .left .host-info {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
         }
 
         .header .right {
@@ -634,6 +697,12 @@
             font-size: 18px;
         }
 
+        .search-bar .results-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
         /* Chat Area */
         .chat-area {
             flex: 1;
@@ -658,9 +727,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
-            color: white;
+            color: #0a0a12;
             flex-shrink: 0;
             overflow: hidden;
         }
@@ -705,7 +774,7 @@
             margin: 8px 0;
         }
 
-        /* Message Input */
+        /* Input Area */
         .input-area {
             padding: 16px 24px;
             background: var(--bg-secondary);
@@ -741,8 +810,8 @@
             background: var(--accent);
             border: none;
             border-radius: var(--radius-sm);
-            color: white;
-            font-weight: 600;
+            color: #0a0a12;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -759,6 +828,7 @@
             padding: 16px;
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
         }
 
         .members-sidebar h3 {
@@ -792,8 +862,8 @@
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            font-weight: 600;
-            color: white;
+            font-weight: 700;
+            color: #0a0a12;
             overflow: hidden;
         }
 
@@ -850,16 +920,26 @@
             animation: fadeInUp 0.3s ease;
         }
 
+        .create-server-modal .modal-content .modal-icon {
+            font-size: 48px;
+            text-align: center;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
         .create-server-modal .modal-content h2 {
             font-size: 22px;
             font-weight: 700;
             margin-bottom: 4px;
+            text-align: center;
         }
 
         .create-server-modal .modal-content .sub {
             color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .create-server-modal .modal-content .form-group {
@@ -930,7 +1010,7 @@
 
         .create-server-modal .modal-actions .btn-primary {
             background: var(--accent);
-            color: white;
+            color: #0a0a12;
         }
 
         .create-server-modal .modal-actions .btn-primary:hover {
@@ -987,6 +1067,10 @@
             .presentation-content .logo {
                 font-size: 56px;
             }
+            .presentation-content .logo svg {
+                width: 56px;
+                height: 56px;
+            }
             .header .left .channel-name {
                 font-size: 15px;
             }
@@ -995,6 +1079,9 @@
             }
             .forgot-modal .modal-content {
                 padding: 24px 20px;
+            }
+            .header .left .host-info {
+                display: none;
             }
         }
 
@@ -1019,6 +1106,13 @@
             .header .left .user span {
                 display: none;
             }
+            .search-bar {
+                padding: 8px 12px;
+            }
+            .search-bar input {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
@@ -1027,16 +1121,21 @@
     <!-- ========== TELA DE APRESENTAÇÃO ========== -->
     <div class="presentation-screen" id="presentationScreen">
         <div class="presentation-content">
-            <span class="logo">🌐</span>
+            <span class="logo">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor">
+                    <path d="M13 2L4 14h6l-2 8 9-12h-6l2-8z"/>
+                </svg>
+            </span>
             <h1>EOROS</h1>
             <p class="tagline">Servidor P2P para sua comunidade</p>
             <div class="features">
+                <span>⚡ Rápido</span>
                 <span>🔒 Privado</span>
                 <span>🌍 Público</span>
                 <span>📱 Multi-dispositivo</span>
                 <span>⭐ Open Source</span>
             </div>
-            <button class="enter-btn" onclick="showLogin()">🚀 Entrar no Eoros</button>
+            <button class="enter-btn" onclick="showLogin()">⚡ Entrar no Eoros</button>
             <div class="version">v2.0 · Servidor P2P</div>
         </div>
     </div>
@@ -1045,7 +1144,11 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-container">
             <div class="login-header">
-                <span class="icon">🔐</span>
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor">
+                        <path d="M13 2L4 14h6l-2 8 9-12h-6l2-8z"/>
+                    </svg>
+                </span>
                 <h2>Entrar no Eoros</h2>
                 <p>Digite suas credenciais para acessar</p>
             </div>
@@ -1070,7 +1173,7 @@
                 <button class="forgot" onclick="openForgotModal()">Esqueceu a senha?</button>
             </div>
 
-            <button class="login-btn" onclick="handleLogin()">🚀 Entrar</button>
+            <button class="login-btn" onclick="handleLogin()">⚡ Entrar</button>
 
             <div class="error-msg" id="loginError"></div>
         </div>
@@ -1079,7 +1182,7 @@
     <!-- ========== MODAL ESQUECEU SENHA ========== -->
     <div class="forgot-modal" id="forgotModal">
         <div class="modal-content">
-            <h3>🔑 Recuperar Senha</h3>
+            <h3>⚡ Recuperar Senha</h3>
             <p>Digite seu usuário para receber instruções de recuperação</p>
             <input type="text" id="forgotUser" placeholder="Seu nome de usuário...">
             <div class="modal-actions">
@@ -1092,8 +1195,9 @@
     <!-- ========== MODAL CRIAR SERVIDOR ========== -->
     <div class="create-server-modal" id="createServerModal">
         <div class="modal-content">
-            <h2>🚀 Criar Servidor</h2>
-            <p class="sub">Configure seu primeiro servidor P2P</p>
+            <span class="modal-icon">⚡</span>
+            <h2>Criar Servidor</h2>
+            <p class="sub">Configure seu servidor P2P e gere um host único</p>
 
             <div class="form-group">
                 <label>📛 Nome do Servidor</label>
@@ -1119,9 +1223,14 @@
                 <input type="password" id="serverPassword" placeholder="Deixe em branco para sem senha">
             </div>
 
+            <div class="form-group">
+                <label>🌐 Host do Servidor</label>
+                <input type="text" id="serverHost" placeholder="Ex: meuservidor" readonly style="background:var(--bg-tertiary);color:var(--accent);font-weight:600;">
+            </div>
+
             <div class="modal-actions">
                 <button class="btn-secondary" onclick="closeCreateServer()">Cancelar</button>
-                <button class="btn-primary" onclick="createServer()">Criar Servidor</button>
+                <button class="btn-primary" onclick="createServer()">⚡ Criar Servidor</button>
             </div>
         </div>
     </div>
@@ -1130,7 +1239,11 @@
     <div class="app" id="app">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
-            <div class="server-icon active" data-server="default">E</div>
+            <div class="server-icon active" data-server="default">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" style="width:20px;height:20px;">
+                    <path d="M13 2L4 14h6l-2 8 9-12h-6l2-8z"/>
+                </svg>
+            </div>
             <div class="server-icon add" onclick="openCreateServer()">+</div>
         </div>
 
@@ -1144,11 +1257,12 @@
                         <span id="headerUser">Usuário</span>
                     </div>
                     <span class="channel-name" id="channelName">geral</span>
+                    <span class="host-info" id="hostInfo">🌐 host: localhost</span>
                 </div>
                 <div class="right">
                     <button onclick="toggleTheme()" id="themeBtn">🌙</button>
                     <button onclick="toggleAudio()" id="audioBtn">🔊</button>
-                    <button onclick="showInvite()">🔗</button>
+                    <button onclick="copyHost()">📋 Host</button>
                     <button class="danger" onclick="logout()">Sair</button>
                 </div>
             </div>
@@ -1156,25 +1270,26 @@
             <!-- Search -->
             <div class="search-bar">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Procurar servidores...">
+                <input type="text" id="searchInput" placeholder="Procurar servidores por nome ou host..." oninput="searchServers()">
+                <span class="results-count" id="resultsCount"></span>
             </div>
 
             <!-- Chat -->
             <div class="chat-area" id="chatArea">
-                <div class="message system">Bem-vindo ao Eoros! 🎉</div>
+                <div class="message system">⚡ Bem-vindo ao Eoros!</div>
                 <div class="message system">Crie um servidor para começar a conversar!</div>
             </div>
 
             <!-- Input -->
             <div class="input-area">
                 <input type="text" id="messageInput" placeholder="Digite uma mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()">Enviar</button>
+                <button onclick="sendMessage()">⚡ Enviar</button>
             </div>
         </div>
 
         <!-- Members -->
         <div class="members-sidebar" id="membersSidebar">
-            <h3>👥 Membros</h3>
+            <h3>⚡ Membros</h3>
             <div id="membersList">
                 <div class="member">
                     <div class="m-avatar" id="memberAvatar">U</div>
@@ -1197,11 +1312,21 @@
         let currentServer = null;
         let members = [];
         let messages = [];
+        let serverIdCounter = 0;
 
         // ============ USUÁRIOS REGISTRADOS ============
         const users = {};
 
         // ============ FUNÇÕES ============
+        function generateHost() {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let host = '';
+            for (let i = 0; i < 8; i++) {
+                host += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return host;
+        }
+
         function showLogin() {
             document.getElementById('presentationScreen').classList.add('hidden');
             setTimeout(() => {
@@ -1231,13 +1356,11 @@
                 return;
             }
 
-            // Verifica se usuário já existe
             if (users[user] && users[user] !== pass) {
                 errorEl.textContent = '❌ Senha incorreta para este usuário!';
                 return;
             }
 
-            // Registra ou valida
             users[user] = pass;
             currentUser = user;
             currentPassword = pass;
@@ -1245,28 +1368,24 @@
 
             errorEl.textContent = '';
 
-            // Entra no app
             document.getElementById('loginScreen').classList.remove('active');
             document.getElementById('app').classList.add('active');
 
-            // Atualiza UI
             document.getElementById('headerUser').textContent = user;
             document.getElementById('headerAvatar').textContent = user.charAt(0).toUpperCase();
             document.getElementById('memberAvatar').textContent = user.charAt(0).toUpperCase();
             document.getElementById('memberName').textContent = user;
 
-            // Adiciona membro
             members = [user];
             updateMembers();
 
-            // Mostra modal de criar servidor
             setTimeout(() => {
                 if (servers.length === 0) {
                     openCreateServer();
                 }
             }, 500);
 
-            showNotification('🎉 Bem-vindo, ' + user + '!');
+            showNotification('⚡ Bem-vindo, ' + user + '!');
         }
 
         function openForgotModal() {
@@ -1287,11 +1406,14 @@
                 showNotification('❌ Usuário não encontrado!');
                 return;
             }
-            showNotification('📧 Instruções enviadas para o email cadastrado!');
+            showNotification('⚡ Instruções enviadas para o email cadastrado!');
             closeForgotModal();
         }
 
         function openCreateServer() {
+            // Gera host automaticamente
+            const host = generateHost();
+            document.getElementById('serverHost').value = host;
             document.getElementById('createServerModal').classList.add('active');
         }
 
@@ -1303,17 +1425,32 @@
             const name = document.getElementById('serverName').value.trim();
             const privacy = document.querySelector('input[name="privacy"]:checked').value;
             const password = document.getElementById('serverPassword').value;
+            const host = document.getElementById('serverHost').value.trim();
 
             if (!name) {
                 showNotification('❌ Digite um nome para o servidor!');
                 return;
             }
 
+            if (!host) {
+                showNotification('❌ Host inválido!');
+                return;
+            }
+
+            // Verifica se o host já existe
+            if (servers.some(s => s.host === host)) {
+                showNotification('❌ Host já está em uso! Gerando outro...');
+                const newHost = generateHost();
+                document.getElementById('serverHost').value = newHost;
+                return;
+            }
+
             const server = {
-                id: 'server-' + Date.now(),
+                id: 'server-' + (++serverIdCounter),
                 name: name,
                 privacy: privacy,
                 password: password || null,
+                host: host,
                 members: [currentUser],
                 messages: [],
                 created: Date.now()
@@ -1326,24 +1463,32 @@
             const sidebar = document.getElementById('sidebar');
             const icon = document.createElement('div');
             icon.className = 'server-icon';
-            icon.textContent = name.charAt(0).toUpperCase();
+            icon.innerHTML = name.charAt(0).toUpperCase();
             icon.dataset.server = server.id;
             icon.onclick = () => switchServer(server.id);
+
+            // Badge com host
+            const badge = document.createElement('span');
+            badge.className = 'host-badge';
+            badge.textContent = '⚡';
+            icon.appendChild(badge);
+
             sidebar.insertBefore(icon, sidebar.lastElementChild);
 
             // Atualiza channel
             document.getElementById('channelName').textContent = name;
+            document.getElementById('hostInfo').textContent = '🌐 host: ' + host;
 
             closeCreateServer();
-            showNotification('✅ Servidor "' + name + '" criado com sucesso!');
+            showNotification('⚡ Servidor "' + name + '" criado! Host: ' + host);
 
-            // Mensagem de boas-vindas
-            addSystemMessage('🚀 Servidor "' + name + '" criado!');
+            addSystemMessage('⚡ Servidor "' + name + '" criado!');
             addSystemMessage('🔒 Privacidade: ' + (privacy === 'private' ? 'Privado' : 'Público'));
+            addSystemMessage('🌐 Host: ' + host);
 
-            // Atualiza membros
             members = [currentUser];
             updateMembers();
+            updateSearchResults();
         }
 
         function switchServer(serverId) {
@@ -1352,13 +1497,12 @@
 
             currentServer = serverId;
             document.getElementById('channelName').textContent = server.name;
+            document.getElementById('hostInfo').textContent = '🌐 host: ' + server.host;
 
-            // Atualiza ícones
             document.querySelectorAll('.sidebar .server-icon').forEach(el => {
                 el.classList.toggle('active', el.dataset.server === serverId);
             });
 
-            // Carrega mensagens
             const chatArea = document.getElementById('chatArea');
             chatArea.innerHTML = '';
             if (server.messages && server.messages.length > 0) {
@@ -1370,14 +1514,15 @@
                     }
                 });
             } else {
-                addSystemMessage('📢 Bem-vindo ao servidor ' + server.name + '!');
+                addSystemMessage('⚡ Bem-vindo ao servidor ' + server.name + '!');
+                addSystemMessage('🌐 Host: ' + server.host);
             }
 
-            // Atualiza membros
             members = server.members || [currentUser];
             updateMembers();
+            updateSearchResults();
 
-            showNotification('🔁 Entrou no servidor: ' + server.name);
+            showNotification('⚡ Entrou no servidor: ' + server.name);
         }
 
         function sendMessage() {
@@ -1395,19 +1540,18 @@
                 user: currentUser,
                 text: text,
                 time: new Date().toLocaleTimeString(),
-                color: '#6366f1'
+                color: '#fbbf24'
             };
 
             server.messages.push(msg);
-            addMessage(currentUser, text, '#6366f1');
+            addMessage(currentUser, text, '#fbbf24');
             input.value = '';
 
-            // Simula resposta
             setTimeout(() => {
                 if (members.length > 1) {
                     const others = members.filter(m => m !== currentUser);
                     if (others.length > 0 && Math.random() > 0.5) {
-                        const replies = ['👋 Olá!', '👍 Legal!', '😄 Boa!', '👀 Interessante...', '🤝 Concordo!',
+                        const replies = ['⚡ Olá!', '👍 Legal!', '😄 Boa!', '👀 Interessante...', '🤝 Concordo!',
                             '🎮 Bora!'
                         ];
                         const reply = replies[Math.floor(Math.random() * replies.length)];
@@ -1441,7 +1585,7 @@
             const chat = document.getElementById('chatArea');
             const div = document.createElement('div');
             div.className = 'message system';
-            div.textContent = '📢 ' + text;
+            div.textContent = '⚡ ' + text;
             chat.appendChild(div);
             chat.scrollTop = chat.scrollHeight;
         }
@@ -1457,9 +1601,58 @@
                 div.innerHTML = `
                     <div class="m-avatar">${initial}</div>
                     <span class="m-status ${isYou ? '' : 'offline'}"></span>
-                    <span class="m-name">${name}${isYou ? ' (Você)' : ''}</span>
+                    <span class="m-name">${name}${isYou ? ' ⚡' : ''}</span>
                 `;
                 list.appendChild(div);
+            });
+        }
+
+        function searchServers() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const serverIcons = document.querySelectorAll('.sidebar .server-icon:not(.add)');
+
+            let visibleCount = 0;
+
+            serverIcons.forEach(el => {
+                const serverId = el.dataset.server;
+                const server = servers.find(s => s.id === serverId);
+                if (!server) {
+                    el.style.display = 'none';
+                    return;
+                }
+
+                const match = server.name.toLowerCase().includes(term) ||
+                    server.host.toLowerCase().includes(term);
+
+                el.style.display = match || term === '' ? 'flex' : 'none';
+                if (match || term === '') visibleCount++;
+            });
+
+            const countEl = document.getElementById('resultsCount');
+            const total = servers.length;
+            if (term === '') {
+                countEl.textContent = total + ' servidores';
+            } else {
+                countEl.textContent = visibleCount + ' de ' + total + ' encontrados';
+            }
+        }
+
+        function updateSearchResults() {
+            searchServers();
+        }
+
+        function copyHost() {
+            const server = servers.find(s => s.id === currentServer);
+            if (!server) {
+                showNotification('❌ Nenhum servidor selecionado!');
+                return;
+            }
+
+            const hostInfo = server.host + '.' + window.location.hostname;
+            navigator.clipboard?.writeText(hostInfo).then(() => {
+                showNotification('⚡ Host copiado: ' + hostInfo);
+            }).catch(() => {
+                showNotification('⚡ Host: ' + hostInfo);
             });
         }
 
@@ -1474,28 +1667,6 @@
             isAudioEnabled = !isAudioEnabled;
             document.getElementById('audioBtn').textContent = isAudioEnabled ? '🔊' : '🔇';
             showNotification(isAudioEnabled ? '🔊 Áudio ativado' : '🔇 Áudio desativado');
-        }
-
-        function showInvite() {
-            const server = servers.find(s => s.id === currentServer);
-            if (!server) {
-                showNotification('❌ Nenhum servidor selecionado!');
-                return;
-            }
-
-            const link = window.location.href.split('?')[0] +
-                '?invite=' + btoa(JSON.stringify({
-                    server: server.id,
-                    name: server.name,
-                    privacy: server.privacy,
-                    password: server.password
-                }));
-
-            navigator.clipboard?.writeText(link).then(() => {
-                showNotification('🔗 Link de convite copiado!');
-            }).catch(() => {
-                showNotification('🔗 ' + link);
-            });
         }
 
         function logout() {
@@ -1530,7 +1701,6 @@
 
         // ============ INICIALIZAÇÃO ============
         document.addEventListener('DOMContentLoaded', () => {
-            // Tema salvo
             const savedTheme = localStorage.getItem('eoros_theme');
             if (savedTheme === 'light') {
                 isDark = false;
@@ -1538,7 +1708,7 @@
                 document.getElementById('themeBtn').textContent = '☀️';
             }
 
-            // Enter key no login
+            // Enter key handlers
             document.getElementById('loginConfirm').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleLogin();
             });
@@ -1549,12 +1719,10 @@
                 if (e.key === 'Enter') document.getElementById('loginPass').focus();
             });
 
-            // Enter key no forgot
             document.getElementById('forgotUser').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleForgot();
             });
 
-            // Enter key no create server
             document.getElementById('serverPassword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') createServer();
             });
@@ -1562,34 +1730,15 @@
                 if (e.key === 'Enter') document.getElementById('serverPassword').focus();
             });
 
-            // Search
-            document.getElementById('searchInput').addEventListener('input', function() {
-                const term = this.value.toLowerCase();
-                const serverList = document.querySelectorAll('.sidebar .server-icon:not(.add)');
-                serverList.forEach(el => {
-                    const name = el.textContent.toLowerCase();
-                    el.style.display = name.includes(term) || term === '' ? 'flex' : 'none';
-                });
+            // Gera host automaticamente ao abrir o modal
+            document.getElementById('createServerModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    // Não faz nada, apenas previne fechamento acidental
+                }
             });
 
-            // Verifica convite na URL
-            const params = new URLSearchParams(window.location.search);
-            const invite = params.get('invite');
-            if (invite) {
-                try {
-                    const data = JSON.parse(atob(invite));
-                    const server = servers.find(s => s.id === data.server);
-                    if (server) {
-                        setTimeout(() => {
-                            switchServer(server.id);
-                            showNotification('🔗 Entrou via convite: ' + server.name);
-                        }, 1000);
-                    }
-                } catch (e) {}
-            }
-
-            console.log('🌐 Eoros v2.0 iniciado!');
-            console.log('📱 Servidor P2P com GitHub Pages');
+            console.log('⚡ Eoros v2.0 iniciado!');
+            console.log('🌐 Cada servidor tem um host único!');
         });
 
         // ============ EXPOSIÇÃO GLOBAL ============
@@ -1603,9 +1752,10 @@
         window.createServer = createServer;
         window.switchServer = switchServer;
         window.sendMessage = sendMessage;
+        window.searchServers = searchServers;
+        window.copyHost = copyHost;
         window.toggleTheme = toggleTheme;
         window.toggleAudio = toggleAudio;
-        window.showInvite = showInvite;
         window.logout = logout;
         window.showNotification = showNotification;
     </script>
