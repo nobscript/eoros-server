@@ -35,7 +35,6 @@
             position: relative;
         }
 
-        /* Header */
         .chat-header {
             background: #1e1e2e;
             padding: 16px 20px;
@@ -73,7 +72,6 @@
             border: 1px solid #3a3c4e;
         }
 
-        /* Messages Area */
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -157,7 +155,6 @@
             color: #b9bbd4;
         }
 
-        /* System message */
         .system-msg {
             text-align: center;
             font-size: 12px;
@@ -173,7 +170,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Input Area */
         .input-area {
             background: #1e1e2e;
             padding: 12px 16px 16px;
@@ -231,7 +227,6 @@
             transform: scale(1);
         }
 
-        /* Status bar */
         .status-bar {
             background: #1e1e2e;
             padding: 6px 16px;
@@ -259,7 +254,6 @@
             100% { opacity: 0.4; }
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
             .chat-container {
                 height: 100vh;
@@ -275,7 +269,6 @@
 <body>
 
 <div class="chat-container" id="app">
-    <!-- Header -->
     <div class="chat-header">
         <h1>
             💬 Chat
@@ -284,286 +277,153 @@
         <div class="user-count" id="userCount">👥 0</div>
     </div>
 
-    <!-- Messages -->
     <div class="messages" id="messagesContainer">
-        <div class="system-msg">🔌 Conectando ao servidor...</div>
+        <div class="system-msg">🔄 Iniciando servidor...</div>
     </div>
 
-    <!-- Input -->
     <div class="input-area">
         <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off">
         <button id="sendBtn" aria-label="Enviar">➤</button>
     </div>
 
-    <!-- Status -->
     <div class="status-bar">
         <span><span class="status-dot"></span> Online</span>
-        <span id="connectionStatus">Conectado</span>
+        <span id="connectionStatus">Iniciando...</span>
     </div>
 </div>
 
+<script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
 <script>
     (function() {
         'use strict';
 
-        // --- CONFIGURAÇÃO ---
-        // Use seu próprio ID do canal do PeerJS (ou deixe o aleatório)
-        // IMPORTANTE: todos os usuários devem usar o MESMO ID para se conectar ao mesmo "servidor"
-        const CHANNEL_ID = 'discord-mobile-chat-server';  // <-- MUDE PARA UM ID ÚNICO SE QUISER
-
-        // --- ELEMENTOS ---
+        // ID fixo do servidor - mude para algo único
+        const SERVER_ID = 'discord-chat-server-' + Math.random().toString(36).substring(2, 8);
+        
+        // Elementos
         const messagesContainer = document.getElementById('messagesContainer');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const userCountSpan = document.getElementById('userCount');
         const connectionStatusSpan = document.getElementById('connectionStatus');
 
-        // --- ESTADO ---
-        let currentUsername = 'Anônimo';
+        // Estado
+        let currentUsername = 'Usuário' + Math.floor(Math.random() * 1000);
         let peer = null;
-        let conn = null;          // conexão ativa com o servidor (ou peer)
+        let connections = {};
+        let isServer = false;
+        let messageHistory = [];
         let isConnected = false;
-        let messageHistory = [];  // armazena mensagens para evitar perder
 
-        // --- FUNÇÕES AUXILIARES ---
-
-        // Gera um nome aleatório (para demonstração)
-        function generateRandomName() {
-            const names = ['Fênix', 'Luna', 'Nyx', 'Kai', 'Rex', 'Mia', 'Zion', 'Aria', 'Noah', 'Iris'];
-            const suffix = Math.floor(Math.random() * 900 + 100);
-            return names[Math.floor(Math.random() * names.length)] + suffix;
-        }
-
-        // Formata hora atual
+        // Funções auxiliares
         function getCurrentTime() {
-            const now = new Date();
-            return now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        // Adiciona uma mensagem ao DOM
         function addMessageToDOM(username, text, isOwn = false, system = false) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'message' + (isOwn ? ' own' : '');
-
+            
             if (system) {
                 msgDiv.className = 'system-msg';
                 msgDiv.textContent = text;
-                messagesContainer.appendChild(msgDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                return;
+            } else {
+                msgDiv.className = 'message' + (isOwn ? ' own' : '');
+                
+                const userDiv = document.createElement('div');
+                userDiv.className = 'msg-user';
+                userDiv.innerHTML = `${username} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>`;
+                
+                const textDiv = document.createElement('div');
+                textDiv.className = 'msg-text';
+                textDiv.textContent = text;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'msg-time';
+                timeDiv.textContent = getCurrentTime();
+                
+                msgDiv.appendChild(userDiv);
+                msgDiv.appendChild(textDiv);
+                msgDiv.appendChild(timeDiv);
             }
-
-            const userDiv = document.createElement('div');
-            userDiv.className = 'msg-user';
-            userDiv.innerHTML = `${username} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>`;
-
-            const textDiv = document.createElement('div');
-            textDiv.className = 'msg-text';
-            textDiv.textContent = text;
-
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'msg-time';
-            timeDiv.textContent = getCurrentTime();
-
-            msgDiv.appendChild(userDiv);
-            msgDiv.appendChild(textDiv);
-            msgDiv.appendChild(timeDiv);
-
+            
             messagesContainer.appendChild(msgDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Mostra mensagem de sistema
         function showSystemMessage(text) {
             addMessageToDOM('', text, false, true);
         }
 
-        // Atualiza contador de usuários (simulado - não temos como saber exato via peerjs)
         function updateUserCount(count) {
-            userCountSpan.textContent = `👥 ${count || '?'}`;
+            userCountSpan.textContent = `👥 ${count || 0}`;
         }
 
-        // --- ENVIAR MENSAGEM ---
+        // Enviar mensagem
         function sendMessage() {
             const text = messageInput.value.trim();
-            if (!text || !isConnected || !conn) {
-                if (!isConnected) showSystemMessage('⚠️ Desconectado. Reconectando...');
+            if (!text || !isConnected) {
+                if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...');
                 return;
             }
 
-            // Adiciona localmente
             addMessageToDOM(currentUsername, text, true);
             messageHistory.push({ username: currentUsername, text, time: Date.now() });
 
-            // Envia para todos os peers conectados
-            try {
-                conn.send({
-                    type: 'message',
-                    username: currentUsername,
-                    text: text,
-                    time: Date.now()
-                });
-            } catch (e) {
-                console.warn('Erro ao enviar:', e);
-                showSystemMessage('❌ Falha ao enviar mensagem.');
-            }
+            // Envia para todos os conectados
+            broadcastMessage({
+                type: 'message',
+                username: currentUsername,
+                text: text,
+                time: Date.now()
+            });
 
             messageInput.value = '';
             messageInput.focus();
         }
 
-        // --- INICIALIZAÇÃO DO PEER ---
-        function initPeer() {
-            // Gera um nome aleatório para esta sessão
-            currentUsername = generateRandomName();
-
-            // Cria um novo peer com ID fixo (servidor) - ou aleatório se for cliente
-            // Na prática, todos usam o mesmo ID para "se encontrar"
-            // Mas apenas um peer pode ter um ID fixo, os outros precisam de IDs aleatórios
-            // Para simplicidade, vamos usar o mesmo ID para todos - mas o PeerJS permite múltiplas conexões?
-            // Na verdade, o PeerJS não permite que dois peers com o mesmo ID coexistam.
-            // Então a estratégia correta: um peer "server" com ID fixo, e outros se conectam a ele.
-            // Mas como o GitHub Pages é estático, todos são "clientes" que se conectam a um servidor externo?
-            // Solução: usar um servidor PeerJS público (0.peerjs.com) e um ID fixo para o "servidor".
-            // O primeiro a se conectar com o ID fixo será o "servidor", os outros serão clientes.
-            // Vamos fazer isso: todo mundo tenta se conectar ao ID fixo. Se falhar, cria um peer aleatório e espera.
-            // Mas precisamos de um "servidor" que escute conexões.
-
-            // Abordagem: cada peer tenta se conectar ao CHANNEL_ID. Se não conseguir, cria um peer aleatório e escuta.
-            // Mas para isso, precisamos que um peer "servidor" esteja online com o CHANNEL_ID.
-            // Como não temos um servidor dedicado, a primeira pessoa que abrir a página será o "servidor"
-            // e as outras se conectarão a ela.
-            // Isso é frágil, mas funciona para demonstração.
-
-            // Vamos tentar nos conectar ao servidor (CHANNEL_ID)
-            // Se falhar, criamos um peer servidor.
-
-            // Primeiro, tenta se conectar ao servidor existente
-            tryConnectToServer();
-
-            // Também escutamos conexões recebidas (caso sejamos o servidor)
-            listenForConnections();
-        }
-
-        let isServer = false;
-
-        function tryConnectToServer() {
-            if (peer) return;
-
-            peer = new Peer(undefined, {  // ID aleatório
-                debug: 0,
-                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
-            });
-
-            peer.on('open', (id) => {
-                console.log('Meu ID:', id);
-                connectionStatusSpan.textContent = 'Conectando...';
-                showSystemMessage(`🔗 Seu ID: ${id}`);
-
-                // Tenta conectar ao servidor central
-                const serverPeerId = CHANNEL_ID;
-                conn = peer.connect(serverPeerId, { reliable: true });
-
-                conn.on('open', () => {
-                    isConnected = true;
-                    isServer = false;
-                    connectionStatusSpan.textContent = 'Conectado ao servidor';
-                    showSystemMessage('✅ Conectado ao servidor!');
-                    updateUserCount('?');
-                    // Envia apresentação
-                    conn.send({
-                        type: 'join',
-                        username: currentUsername,
-                        time: Date.now()
-                    });
-                });
-
-                conn.on('data', (data) => {
-                    handleIncomingData(data);
-                });
-
-                conn.on('close', () => {
-                    isConnected = false;
-                    connectionStatusSpan.textContent = 'Desconectado';
-                    showSystemMessage('⚠️ Desconectado do servidor. Tentando reconectar...');
-                    setTimeout(() => {
-                        reconnect();
-                    }, 3000);
-                });
-
-                conn.on('error', (err) => {
-                    console.warn('Erro na conexão:', err);
-                    // Se falhar ao conectar, talvez sejamos o servidor
-                    if (err.type === 'peer-unavailable') {
-                        becomeServer();
-                    } else {
-                        connectionStatusSpan.textContent = 'Erro';
-                        showSystemMessage(`❌ Erro: ${err.message}`);
+        // Transmitir mensagem para todos
+        function broadcastMessage(data, senderConn = null) {
+            const conns = isServer ? connections : (peer ? peer.connections : {});
+            
+            Object.keys(conns).forEach(key => {
+                const conn = conns[key];
+                if (conn && conn !== senderConn && conn.open) {
+                    try {
+                        conn.send(data);
+                    } catch (e) {
+                        console.warn('Erro ao enviar:', e);
                     }
-                });
-            });
-
-            peer.on('error', (err) => {
-                console.error('Peer error:', err);
-                if (err.type === 'unavailable-id') {
-                    // Se o ID já está em uso, tenta novamente com outro ID
-                    becomeServer();
                 }
             });
         }
 
-        function becomeServer() {
-            if (isServer) return;
+        // Inicializar como servidor
+        function initServer() {
             isServer = true;
             connectionStatusSpan.textContent = 'Servidor ativo';
-            showSystemMessage('🌟 Você é o servidor! Aguarde conexões...');
-
-            // Fecha peer anterior se existir
-            if (peer) {
-                peer.destroy();
-                peer = null;
-            }
-
-            // Cria um novo peer com o ID fixo (servidor)
-            peer = new Peer(CHANNEL_ID, {
+            showSystemMessage(`✅ Servidor criado! ID: ${SERVER_ID}`);
+            
+            peer = new Peer(SERVER_ID, {
                 debug: 0,
                 config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
             });
 
             peer.on('open', (id) => {
-                console.log('Servidor iniciado com ID:', id);
-                connectionStatusSpan.textContent = 'Servidor ativo';
-                showSystemMessage('✅ Servidor pronto! Compartilhe o ID: ' + CHANNEL_ID);
+                console.log('Servidor iniciado:', id);
                 updateUserCount(0);
-                // Escuta conexões
-                listenForConnections();
             });
 
-            peer.on('error', (err) => {
-                console.error('Erro no servidor:', err);
-                if (err.type === 'unavailable-id') {
-                    // Se o ID já está em uso, significa que outro servidor está ativo
-                    showSystemMessage('⚠️ Outro servidor já está ativo. Conectando como cliente...');
-                    isServer = false;
-                    // Tenta conectar como cliente novamente
-                    setTimeout(() => {
-                        peer.destroy();
-                        peer = null;
-                        tryConnectToServer();
-                    }, 2000);
-                }
-            });
-
-            // Escuta conexões
-            peer.on('connection', (incomingConn) => {
-                console.log('Nova conexão recebida!');
-                // Aceita a conexão
-                incomingConn.on('open', () => {
-                    showSystemMessage(`👤 Novo usuário conectado!`);
-                    updateUserCount(peer.connections[CHANNEL_ID] ? Object.keys(peer.connections[CHANNEL_ID]).length : 0);
+            peer.on('connection', (conn) => {
+                console.log('Nova conexão:', conn.peer);
+                connections[conn.peer] = conn;
+                
+                conn.on('open', () => {
+                    showSystemMessage(`👤 ${conn.peer} entrou no chat`);
+                    updateUserCount(Object.keys(connections).length);
+                    
                     // Envia histórico para o novo usuário
                     messageHistory.forEach(msg => {
-                        incomingConn.send({
+                        conn.send({
                             type: 'history',
                             username: msg.username,
                             text: msg.text,
@@ -572,74 +432,139 @@
                     });
                 });
 
-                incomingConn.on('data', (data) => {
-                    // Encaminha para todos os outros clientes
+                conn.on('data', (data) => {
                     if (data.type === 'message') {
-                        // Adiciona ao histórico
                         messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                        // Envia para todos os conectados (exceto o remetente)
-                        broadcastMessage(data, incomingConn);
-                        // Mostra localmente
                         addMessageToDOM(data.username, data.text, false);
+                        broadcastMessage(data, conn);
                     } else if (data.type === 'join') {
                         showSystemMessage(`👤 ${data.username} entrou no chat`);
-                        // Anuncia para todos
-                        broadcastMessage({ type: 'system', text: `${data.username} entrou no chat` }, incomingConn);
+                        broadcastMessage({ type: 'system', text: `${data.username} entrou no chat` }, conn);
                     }
                 });
 
-                incomingConn.on('close', () => {
-                    showSystemMessage(`👤 Um usuário saiu`);
-                    updateUserCount(peer.connections[CHANNEL_ID] ? Object.keys(peer.connections[CHANNEL_ID]).length : 0);
+                conn.on('close', () => {
+                    delete connections[conn.peer];
+                    showSystemMessage(`👤 ${conn.peer} saiu do chat`);
+                    updateUserCount(Object.keys(connections).length);
                 });
             });
+
+            peer.on('error', (err) => {
+                console.error('Erro no servidor:', err);
+                if (err.type === 'unavailable-id') {
+                    showSystemMessage('⚠️ ID já em uso. Tentando como cliente...');
+                    setTimeout(() => {
+                        peer.destroy();
+                        peer = null;
+                        initClient();
+                    }, 1000);
+                }
+            });
+
+            isConnected = true;
         }
 
-        function listenForConnections() {
-            if (!peer) return;
-            // Já escutamos via peer.on('connection') acima
-        }
+        // Inicializar como cliente
+        function initClient() {
+            isServer = false;
+            connectionStatusSpan.textContent = 'Conectando...';
+            showSystemMessage(`🔗 Conectando ao servidor: ${SERVER_ID}`);
+            
+            peer = new Peer({
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
 
-        function handleIncomingData(data) {
-            if (data.type === 'message') {
-                addMessageToDOM(data.username, data.text, false);
-                // Adiciona ao histórico local
-                messageHistory.push({ username: data.username, text: data.text, time: data.time });
-            } else if (data.type === 'history') {
-                // Recebe histórico do servidor
-                addMessageToDOM(data.username, data.text, false);
-                messageHistory.push({ username: data.username, text: data.text, time: data.time });
-            } else if (data.type === 'system') {
-                showSystemMessage(data.text);
-            } else if (data.type === 'join') {
-                // Não faz nada
-            }
-        }
+            peer.on('open', (id) => {
+                console.log('Cliente ID:', id);
+                const conn = peer.connect(SERVER_ID, { reliable: true });
+                
+                conn.on('open', () => {
+                    isConnected = true;
+                    connectionStatusSpan.textContent = 'Conectado';
+                    showSystemMessage('✅ Conectado ao servidor!');
+                    
+                    conn.send({
+                        type: 'join',
+                        username: currentUsername
+                    });
+                });
 
-        function broadcastMessage(data, senderConn) {
-            if (!peer) return;
-            const connections = peer.connections[CHANNEL_ID] || {};
-            Object.keys(connections).forEach(key => {
-                const c = connections[key];
-                if (c !== senderConn && c.open) {
-                    c.send(data);
+                conn.on('data', (data) => {
+                    if (data.type === 'message') {
+                        addMessageToDOM(data.username, data.text, false);
+                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                    } else if (data.type === 'history') {
+                        addMessageToDOM(data.username, data.text, false);
+                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                    } else if (data.type === 'system') {
+                        showSystemMessage(data.text);
+                    }
+                });
+
+                conn.on('close', () => {
+                    isConnected = false;
+                    connectionStatusSpan.textContent = 'Desconectado';
+                    showSystemMessage('⚠️ Desconectado. Tentando reconectar...');
+                    setTimeout(() => {
+                        if (!isConnected) {
+                            peer.destroy();
+                            peer = null;
+                            initClient();
+                        }
+                    }, 3000);
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro de conexão:', err);
+                    if (err.type === 'peer-unavailable') {
+                        showSystemMessage('⚠️ Servidor não encontrado. Iniciando como servidor...');
+                        setTimeout(() => {
+                            peer.destroy();
+                            peer = null;
+                            initServer();
+                        }, 1000);
+                    }
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no cliente:', err);
+                if (err.type === 'unavailable-id') {
+                    // Tenta novamente com outro ID
+                    peer.destroy();
+                    peer = null;
+                    setTimeout(() => initClient(), 500);
                 }
             });
         }
 
-        function reconnect() {
-            if (peer) {
-                peer.destroy();
-                peer = null;
-            }
-            isConnected = false;
-            isServer = false;
+        // Inicializar
+        function init() {
+            // Limpa mensagem inicial
             setTimeout(() => {
-                initPeer();
-            }, 500);
+                const sysMsg = document.querySelector('.system-msg');
+                if (sysMsg) sysMsg.remove();
+            }, 1000);
+
+            // Primeiro tenta conectar como cliente
+            initClient();
+
+            // Se não conectar em 5 segundos, tenta ser servidor
+            setTimeout(() => {
+                if (!isConnected && !isServer) {
+                    showSystemMessage('⏳ Tentando iniciar servidor...');
+                    if (peer) {
+                        peer.destroy();
+                        peer = null;
+                    }
+                    initServer();
+                }
+            }, 5000);
         }
 
-        // --- EVENT LISTENERS ---
+        // Event listeners
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -648,33 +573,15 @@
             }
         });
 
-        // Limpa mensagem de sistema inicial
-        setTimeout(() => {
-            const sysMsg = document.querySelector('.system-msg');
-            if (sysMsg && sysMsg.textContent.includes('Conectando')) {
-                sysMsg.remove();
-            }
-        }, 2000);
+        // Inicia
+        init();
 
-        // --- INICIA ---
-        initPeer();
-
-        // Atualiza contador periodicamente (se for servidor)
+        // Atualiza contador periodicamente
         setInterval(() => {
-            if (isServer && peer) {
-                const conns = peer.connections[CHANNEL_ID] || {};
-                const count = Object.keys(conns).length;
-                updateUserCount(count);
+            if (isServer) {
+                updateUserCount(Object.keys(connections).length);
             }
-        }, 5000);
-
-        // Fallback: se não conectar em 10 segundos, tenta ser servidor
-        setTimeout(() => {
-            if (!isConnected && !isServer) {
-                showSystemMessage('⏳ Tentando estabelecer conexão...');
-                becomeServer();
-            }
-        }, 10000);
+        }, 3000);
 
     })();
 </script>
