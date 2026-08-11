@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat Server - Escolha o Servidor</title>
+    <title>Chat Server - Discord Mobile</title>
     <style>
         * {
             margin: 0;
@@ -106,11 +106,6 @@
             border-color: #5865f2;
             background: #5865f2;
             color: white;
-        }
-
-        .server-btn.creating {
-            border-color: #ff9800;
-            color: #ff9800;
         }
 
         .server-btn .status-indicator {
@@ -217,6 +212,72 @@
             color: #b9bbd4;
         }
 
+        /* Áudio message */
+        .audio-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1e1e2e;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin: 4px 0;
+            min-width: 150px;
+        }
+
+        .audio-message .play-btn {
+            background: #5865f2;
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+
+        .audio-message .play-btn:hover {
+            background: #4752c4;
+        }
+
+        .audio-message .play-btn:active {
+            transform: scale(0.9);
+        }
+
+        .audio-message .audio-progress {
+            flex: 1;
+            height: 4px;
+            background: #3a3c4e;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+            min-width: 60px;
+        }
+
+        .audio-message .audio-progress .progress-bar {
+            height: 100%;
+            background: #5865f2;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .audio-message .audio-time {
+            color: #a6a9c2;
+            font-size: 11px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .audio-message .audio-duration {
+            color: #6d6f87;
+            font-size: 11px;
+        }
+
         .system-msg {
             text-align: center;
             font-size: 12px;
@@ -255,6 +316,14 @@
             gap: 10px;
             flex-shrink: 0;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-area .input-row {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            min-width: 200px;
         }
 
         .input-area input {
@@ -267,6 +336,7 @@
             font-size: 15px;
             outline: none;
             transition: 0.2s;
+            min-width: 100px;
         }
 
         .input-area input:focus {
@@ -282,14 +352,14 @@
             opacity: 0.5;
         }
 
-        .input-area button {
-            background: #5865f2;
-            border: none;
-            color: white;
+        .input-area .action-btn {
+            background: #2b2d3e;
+            border: 1px solid #3a3c4e;
+            color: #a6a9c2;
             width: 48px;
             height: 48px;
             border-radius: 30px;
-            font-size: 22px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -298,15 +368,43 @@
             flex-shrink: 0;
         }
 
-        .input-area button:active {
+        .input-area .action-btn:hover {
+            border-color: #5865f2;
+            color: #fff;
+        }
+
+        .input-area .action-btn:active {
             transform: scale(0.92);
+        }
+
+        .input-area .action-btn.recording {
+            background: #f44336;
+            border-color: #f44336;
+            color: white;
+            animation: pulse 0.5s infinite;
+        }
+
+        .input-area .action-btn.send-btn {
+            background: #5865f2;
+            border: none;
+            color: white;
+        }
+
+        .input-area .action-btn.send-btn:hover {
             background: #4752c4;
         }
 
-        .input-area button:disabled {
+        .input-area .action-btn:disabled {
             opacity: 0.5;
-            transform: scale(1);
             cursor: not-allowed;
+        }
+
+        .input-area .recording-timer {
+            color: #f44336;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
         }
 
         .status-bar {
@@ -354,6 +452,17 @@
                 padding: 6px 10px;
                 min-width: 60px;
             }
+            .input-area .input-row {
+                flex-wrap: wrap;
+            }
+            .input-area input {
+                min-width: 80px;
+                font-size: 14px;
+            }
+            .audio-message {
+                min-width: 120px;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -368,7 +477,6 @@
         <div class="user-count" id="userCount">👥 0</div>
     </div>
 
-    <!-- Seleção de Servidor -->
     <div class="server-selector" id="serverSelector">
         <button class="server-btn" data-server="1" id="server1Btn">
             <span class="status-indicator" id="status1"></span> Servidor 1
@@ -386,8 +494,12 @@
     </div>
 
     <div class="input-area">
-        <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off" disabled>
-        <button id="sendBtn" aria-label="Enviar" disabled>➤</button>
+        <div class="input-row">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off" disabled>
+            <button class="action-btn" id="audioBtn" title="Gravar Áudio (30s)" disabled>🎤</button>
+            <button class="action-btn send-btn" id="sendBtn" aria-label="Enviar" disabled>➤</button>
+        </div>
+        <div class="recording-timer" id="recordingTimer"></div>
     </div>
 
     <div class="status-bar">
@@ -401,7 +513,7 @@
     (function() {
         'use strict';
 
-        // SERVIDORES PRÉ-DEFINIDOS (todos veem os mesmos)
+        // SERVIDORES PRÉ-DEFINIDOS
         const SERVERS = {
             1: { id: 'chat-server-1', name: 'Servidor 1' },
             2: { id: 'chat-server-2', name: 'Servidor 2' },
@@ -412,6 +524,8 @@
         const messagesContainer = document.getElementById('messagesContainer');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
+        const audioBtn = document.getElementById('audioBtn');
+        const recordingTimer = document.getElementById('recordingTimer');
         const userCountSpan = document.getElementById('userCount');
         const connectionStatusSpan = document.getElementById('connectionStatus');
         const statusDot = document.getElementById('statusDot');
@@ -435,12 +549,20 @@
         let selectedServerId = null;
         let isCreatingServer = false;
 
+        // Áudio
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingStartTime = null;
+        let recordingTimerInterval = null;
+        let audioPlayers = {};
+
         // Funções auxiliares
         function getCurrentTime() {
             return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false) {
+        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, audioData = null) {
             const msgDiv = document.createElement('div');
             
             if (system) {
@@ -455,16 +577,105 @@
                 userDiv.className = 'msg-user';
                 userDiv.innerHTML = `${username} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>`;
                 
-                const textDiv = document.createElement('div');
-                textDiv.className = 'msg-text';
-                textDiv.textContent = text;
+                let contentDiv = document.createElement('div');
+                contentDiv.className = 'msg-text';
+                
+                if (audioData) {
+                    // Criar player de áudio
+                    const audioContainer = document.createElement('div');
+                    audioContainer.className = 'audio-message';
+                    
+                    const playBtn = document.createElement('button');
+                    playBtn.className = 'play-btn';
+                    playBtn.textContent = '▶';
+                    playBtn.dataset.playing = 'false';
+                    
+                    const progressContainer = document.createElement('div');
+                    progressContainer.className = 'audio-progress';
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    progressContainer.appendChild(progressBar);
+                    
+                    const timeDisplay = document.createElement('span');
+                    timeDisplay.className = 'audio-time';
+                    timeDisplay.textContent = '0:00';
+                    
+                    const audio = new Audio(audioData);
+                    audio.preload = 'metadata';
+                    
+                    let isPlaying = false;
+                    
+                    audio.addEventListener('loadedmetadata', () => {
+                        const duration = Math.floor(audio.duration);
+                        const minutes = Math.floor(duration / 60);
+                        const seconds = duration % 60;
+                        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    });
+                    
+                    playBtn.addEventListener('click', () => {
+                        if (isPlaying) {
+                            audio.pause();
+                            playBtn.textContent = '▶';
+                            isPlaying = false;
+                            playBtn.dataset.playing = 'false';
+                        } else {
+                            // Pausar outros áudios
+                            document.querySelectorAll('.play-btn').forEach(btn => {
+                                if (btn !== playBtn && btn.dataset.playing === 'true') {
+                                    btn.click();
+                                }
+                            });
+                            
+                            audio.play();
+                            playBtn.textContent = '⏸';
+                            isPlaying = true;
+                            playBtn.dataset.playing = 'true';
+                            
+                            // Atualizar progresso
+                            const updateProgress = () => {
+                                if (!isPlaying) return;
+                                const progress = (audio.currentTime / audio.duration) * 100;
+                                progressBar.style.width = progress + '%';
+                                const current = Math.floor(audio.currentTime);
+                                const minutes = Math.floor(current / 60);
+                                const seconds = current % 60;
+                                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                requestAnimationFrame(updateProgress);
+                            };
+                            updateProgress();
+                        }
+                    });
+                    
+                    audio.addEventListener('ended', () => {
+                        playBtn.textContent = '▶';
+                        isPlaying = false;
+                        playBtn.dataset.playing = 'false';
+                        progressBar.style.width = '0%';
+                        timeDisplay.textContent = '0:00';
+                    });
+                    
+                    // Click no progresso para buscar
+                    progressContainer.addEventListener('click', (e) => {
+                        const rect = progressContainer.getBoundingClientRect();
+                        const x = (e.clientX - rect.left) / rect.width;
+                        audio.currentTime = x * audio.duration;
+                    });
+                    
+                    audioContainer.appendChild(playBtn);
+                    audioContainer.appendChild(progressContainer);
+                    audioContainer.appendChild(timeDisplay);
+                    
+                    contentDiv.appendChild(audioContainer);
+                } else {
+                    contentDiv.textContent = text;
+                }
                 
                 const timeDiv = document.createElement('div');
                 timeDiv.className = 'msg-time';
                 timeDiv.textContent = getCurrentTime();
                 
                 msgDiv.appendChild(userDiv);
-                msgDiv.appendChild(textDiv);
+                msgDiv.appendChild(contentDiv);
                 msgDiv.appendChild(timeDiv);
             }
             
@@ -498,6 +709,7 @@
         function setInputEnabled(enabled) {
             messageInput.disabled = !enabled;
             sendBtn.disabled = !enabled;
+            audioBtn.disabled = !enabled;
             if (enabled) {
                 messageInput.focus();
             }
@@ -517,18 +729,6 @@
             }
         }
 
-        function updateAllServerStatus() {
-            // Por enquanto, apenas marca o servidor atual como online
-            Object.keys(SERVERS).forEach(id => {
-                const serverId = parseInt(id);
-                if (serverId === currentServer && isConnected) {
-                    updateServerStatus(serverId, 'online');
-                } else {
-                    updateServerStatus(serverId, 'offline');
-                }
-            });
-        }
-
         function markServerActive(serverId) {
             serverBtns.forEach(btn => {
                 const btnServer = parseInt(btn.dataset.server);
@@ -540,7 +740,7 @@
             });
         }
 
-        // Enviar mensagem
+        // ENVIAR MENSAGEM
         function sendMessage() {
             const text = messageInput.value.trim();
             if (!text || !isConnected) {
@@ -562,6 +762,24 @@
             messageInput.focus();
         }
 
+        // ENVIAR ÁUDIO
+        function sendAudio(audioData) {
+            if (!isConnected) {
+                showSystemMessage('⚠️ Aguarde a conexão...', false, true);
+                return;
+            }
+
+            addMessageToDOM(currentUsername, '', true, false, false, false, audioData);
+            messageHistory.push({ username: currentUsername, text: '🎤 Áudio', time: Date.now(), audio: audioData });
+
+            broadcastMessage({
+                type: 'audio',
+                username: currentUsername,
+                audio: audioData,
+                time: Date.now()
+            });
+        }
+
         function broadcastMessage(data, excludeConn = null) {
             if (isServer) {
                 Object.keys(clients).forEach(peerId => {
@@ -580,6 +798,76 @@
                 } catch (e) {
                     console.warn('Erro ao enviar para servidor', e);
                 }
+            }
+        }
+
+        // ÁUDIO - GRAVAÇÃO
+        async function startRecording() {
+            if (isRecording) return;
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64Audio = reader.result;
+                        sendAudio(base64Audio);
+                    };
+                    reader.readAsDataURL(audioBlob);
+                    
+                    // Limpar
+                    audioChunks = [];
+                    stream.getTracks().forEach(track => track.stop());
+                    audioBtn.classList.remove('recording');
+                    recordingTimer.textContent = '';
+                    clearInterval(recordingTimerInterval);
+                    isRecording = false;
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+                audioBtn.classList.add('recording');
+                
+                // Timer
+                let seconds = 0;
+                recordingTimerInterval = setInterval(() => {
+                    seconds++;
+                    const remaining = 30 - seconds;
+                    if (remaining <= 0) {
+                        stopRecording();
+                        return;
+                    }
+                    recordingTimer.textContent = `${remaining}s`;
+                }, 1000);
+                
+                // Parar automaticamente após 30 segundos
+                setTimeout(() => {
+                    if (isRecording) {
+                        stopRecording();
+                    }
+                }, 30000);
+                
+            } catch (err) {
+                console.error('Erro ao acessar microfone:', err);
+                showSystemMessage('⚠️ Erro ao acessar microfone. Verifique as permissões.', false, true);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
             }
         }
 
@@ -627,7 +915,8 @@
                         conn.send({
                             type: 'history',
                             username: msg.username,
-                            text: msg.text,
+                            text: msg.text || '🎤 Áudio',
+                            audio: msg.audio || null,
                             time: msg.time
                         });
                     });
@@ -642,6 +931,10 @@
                     if (data.type === 'message') {
                         messageHistory.push({ username: data.username, text: data.text, time: data.time });
                         addMessageToDOM(data.username, data.text, false);
+                        broadcastMessage(data, conn);
+                    } else if (data.type === 'audio') {
+                        messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                        addMessageToDOM(data.username, '', false, false, false, false, data.audio);
                         broadcastMessage(data, conn);
                     } else if (data.type === 'join') {
                         showSystemMessage(`👤 ${data.username} entrou no chat`);
@@ -729,9 +1022,17 @@
                     if (data.type === 'message') {
                         addMessageToDOM(data.username, data.text, false);
                         messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                    } else if (data.type === 'audio') {
+                        addMessageToDOM(data.username, '', false, false, false, false, data.audio);
+                        messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
                     } else if (data.type === 'history') {
-                        addMessageToDOM(data.username, data.text, false);
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                        if (data.audio) {
+                            addMessageToDOM(data.username, '', false, false, false, false, data.audio);
+                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                        } else {
+                            addMessageToDOM(data.username, data.text, false);
+                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                        }
                     } else if (data.type === 'system') {
                         showSystemMessage(data.text);
                     } else if (data.type === 'pong') {
@@ -786,6 +1087,10 @@
             }
             serverConnection = null;
             clients = {};
+            
+            if (isRecording) {
+                stopRecording();
+            }
         }
 
         // SELECIONAR SERVIDOR
@@ -832,9 +1137,16 @@
             }
         });
 
+        audioBtn.addEventListener('click', () => {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+
         // INICIALIZAR
         function init() {
-            // Mostra status inicial dos servidores
             Object.keys(SERVERS).forEach(id => {
                 updateServerStatus(parseInt(id), 'offline');
             });
