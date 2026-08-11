@@ -170,6 +170,10 @@
             font-weight: 600;
         }
 
+        .system-msg.error {
+            color: #f44336;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
@@ -206,6 +210,10 @@
             color: #6d6f87;
         }
 
+        .input-area input:disabled {
+            opacity: 0.5;
+        }
+
         .input-area button {
             background: #5865f2;
             border: none;
@@ -230,6 +238,7 @@
         .input-area button:disabled {
             opacity: 0.5;
             transform: scale(1);
+            cursor: not-allowed;
         }
 
         .status-bar {
@@ -258,6 +267,11 @@
             animation: none;
         }
 
+        .status-bar .status-dot.connecting {
+            background: #ff9800;
+            animation: pulse 0.5s infinite;
+        }
+
         @keyframes pulse {
             0% { opacity: 0.4; }
             50% { opacity: 1; }
@@ -284,6 +298,25 @@
             font-weight: 600;
             margin-left: 8px;
         }
+
+        .reconnect-btn {
+            background: #2b2d3e;
+            color: #a6a9c2;
+            border: 1px solid #3a3c4e;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reconnect-btn:hover {
+            background: #3a3c4e;
+        }
+
+        .reconnect-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
@@ -298,17 +331,17 @@
     </div>
 
     <div class="messages" id="messagesContainer">
-        <div class="system-msg">🔄 Iniciando servidor...</div>
+        <div class="system-msg">🔄 Iniciando...</div>
     </div>
 
     <div class="input-area">
-        <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off">
-        <button id="sendBtn" aria-label="Enviar">➤</button>
+        <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off" disabled>
+        <button id="sendBtn" aria-label="Enviar" disabled>➤</button>
     </div>
 
     <div class="status-bar">
-        <span><span class="status-dot" id="statusDot"></span> <span id="statusText">Conectando...</span></span>
-        <span id="connectionStatus">Iniciando...</span>
+        <span><span class="status-dot" id="statusDot"></span> <span id="statusText">Iniciando...</span></span>
+        <span id="connectionStatus">Desconectado</span>
     </div>
 </div>
 
@@ -317,8 +350,10 @@
     (function() {
         'use strict';
 
-        // ID fixo do servidor
-        const SERVER_ID = 'discord-chat-server-master';
+        // CONFIGURAÇÃO
+        const SERVER_ID = 'discord-chat-master-server';
+        const RECONNECT_DELAY = 3000;
+        const ELECTION_DELAY = 5000;
         
         // Elementos
         const messagesContainer = document.getElementById('messagesContainer');
@@ -330,27 +365,31 @@
         const statusText = document.getElementById('statusText');
 
         // Estado
-        let currentUsername = 'Usuário' + Math.floor(Math.random() * 1000);
+        let currentUsername = 'User' + Math.floor(Math.random() * 10000);
         let peer = null;
-        let connections = {};
+        let serverConnection = null;
         let isServer = false;
         let isConnected = false;
         let messageHistory = [];
-        let reconnectTimeout = null;
-        let electionTimeout = null;
-        let serverAlive = false;
-        let myId = '';
+        let reconnectTimer = null;
+        let electionTimer = null;
+        let isElectionRunning = false;
+        let myPeerId = '';
+        let clients = {};
+        let lastPing = Date.now();
 
         // Funções auxiliares
         function getCurrentTime() {
             return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false) {
+        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false) {
             const msgDiv = document.createElement('div');
             
             if (system) {
-                msgDiv.className = 'system-msg' + (isServerMsg ? ' server' : '');
+                msgDiv.className = 'system-msg';
+                if (isServerMsg) msgDiv.classList.add('server');
+                if (isError) msgDiv.classList.add('error');
                 msgDiv.textContent = text;
             } else {
                 msgDiv.className = 'message' + (isOwn ? ' own' : '');
@@ -376,31 +415,50 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        function showSystemMessage(text, isServerMsg = false) {
-            addMessageToDOM('', text, false, true, isServerMsg);
+        function showSystemMessage(text, isServerMsg = false, isError = false) {
+            addMessageToDOM('', text, false, true, isServerMsg, isError);
         }
 
-        function updateStatus(text, isOnline = true) {
+        function updateStatus(text, state = 'online') {
             statusText.textContent = text;
-            statusDot.className = 'status-dot' + (isOnline ? '' : ' offline');
-            connectionStatusSpan.textContent = isServer ? '👑 Servidor' : (isConnected ? 'Conectado' : 'Desconectado');
+            statusDot.className = 'status-dot';
+            if (state === 'offline') statusDot.classList.add('offline');
+            if (state === 'connecting') statusDot.classList.add('connecting');
+            
+            if (isServer) {
+                connectionStatusSpan.textContent = '👑 Servidor';
+            } else if (isConnected) {
+                connectionStatusSpan.textContent = '✅ Conectado';
+            } else {
+                connectionStatusSpan.textContent = '❌ Desconectado';
+            }
         }
 
         function updateUserCount(count) {
             userCountSpan.textContent = `👥 ${count || 0}`;
         }
 
+        function setInputEnabled(enabled) {
+            messageInput.disabled = !enabled;
+            sendBtn.disabled = !enabled;
+            if (enabled) {
+                messageInput.focus();
+            }
+        }
+
         // Enviar mensagem
         function sendMessage() {
             const text = messageInput.value.trim();
             if (!text || !isConnected) {
-                if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...');
+                if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...', false, true);
                 return;
             }
 
+            // Mostra localmente
             addMessageToDOM(currentUsername, text, true);
             messageHistory.push({ username: currentUsername, text, time: Date.now() });
 
+            // Envia para todos
             broadcastMessage({
                 type: 'message',
                 username: currentUsername,
@@ -412,58 +470,69 @@
             messageInput.focus();
         }
 
-        // Transmitir mensagem para todos
-        function broadcastMessage(data, senderConn = null) {
-            const conns = isServer ? connections : (peer ? peer.connections : {});
-            
-            Object.keys(conns).forEach(key => {
-                const conn = conns[key];
-                if (conn && conn !== senderConn && conn.open) {
-                    try {
-                        conn.send(data);
-                    } catch (e) {
-                        console.warn('Erro ao enviar:', e);
+        // Transmitir mensagem
+        function broadcastMessage(data, excludeConn = null) {
+            if (isServer) {
+                // Servidor envia para todos os clientes
+                Object.keys(clients).forEach(peerId => {
+                    const conn = clients[peerId];
+                    if (conn && conn !== excludeConn && conn.open) {
+                        try {
+                            conn.send(data);
+                        } catch (e) {
+                            console.warn('Erro ao enviar para', peerId, e);
+                        }
                     }
+                });
+            } else if (serverConnection && serverConnection.open) {
+                // Cliente envia para o servidor
+                try {
+                    serverConnection.send(data);
+                } catch (e) {
+                    console.warn('Erro ao enviar para servidor', e);
                 }
-            });
+            }
         }
 
-        // Inicializar como servidor
-        function initServer() {
+        // INICIAR COMO SERVIDOR
+        function startAsServer() {
             if (isServer) return;
+            
+            // Limpa qualquer estado anterior
+            cleanup();
             
             isServer = true;
             isConnected = true;
-            serverAlive = true;
-            updateStatus('👑 Servidor ativo', true);
-            showSystemMessage(`✅ Você é o servidor! ID: ${SERVER_ID}`, true);
+            isElectionRunning = false;
+            clients = {};
             
-            if (peer) {
-                peer.destroy();
-                peer = null;
-            }
-
+            updateStatus('👑 Servidor ativo', 'online');
+            showSystemMessage('✅ Você é o servidor!', true);
+            setInputEnabled(true);
+            
             peer = new Peer(SERVER_ID, {
                 debug: 0,
                 config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
             });
 
             peer.on('open', (id) => {
-                myId = id;
+                myPeerId = id;
                 console.log('Servidor iniciado:', id);
+                showSystemMessage(`🟢 Servidor pronto! ID: ${SERVER_ID}`, true);
                 updateUserCount(0);
-                showSystemMessage('🟢 Servidor pronto! Aguardando conexões...', true);
             });
 
             peer.on('connection', (conn) => {
-                console.log('Nova conexão:', conn.peer);
-                connections[conn.peer] = conn;
+                console.log('Nova conexão recebida:', conn.peer);
+                
+                // Armazena a conexão
+                clients[conn.peer] = conn;
                 
                 conn.on('open', () => {
                     showSystemMessage(`👤 ${conn.peer} entrou no chat`);
-                    updateUserCount(Object.keys(connections).length);
+                    updateUserCount(Object.keys(clients).length);
                     
-                    // Envia histórico para o novo usuário
+                    // Envia histórico
                     messageHistory.forEach(msg => {
                         conn.send({
                             type: 'history',
@@ -473,7 +542,7 @@
                         });
                     });
                     
-                    // Anuncia novo usuário
+                    // Anuncia para todos
                     broadcastMessage({
                         type: 'system',
                         text: `${conn.peer} entrou no chat`
@@ -481,74 +550,73 @@
                 });
 
                 conn.on('data', (data) => {
-                    if (data.type === 'message') {
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                        addMessageToDOM(data.username, data.text, false);
-                        broadcastMessage(data, conn);
-                    } else if (data.type === 'join') {
-                        showSystemMessage(`👤 ${data.username} entrou no chat`);
-                        broadcastMessage({ type: 'system', text: `${data.username} entrou no chat` }, conn);
-                    } else if (data.type === 'ping') {
-                        conn.send({ type: 'pong' });
-                    }
+                    handleServerData(data, conn);
                 });
 
                 conn.on('close', () => {
-                    delete connections[conn.peer];
+                    delete clients[conn.peer];
                     showSystemMessage(`👤 ${conn.peer} saiu do chat`);
-                    updateUserCount(Object.keys(connections).length);
+                    updateUserCount(Object.keys(clients).length);
                     
-                    // Se não houver mais conexões, continua sendo servidor
+                    broadcastMessage({
+                        type: 'system',
+                        text: `${conn.peer} saiu do chat`
+                    });
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro na conexão com cliente:', err);
+                    delete clients[conn.peer];
+                    updateUserCount(Object.keys(clients).length);
                 });
             });
 
             peer.on('error', (err) => {
                 console.error('Erro no servidor:', err);
                 if (err.type === 'unavailable-id') {
-                    showSystemMessage('⚠️ Outro servidor já está ativo. Conectando como cliente...');
+                    showSystemMessage('⚠️ Outro servidor já está ativo. Conectando como cliente...', false, true);
                     isServer = false;
                     isConnected = false;
-                    setTimeout(() => {
-                        peer.destroy();
-                        peer = null;
-                        initClient();
-                    }, 1000);
+                    cleanup();
+                    setTimeout(() => connectAsClient(), 1000);
                 }
             });
         }
 
-        // Inicializar como cliente
-        function initClient() {
+        // CONECTAR COMO CLIENTE
+        function connectAsClient() {
             if (isServer) return;
+            
+            cleanup();
             
             isServer = false;
             isConnected = false;
-            serverAlive = false;
-            updateStatus('Conectando...', false);
-            showSystemMessage(`🔗 Tentando conectar ao servidor...`);
+            isElectionRunning = false;
             
-            if (peer) {
-                peer.destroy();
-                peer = null;
-            }
-
+            updateStatus('Conectando...', 'connecting');
+            showSystemMessage(`🔗 Tentando conectar ao servidor...`);
+            setInputEnabled(false);
+            
             peer = new Peer({
                 debug: 0,
                 config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
             });
 
             peer.on('open', (id) => {
-                myId = id;
+                myPeerId = id;
                 console.log('Cliente ID:', id);
                 
+                // Tenta conectar ao servidor
                 const conn = peer.connect(SERVER_ID, { reliable: true });
+                serverConnection = conn;
                 
                 conn.on('open', () => {
                     isConnected = true;
-                    serverAlive = true;
-                    updateStatus('Conectado', true);
+                    updateStatus('Conectado', 'online');
                     showSystemMessage('✅ Conectado ao servidor!');
+                    setInputEnabled(true);
                     
+                    // Envia join
                     conn.send({
                         type: 'join',
                         username: currentUsername
@@ -556,38 +624,29 @@
                 });
 
                 conn.on('data', (data) => {
-                    if (data.type === 'message') {
-                        addMessageToDOM(data.username, data.text, false);
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                    } else if (data.type === 'history') {
-                        addMessageToDOM(data.username, data.text, false);
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                    } else if (data.type === 'system') {
-                        showSystemMessage(data.text);
-                    } else if (data.type === 'pong') {
-                        serverAlive = true;
-                    }
+                    handleClientData(data);
                 });
 
                 conn.on('close', () => {
                     isConnected = false;
-                    serverAlive = false;
-                    updateStatus('Desconectado', false);
-                    showSystemMessage('⚠️ Servidor caiu! Iniciando eleição...');
+                    serverConnection = null;
+                    updateStatus('Desconectado', 'offline');
+                    showSystemMessage('⚠️ Servidor caiu! Iniciando eleição...', false, true);
+                    setInputEnabled(false);
                     
-                    // Verifica se deve se tornar servidor
                     startElection();
                 });
 
                 conn.on('error', (err) => {
                     console.warn('Erro de conexão:', err);
                     if (err.type === 'peer-unavailable') {
-                        showSystemMessage('⚠️ Servidor não encontrado. Iniciando eleição...');
+                        showSystemMessage('⚠️ Servidor não encontrado. Iniciando eleição...', false, true);
                         startElection();
                     } else {
                         isConnected = false;
-                        serverAlive = false;
-                        updateStatus('Erro', false);
+                        serverConnection = null;
+                        updateStatus('Erro', 'offline');
+                        setInputEnabled(false);
                     }
                 });
             });
@@ -596,78 +655,124 @@
                 console.error('Erro no cliente:', err);
                 if (err.type === 'unavailable-id') {
                     // Tenta novamente com outro ID
-                    peer.destroy();
-                    peer = null;
-                    setTimeout(() => initClient(), 500);
+                    cleanup();
+                    setTimeout(() => connectAsClient(), 1000);
                 }
             });
         }
 
-        // Processo de eleição para novo servidor
-        function startElection() {
-            if (electionTimeout) {
-                clearTimeout(electionTimeout);
-                electionTimeout = null;
+        // MANIPULAR DADOS NO SERVIDOR
+        function handleServerData(data, conn) {
+            if (data.type === 'message') {
+                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                addMessageToDOM(data.username, data.text, false);
+                broadcastMessage(data, conn);
+            } else if (data.type === 'join') {
+                showSystemMessage(`👤 ${data.username} entrou no chat`);
+                broadcastMessage({ type: 'system', text: `${data.username} entrou no chat` }, conn);
+            } else if (data.type === 'ping') {
+                conn.send({ type: 'pong' });
             }
+        }
+
+        // MANIPULAR DADOS NO CLIENTE
+        function handleClientData(data) {
+            if (data.type === 'message') {
+                addMessageToDOM(data.username, data.text, false);
+                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+            } else if (data.type === 'history') {
+                addMessageToDOM(data.username, data.text, false);
+                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+            } else if (data.type === 'system') {
+                showSystemMessage(data.text);
+            } else if (data.type === 'pong') {
+                lastPing = Date.now();
+            }
+        }
+
+        // ELEIÇÃO
+        function startElection() {
+            if (isElectionRunning || isServer || isConnected) return;
             
-            showSystemMessage('⚡ Eleição em andamento... Aguarde 3 segundos', true);
-            updateStatus('Eleição...', false);
+            isElectionRunning = true;
+            updateStatus('Eleição...', 'connecting');
+            showSystemMessage('⚡ Eleição em andamento...', true);
             
-            // Espera 3 segundos para ver se alguém já se tornou servidor
-            electionTimeout = setTimeout(() => {
+            // Aguarda para ver se alguém já virou servidor
+            electionTimer = setTimeout(() => {
                 if (!isConnected && !isServer) {
                     // Tenta conectar novamente
-                    if (peer) {
-                        peer.destroy();
-                        peer = null;
-                    }
+                    cleanup();
                     
                     // Tenta ser servidor
                     showSystemMessage('🔄 Nenhum servidor encontrado. Você será o servidor!', true);
                     setTimeout(() => {
-                        initServer();
+                        startAsServer();
                     }, 1000);
                 }
-            }, 3000);
+                isElectionRunning = false;
+            }, ELECTION_DELAY);
             
-            // Também tenta reconectar como cliente algumas vezes
+            // Também tenta reconectar algumas vezes
             let attempts = 0;
-            const tryReconnect = setInterval(() => {
+            const reconnectInterval = setInterval(() => {
                 attempts++;
-                if (attempts > 3) {
-                    clearInterval(tryReconnect);
+                if (attempts > 3 || isConnected || isServer) {
+                    clearInterval(reconnectInterval);
                     return;
                 }
                 
                 if (!isConnected && !isServer) {
                     console.log('Tentando reconectar como cliente...');
-                    if (peer) {
-                        peer.destroy();
-                        peer = null;
-                    }
-                    initClient();
-                } else {
-                    clearInterval(tryReconnect);
+                    cleanup();
+                    connectAsClient();
                 }
             }, 2000);
         }
 
-        // Inicializar
+        // LIMPEZA
+        function cleanup() {
+            if (reconnectTimer) {
+                clearTimeout(reconnectTimer);
+                reconnectTimer = null;
+            }
+            if (electionTimer) {
+                clearTimeout(electionTimer);
+                electionTimer = null;
+            }
+            
+            if (peer) {
+                try {
+                    peer.destroy();
+                } catch (e) {}
+                peer = null;
+            }
+            
+            serverConnection = null;
+            clients = {};
+            isElectionRunning = false;
+        }
+
+        // INICIALIZAR
         function init() {
-            currentUsername = 'Usuário' + Math.floor(Math.random() * 1000);
+            // Limpa mensagens iniciais
+            setTimeout(() => {
+                const msgs = messagesContainer.querySelectorAll('.system-msg');
+                msgs.forEach(msg => msg.remove());
+            }, 1000);
             
             // Primeiro tenta conectar como cliente
-            initClient();
-
-            // Se não conectar em 3 segundos, inicia eleição
+            connectAsClient();
+            
+            // Se não conectar em 5 segundos, inicia eleição
             setTimeout(() => {
                 if (!isConnected && !isServer) {
                     startElection();
                 }
-            }, 3000);
+            }, 5000);
         }
 
-        // Event listeners
+        // EVENT LISTENERS
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -676,49 +781,31 @@
             }
         });
 
-        // Inicia
-        init();
-
-        // Atualiza contador periodicamente
+        // RECONEXÃO AUTOMÁTICA
         setInterval(() => {
-            if (isServer) {
-                updateUserCount(Object.keys(connections).length);
-            }
-            
-            // Verifica se o servidor está vivo (clientes)
-            if (!isServer && isConnected) {
-                // Envia ping para verificar se o servidor ainda está lá
-                try {
-                    const conns = peer ? peer.connections : {};
-                    if (conns[SERVER_ID]) {
-                        conns[SERVER_ID].send({ type: 'ping' });
-                    }
-                } catch (e) {}
-            }
-        }, 5000);
-
-        // Verificação de saúde do servidor (clientes)
-        setInterval(() => {
-            if (!isServer && isConnected && !serverAlive) {
-                showSystemMessage('⚠️ Servidor não responde. Iniciando eleição...');
-                startElection();
-            }
-            if (!isServer && isConnected) {
-                serverAlive = false; // Será setado como true pelo pong
+            if (!isConnected && !isServer && !isElectionRunning) {
+                console.log('Tentando reconectar...');
+                cleanup();
+                connectAsClient();
             }
         }, 10000);
 
-        // Reconexão automática se perder conexão
+        // VERIFICAÇÃO DE SAÚDE (clientes)
         setInterval(() => {
-            if (!isConnected && !isServer && !electionTimeout) {
-                console.log('Tentando reconectar...');
-                if (peer) {
-                    peer.destroy();
-                    peer = null;
+            if (!isServer && isConnected && serverConnection) {
+                try {
+                    serverConnection.send({ type: 'ping' });
+                } catch (e) {
+                    console.warn('Erro ao enviar ping:', e);
                 }
-                initClient();
             }
-        }, 15000);
+        }, 5000);
+
+        // INICIA
+        init();
+
+        console.log('Chat iniciado! ID do servidor:', SERVER_ID);
+        console.log('Seu nome:', currentUsername);
 
     })();
 </script>
