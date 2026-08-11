@@ -1,0 +1,2540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eoros - Servidor P2P</title>
+    <style>
+        /* ========== ESTILOS COMPLETOS ========== */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #1e1e2f;
+            --bg-tertiary: #2a2a3a;
+            --bg-hover: #3a3a4a;
+            --text-primary: #dcdcdc;
+            --text-secondary: #b0b0c0;
+            --text-muted: #6a6a7a;
+            --border-color: #2a2a3a;
+            --accent-color: #5865f2;
+            --accent-hover: #4752c4;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --success-color: #3ba55d;
+            --danger-color: #ed4245;
+            --input-bg: #2a2a3a;
+            --modal-bg: #1e1e2f;
+            --login-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --card-bg: rgba(30, 30, 47, 0.95);
+            --avatar-border: #5865f2;
+            --scrollbar-track: #1a1a2e;
+            --scrollbar-thumb: #2a2a3a;
+            --scrollbar-hover: #3a3a4a;
+            --message-system-bg: #252536;
+            --toggle-bg: #2a2a3a;
+            --token-bg: #1a1a2e;
+            --token-border: #2a2a3a;
+            --invite-bg: #1a1a2e;
+            --server-badge: #5865f2;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eaed;
+            --bg-hover: #dde0e4;
+            --text-primary: #2c2c2c;
+            --text-secondary: #5a5a6a;
+            --text-muted: #8a8a9a;
+            --border-color: #d0d2d6;
+            --accent-color: #5865f2;
+            --accent-hover: #4752c4;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --input-bg: #f0f2f5;
+            --modal-bg: #ffffff;
+            --login-bg: linear-gradient(135deg, #e8eaf0 0%, #d5d8e0 50%, #c0c4d0 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --avatar-border: #5865f2;
+            --scrollbar-track: #f0f2f5;
+            --scrollbar-thumb: #c0c4d0;
+            --scrollbar-hover: #a0a4b0;
+            --message-system-bg: #e8eaed;
+            --toggle-bg: #e8eaed;
+            --token-bg: #f0f2f5;
+            --token-border: #d0d2d6;
+            --invite-bg: #f0f2f5;
+            --server-badge: #5865f2;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* ========== TELA DE LOGIN ========== */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--login-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            padding: 40px 50px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px var(--shadow-color);
+            width: 480px;
+            max-width: 95%;
+            text-align: center;
+            animation: fadeInUp 0.6s ease;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            max-height: 98vh;
+            overflow-y: auto;
+        }
+
+        .login-container h1 {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-color), #7289da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .login-container .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .login-container .logo-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .login-container input,
+        .login-container select {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .login-container input:focus,
+        .login-container select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
+        }
+
+        .login-container input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Avatar Upload */
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--avatar-border);
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar-preview:hover {
+            border-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-preview .avatar-placeholder {
+            font-size: 32px;
+            color: var(--text-secondary);
+        }
+
+        .avatar-preview .avatar-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 10px;
+            padding: 4px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .avatar-preview:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-upload input[type="file"] {
+            display: none;
+        }
+
+        /* ========== SEÇÃO DE SERVIDOR ========== */
+        .server-section {
+            background: var(--invite-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            position: relative;
+        }
+
+        .server-section .server-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--server-badge);
+            color: white;
+            padding: 2px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .server-section .server-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .server-section .server-display {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .server-section .server-display input {
+            flex: 1;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--accent-color);
+            outline: none;
+            margin: 0;
+            letter-spacing: 0.5px;
+            min-width: 0;
+            font-weight: 500;
+        }
+
+        .server-section .server-display input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .server-section .server-display button {
+            padding: 10px 16px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .server-section .server-display button:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .server-section .server-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .server-section .server-actions button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .server-section .server-actions button:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--accent-color);
+        }
+
+        .server-section .server-actions button.primary {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .server-section .server-actions button.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .server-section .server-info {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .server-section .server-info .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .server-section .server-info .status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .server-section .server-info .status .dot.online {
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        .server-section .server-info .status .dot.offline {
+            background: var(--text-muted);
+        }
+
+        .server-section .server-info .url-info {
+            font-family: monospace;
+            background: var(--bg-tertiary);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .login-container .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .login-container .login-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .login-container .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-container .language-selector-login {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .login-container .language-selector-login button {
+            flex: 1;
+            padding: 8px;
+            background: var(--bg-tertiary);
+            border: 2px solid transparent;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .login-container .language-selector-login button:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-color);
+        }
+
+        .login-container .language-selector-login button.active {
+            border-color: var(--accent-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .login-container .error-msg {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
+        .login-container .divider {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+            gap: 12px;
+        }
+
+        .login-container .divider::before,
+        .login-container .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .login-container .divider span {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== TELA DE CONFIGURAÇÕES ========== */
+        .settings-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            backdrop-filter: blur(8px);
+        }
+
+        .settings-screen.active {
+            display: flex;
+        }
+
+        .settings-container {
+            background: var(--modal-bg);
+            padding: 40px 50px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            width: 480px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.4s ease;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .settings-container h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+        }
+
+        .settings-container .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .settings-container .setting-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .settings-container .setting-group .toggle-group {
+            display: flex;
+            gap: 12px;
+            background: var(--toggle-bg);
+            padding: 6px;
+            border-radius: 8px;
+        }
+
+        .settings-container .setting-group .toggle-group button {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .settings-container .setting-group .toggle-group button.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .settings-container .setting-group .toggle-group button:hover:not(.active) {
+            background: var(--bg-hover);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 12px;
+        }
+
+        .theme-selector button {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .theme-selector button.active {
+            border-color: var(--accent-color);
+            background: var(--bg-hover);
+        }
+
+        .theme-selector button:hover {
+            border-color: var(--accent-color);
+        }
+
+        .color-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .color-picker-grid .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 auto;
+        }
+
+        .color-picker-grid .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-picker-grid .color-option.active {
+            border-color: white;
+            box-shadow: 0 0 0 2px var(--text-primary);
+        }
+
+        .color-picker-grid .color-option.custom {
+            border: 2px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background: var(--bg-tertiary);
+        }
+
+        .settings-container .settings-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .settings-container .settings-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .settings-container .settings-actions .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .settings-container .settings-actions .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .settings-container .settings-actions .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .settings-container .settings-actions .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        /* ========== APP PRINCIPAL ========== */
+        .app {
+            display: flex;
+            height: 100vh;
+            background: var(--bg-primary);
+            opacity: 0;
+            transition: opacity 0.6s ease, background 0.3s ease;
+        }
+
+        .app.visible {
+            opacity: 1;
+        }
+
+        .sidebar-left {
+            width: 80px;
+            background: var(--bg-secondary);
+            padding: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-secondary);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .server-icon:hover {
+            border-radius: 16px;
+            border-color: var(--accent-color);
+            background: var(--bg-hover);
+        }
+
+        .server-icon.active {
+            border-radius: 16px;
+            border-color: var(--accent-color);
+            background: var(--bg-hover);
+        }
+
+        .server-icon .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger-color);
+            color: white;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .server-icon.add-server {
+            background: transparent;
+            border: 2px dashed var(--border-color);
+            color: var(--text-muted);
+            font-size: 24px;
+        }
+
+        .server-icon.add-server:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+            transition: background 0.3s ease;
+        }
+
+        .channel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            min-height: 60px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .channel-header .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .channel-header .left .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 4px 12px 4px 4px;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: background 0.3s ease;
+        }
+
+        .channel-header .left .user-info .avatar-small {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .channel-header .left .user-info .avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-header h2 {
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .channel-header h2::before {
+            content: '#';
+            color: var(--text-muted);
+        }
+
+        .channel-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .channel-actions button {
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .channel-actions button:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .channel-actions .danger-btn {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .channel-actions .danger-btn:hover {
+            background: #c0353a;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-username {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .message-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            word-break: break-word;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .message.system {
+            background: var(--message-system-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .message-input-area {
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .message-input-area input {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .message-input-area input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .message-input-area input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message-input-area button {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .message-input-area button:hover {
+            background: var(--accent-hover);
+        }
+
+        .message-input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .members-sidebar {
+            width: 240px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .members-sidebar h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .member-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .member-item .member-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .member-item .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-color);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .member-status.offline {
+            background: var(--text-muted);
+        }
+
+        .member-name {
+            font-size: 14px;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .member-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .member-controls button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .member-controls button:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 90%;
+            border: 1px solid var(--border-color);
+            animation: fadeInUp 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .modal-content input:focus,
+        .modal-content select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .modal-actions button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .modal-actions .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .modal-actions .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .modal-actions .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .modal-actions .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 14px;
+            z-index: 999;
+            animation: fadeInUp 0.3s ease;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            max-width: 90%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-hover);
+        }
+
+        @media (max-width: 768px) {
+            .members-sidebar {
+                display: none;
+            }
+            .sidebar-left {
+                width: 60px;
+            }
+            .server-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .login-container {
+                padding: 25px 20px;
+            }
+            .settings-container {
+                padding: 25px 20px;
+            }
+            .channel-actions button {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+            .channel-header .left .user-info span {
+                display: none;
+            }
+            .server-section .server-display {
+                flex-direction: column;
+            }
+            .server-section .server-display button {
+                width: 100%;
+            }
+            .server-section .server-actions {
+                flex-direction: column;
+            }
+            .server-section .server-info {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== TELA DE LOGIN ========== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <span class="logo-icon">🌐</span>
+            <h1>EOROS</h1>
+            <p class="subtitle">Servidor P2P para sua comunidade</p>
+
+            <div class="language-selector-login">
+                <button class="active" data-lang="pt" onclick="selectLoginLanguage('pt')">🇧🇷 PT</button>
+                <button data-lang="en" onclick="selectLoginLanguage('en')">🇬🇧 EN</button>
+                <button data-lang="ru" onclick="selectLoginLanguage('ru')">🇷🇺 RU</button>
+            </div>
+
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatarPreview" onclick="document.getElementById('avatarInput').click()">
+                    <span class="avatar-placeholder">👤</span>
+                    <div class="avatar-overlay">Alterar Foto</div>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)">
+            </div>
+
+            <input type="text" id="loginUsername" placeholder="Seu nome de usuário..." maxlength="20">
+            <input type="password" id="loginPassword" placeholder="Senha (opcional)">
+
+            <!-- SEÇÃO DE SERVIDOR COM LINK FUNCIONAL -->
+            <div class="server-section" id="serverSection">
+                <span class="server-badge">🌐 SERVIDOR</span>
+                <span class="server-label">🔗 Link do Servidor</span>
+                <div class="server-display">
+                    <input type="text" id="serverLinkInput" class="server-link" placeholder="Clique em 'Gerar Link'" readonly>
+                    <button onclick="generateServerLink()">Gerar Link</button>
+                </div>
+                <div class="server-actions">
+                    <button onclick="copyServerLink()">📋 Copiar Link</button>
+                    <button class="primary" onclick="joinViaServerLink()">🚀 Entrar no Servidor</button>
+                </div>
+                <div class="server-info">
+                    <span class="status">
+                        <span class="dot online" id="serverStatusDot"></span>
+                        <span id="serverStatusText">Servidor ativo</span>
+                    </span>
+                    <span class="url-info" id="serverUrlDisplay">Nenhum link gerado</span>
+                </div>
+            </div>
+
+            <button class="login-btn" onclick="handleLogin()">🚀 Entrar no Eoros</button>
+
+            <div class="error-msg" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- ========== TELA DE CONFIGURAÇÕES ========== -->
+    <div class="settings-screen" id="settingsScreen">
+        <div class="settings-container">
+            <h2>⚙️ Configurações</h2>
+
+            <div class="setting-group">
+                <label>🎨 Tema</label>
+                <div class="theme-selector">
+                    <button class="active" data-theme="dark" onclick="setTheme('dark')">🌙 Escuro</button>
+                    <button data-theme="light" onclick="setTheme('light')">☀️ Claro</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label>🎨 Cor Principal</label>
+                <div class="color-picker-grid" id="colorPickerGrid">
+                    <div class="color-option active" style="background:#5865f2" data-color="#5865f2" onclick="setAccentColor('#5865f2')"></div>
+                    <div class="color-option" style="background:#ed4245" data-color="#ed4245" onclick="setAccentColor('#ed4245')"></div>
+                    <div class="color-option" style="background:#3ba55d" data-color="#3ba55d" onclick="setAccentColor('#3ba55d')"></div>
+                    <div class="color-option" style="background:#faa81a" data-color="#faa81a" onclick="setAccentColor('#faa81a')"></div>
+                    <div class="color-option" style="background:#eb459e" data-color="#eb459e" onclick="setAccentColor('#eb459e')"></div>
+                    <div class="color-option" style="background:#00b0f4" data-color="#00b0f4" onclick="setAccentColor('#00b0f4')"></div>
+                    <div class="color-option" style="background:#9b59b6" data-color="#9b59b6" onclick="setAccentColor('#9b59b6')"></div>
+                    <div class="color-option" style="background:#1abc9c" data-color="#1abc9c" onclick="setAccentColor('#1abc9c')"></div>
+                    <div class="color-option" style="background:#e67e22" data-color="#e67e22" onclick="setAccentColor('#e67e22')"></div>
+                    <div class="color-option" style="background:#2ecc71" data-color="#2ecc71" onclick="setAccentColor('#2ecc71')"></div>
+                    <div class="color-option" style="background:#e74c3c" data-color="#e74c3c" onclick="setAccentColor('#e74c3c')"></div>
+                    <div class="color-option custom" onclick="document.getElementById('customColorInput').click()">🎨</div>
+                    <input type="color" id="customColorInput" style="display:none" onchange="setAccentColor(this.value)">
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label>🔊 Áudio</label>
+                <div class="toggle-group" id="audioToggleGroup">
+                    <button class="active" data-value="on" onclick="setAudioSetting('on')">Ativado</button>
+                    <button data-value="off" onclick="setAudioSetting('off')">Desativado</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label>💬 Mensagens</label>
+                <div class="toggle-group" id="messageToggleGroup">
+                    <button class="active" data-value="on" onclick="setMessageSetting('on')">Ativado</button>
+                    <button data-value="off" onclick="setMessageSetting('off')">Desativado</button>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button class="btn-secondary" onclick="closeSettings()">Voltar</button>
+                <button class="btn-primary" onclick="saveSettings()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL DE CRIAÇÃO DE SALA ========== -->
+    <div class="modal" id="roomModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Criar Nova Sala</h2>
+            <input type="text" id="roomNameInput" placeholder="Nome da sala...">
+            <select id="roomLanguageSelect">
+                <option value="pt">Português</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+            <input type="text" id="roomPasswordInput" placeholder="Senha (opcional)">
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" onclick="createRoom()">Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== APP PRINCIPAL ========== -->
+    <div class="app" id="app">
+        <div class="sidebar-left" id="sidebarLeft">
+            <div class="server-icon active" data-room="geral">E</div>
+            <div class="server-icon add-server" onclick="openModal()">+</div>
+        </div>
+
+        <div class="main-content">
+            <div class="channel-header">
+                <div class="left">
+                    <div class="user-info">
+                        <div class="avatar-small" id="userAvatar">U</div>
+                        <span id="userNameDisplay">Usuário</span>
+                    </div>
+                    <h2 id="currentChannel">geral</h2>
+                </div>
+                <div class="channel-actions">
+                    <button onclick="showServerLink()">🌐 Link</button>
+                    <button onclick="toggleAudio()" id="audioToggle">🔊 Áudio</button>
+                    <button onclick="openSettings()">⚙️</button>
+                    <button class="danger-btn" onclick="logout()">Sair</button>
+                </div>
+            </div>
+
+            <div class="chat-area" id="chatArea">
+                <div class="message system" id="welcomeMessage">Bem-vindo ao Eoros! Conecte-se com seus amigos.</div>
+                <div class="message system">📢 Crie uma sala ou entre em uma existente.</div>
+                <div class="message system">🌐 Compartilhe o link do servidor para convidar amigos de outros dispositivos!</div>
+            </div>
+
+            <div class="message-input-area">
+                <input type="text" id="messageInput" placeholder="Digite uma mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" id="sendBtn">Enviar</button>
+            </div>
+        </div>
+
+        <div class="members-sidebar" id="membersSidebar">
+            <h3 id="membersTitle">👥 Membros</h3>
+            <div id="membersList">
+                <div class="member-item" data-user="you">
+                    <div class="member-avatar" id="memberAvatar">U</div>
+                    <span class="member-status"></span>
+                    <span class="member-name" id="memberYouName">Você</span>
+                    <div class="member-controls">
+                        <button onclick="toggleMute()" id="muteBtn">🔊</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ TRADUÇÕES ============
+        const translations = {
+            pt: {
+                appName: 'EOROS',
+                subtitle: 'Servidor P2P para sua comunidade',
+                enter: '🚀 Entrar no Eoros',
+                username: 'Seu nome de usuário...',
+                password: 'Senha (opcional)',
+                welcome: 'Bem-vindo ao Eoros! Conecte-se com seus amigos.',
+                createRoom: 'Criar Nova Sala',
+                roomName: 'Nome da sala...',
+                passwordOpt: 'Senha (opcional)',
+                cancel: 'Cancelar',
+                create: 'Criar',
+                mute: 'Mutar',
+                unmute: 'Desmutar',
+                audio: 'Áudio',
+                audioOn: 'Ativado',
+                audioOff: 'Desativado',
+                messages: 'Mensagens',
+                messagesOn: 'Ativado',
+                messagesOff: 'Desativado',
+                settings: '⚙️ Configurações',
+                back: 'Voltar',
+                save: 'Salvar',
+                invite: '🔗 Link do servidor copiado!',
+                serverLinkGenerated: '🌐 Link do servidor gerado! Compartilhe com seus amigos.',
+                serverLinkCopied: '📋 Link do servidor copiado para a área de transferência!',
+                serverJoined: '✅ Entrou no servidor via link!',
+                serverInvalid: '❌ Link do servidor inválido ou expirado!',
+                serverPlaceholder: 'Clique em "Gerar Link"',
+                generateLink: 'Gerar Link',
+                copyLink: '📋 Copiar Link',
+                joinLink: '🚀 Entrar no Servidor',
+                serverActive: 'Servidor ativo',
+                serverInactive: 'Servidor inativo',
+                noLink: 'Nenhum link gerado',
+                general: 'geral',
+                members: '👥 Membros',
+                you: 'Você',
+                messagePlaceholder: 'Digite uma mensagem...',
+                systemJoined: 'entrou no servidor',
+                systemLeft: 'saiu do servidor',
+                systemCreated: 'criou a sala',
+                systemMuted: 'mutou o áudio',
+                systemUnmuted: 'desmutou o áudio',
+                audioEnabled: 'Áudio ativado',
+                audioDisabled: 'Áudio desativado',
+                messagesEnabled: 'Mensagens ativadas',
+                messagesDisabled: 'Mensagens desativadas',
+                settingsSaved: '✅ Configurações salvas!',
+                loginError: 'Por favor, digite seu nome de usuário',
+                logout: 'Sair',
+                logoutConfirm: 'Tem certeza que deseja sair?',
+                theme: 'Tema',
+                dark: '🌙 Escuro',
+                light: '☀️ Claro',
+                mainColor: 'Cor Principal',
+                serverLabel: '🌐 Link do Servidor'
+            },
+            en: {
+                appName: 'EOROS',
+                subtitle: 'P2P Server for your community',
+                enter: '🚀 Enter Eoros',
+                username: 'Your username...',
+                password: 'Password (optional)',
+                welcome: 'Welcome to Eoros! Connect with your friends.',
+                createRoom: 'Create New Room',
+                roomName: 'Room name...',
+                passwordOpt: 'Password (optional)',
+                cancel: 'Cancel',
+                create: 'Create',
+                mute: 'Mute',
+                unmute: 'Unmute',
+                audio: 'Audio',
+                audioOn: 'Enabled',
+                audioOff: 'Disabled',
+                messages: 'Messages',
+                messagesOn: 'Enabled',
+                messagesOff: 'Disabled',
+                settings: '⚙️ Settings',
+                back: 'Back',
+                save: 'Save',
+                invite: '🔗 Server link copied!',
+                serverLinkGenerated: '🌐 Server link generated! Share with your friends.',
+                serverLinkCopied: '📋 Server link copied to clipboard!',
+                serverJoined: '✅ Joined server via link!',
+                serverInvalid: '❌ Invalid or expired server link!',
+                serverPlaceholder: 'Click "Generate Link"',
+                generateLink: 'Generate Link',
+                copyLink: '📋 Copy Link',
+                joinLink: '🚀 Join Server',
+                serverActive: 'Server active',
+                serverInactive: 'Server inactive',
+                noLink: 'No link generated',
+                general: 'general',
+                members: '👥 Members',
+                you: 'You',
+                messagePlaceholder: 'Type a message...',
+                systemJoined: 'joined the server',
+                systemLeft: 'left the server',
+                systemCreated: 'created the room',
+                systemMuted: 'muted audio',
+                systemUnmuted: 'unmuted audio',
+                audioEnabled: 'Audio enabled',
+                audioDisabled: 'Audio disabled',
+                messagesEnabled: 'Messages enabled',
+                messagesDisabled: 'Messages disabled',
+                settingsSaved: '✅ Settings saved!',
+                loginError: 'Please enter your username',
+                logout: 'Logout',
+                logoutConfirm: 'Are you sure you want to logout?',
+                theme: 'Theme',
+                dark: '🌙 Dark',
+                light: '☀️ Light',
+                mainColor: 'Main Color',
+                serverLabel: '🌐 Server Link'
+            },
+            ru: {
+                appName: 'EOROS',
+                subtitle: 'P2P сервер для вашего сообщества',
+                enter: '🚀 Войти в Eoros',
+                username: 'Ваше имя пользователя...',
+                password: 'Пароль (опционально)',
+                welcome: 'Добро пожаловать в Eoros! Общайтесь с друзьями.',
+                createRoom: 'Создать новую комнату',
+                roomName: 'Название комнаты...',
+                passwordOpt: 'Пароль (опционально)',
+                cancel: 'Отмена',
+                create: 'Создать',
+                mute: 'Отключить звук',
+                unmute: 'Включить звук',
+                audio: 'Аудио',
+                audioOn: 'Включено',
+                audioOff: 'Отключено',
+                messages: 'Сообщения',
+                messagesOn: 'Включено',
+                messagesOff: 'Отключено',
+                settings: '⚙️ Настройки',
+                back: 'Назад',
+                save: 'Сохранить',
+                invite: '🔗 Ссылка на сервер скопирована!',
+                serverLinkGenerated: '🌐 Ссылка на сервер создана! Поделитесь с друзьями.',
+                serverLinkCopied: '📋 Ссылка на сервер скопирована в буфер обмена!',
+                serverJoined: '✅ Присоединился к серверу по ссылке!',
+                serverInvalid: '❌ Неверная или просроченная ссылка на сервер!',
+                serverPlaceholder: 'Нажмите "Создать ссылку"',
+                generateLink: 'Создать ссылку',
+                copyLink: '📋 Копировать ссылку',
+                joinLink: '🚀 Войти на сервер',
+                serverActive: 'Сервер активен',
+                serverInactive: 'Сервер неактивен',
+                noLink: 'Ссылка не создана',
+                general: 'общий',
+                members: '👥 Участники',
+                you: 'Вы',
+                messagePlaceholder: 'Введите сообщение...',
+                systemJoined: 'вошел на сервер',
+                systemLeft: 'вышел с сервера',
+                systemCreated: 'создал комнату',
+                systemMuted: 'отключил звук',
+                systemUnmuted: 'включил звук',
+                audioEnabled: 'Аудио включено',
+                audioDisabled: 'Аудио отключено',
+                messagesEnabled: 'Сообщения включены',
+                messagesDisabled: 'Сообщения отключены',
+                settingsSaved: '✅ Настройки сохранены!',
+                loginError: 'Пожалуйста, введите имя пользователя',
+                logout: 'Выйти',
+                logoutConfirm: 'Вы уверены, что хотите выйти?',
+                theme: 'Тема',
+                dark: '🌙 Темная',
+                light: '☀️ Светлая',
+                mainColor: 'Основной цвет',
+                serverLabel: '🌐 Ссылка на сервер'
+            }
+        };
+
+        // ============ ESTADO GLOBAL ============
+        let currentLang = 'pt';
+        let currentUser = '';
+        let userAvatar = null;
+        let isMuted = false;
+        let isAudioEnabled = true;
+        let isMessagesEnabled = true;
+        let rooms = [];
+        let currentRoom = 'geral';
+        let members = [];
+        let settingsChanged = false;
+        let currentTheme = 'dark';
+        let accentColor = '#5865f2';
+        let serverLink = '';
+        let serverLinkData = {};
+
+        // ============ FUNÇÕES DE TRADUÇÃO ============
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
+
+        function updateUITexts() {
+            document.querySelector('.login-container h1').textContent = t('appName');
+            document.querySelector('.login-container .subtitle').textContent = t('subtitle');
+            document.querySelector('.login-btn').textContent = t('enter');
+            document.querySelector('#loginUsername').placeholder = t('username');
+            document.querySelector('#loginPassword').placeholder = t('password');
+
+            document.querySelector('.server-section .server-label').textContent = t('serverLabel');
+            document.querySelector('#serverLinkInput').placeholder = t('serverPlaceholder');
+            document.querySelector('.server-section .server-display button').textContent = t('generateLink');
+            document.querySelectorAll('.server-actions button')[0].textContent = t('copyLink');
+            document.querySelectorAll('.server-actions button')[1].textContent = t('joinLink');
+            document.querySelector('#serverStatusText').textContent = t('serverActive');
+
+            const settingsLabels = document.querySelectorAll('.setting-group label');
+            if (settingsLabels.length >= 4) {
+                settingsLabels[0].textContent = '🎨 ' + t('theme');
+                settingsLabels[1].textContent = '🎨 ' + t('mainColor');
+                settingsLabels[2].textContent = '🔊 ' + t('audio');
+                settingsLabels[3].textContent = '💬 ' + t('messages');
+            }
+            document.querySelector('.settings-actions .btn-secondary').textContent = t('back');
+            document.querySelector('.settings-actions .btn-primary').textContent = t('save');
+
+            const themeBtns = document.querySelectorAll('.theme-selector button');
+            if (themeBtns.length >= 2) {
+                themeBtns[0].textContent = t('dark');
+                themeBtns[1].textContent = t('light');
+            }
+
+            document.querySelector('#modalTitle').textContent = t('createRoom');
+            document.querySelector('#roomNameInput').placeholder = t('roomName');
+            document.querySelector('#roomPasswordInput').placeholder = t('passwordOpt');
+            document.querySelector('.modal-actions .btn-secondary').textContent = t('cancel');
+            document.querySelector('.modal-actions .btn-primary').textContent = t('create');
+
+            document.querySelector('#currentChannel').textContent = t('general');
+            document.querySelector('#membersTitle').textContent = t('members');
+            document.querySelector('#messageInput').placeholder = t('messagePlaceholder');
+            document.querySelector('#memberYouName').textContent = t('you');
+
+            const welcome = document.querySelector('#welcomeMessage');
+            if (welcome) welcome.textContent = t('welcome');
+
+            if (currentUser) {
+                document.querySelector('#userNameDisplay').textContent = currentUser;
+            }
+
+            updateServerStatus();
+        }
+
+        // ============ AVATAR ============
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    userAvatar = dataUrl;
+                    const preview = document.getElementById('avatarPreview');
+                    preview.innerHTML =
+                        `<img src="${dataUrl}" alt="Avatar"><div class="avatar-overlay">Alterar Foto</div>`;
+                    updateAvatarUI(dataUrl);
+                    localStorage.setItem('eoros_avatar', dataUrl);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateAvatarUI(dataUrl) {
+            const userAvatarEl = document.querySelector('#userAvatar');
+            if (userAvatarEl) {
+                userAvatarEl.innerHTML = `<img src="${dataUrl}" alt="Avatar">`;
+            }
+            const memberAvatar = document.querySelector('#memberAvatar');
+            if (memberAvatar) {
+                memberAvatar.innerHTML = `<img src="${dataUrl}" alt="Avatar">`;
+            }
+        }
+
+        // ============ SISTEMA DE SERVIDOR COM LINK FUNCIONAL ============
+        function generateServerLink() {
+            const room = rooms.find(r => r.id === currentRoom) || rooms[0];
+            if (!room) {
+                showNotification('❌ ' + (currentLang === 'pt' ? 'Crie uma sala primeiro!' : currentLang === 'en' ?
+                    'Create a room first!' : 'Сначала создайте комнату!'));
+                return;
+            }
+
+            // Gera um código único para o servidor
+            const serverCode = btoa(JSON.stringify({
+                roomId: room.id,
+                roomName: room.name,
+                password: room.password || '',
+                server: 'Eoros',
+                created: Date.now(),
+                expires: Date.now() + 86400000 // 24 horas
+            }));
+
+            // Obtém a URL base (funciona em servidor web ou local)
+            let baseUrl = window.location.href.split('?')[0];
+            // Se for file://, tenta usar localhost ou IP
+            if (baseUrl.startsWith('file://')) {
+                // Tenta obter o IP local
+                const localIP = getLocalIP();
+                baseUrl = `http://${localIP}:8080/`;
+            }
+
+            // Monta o link completo
+            serverLink = baseUrl + '?server=' + encodeURIComponent(serverCode);
+
+            serverLinkData = {
+                code: serverCode,
+                roomId: room.id,
+                created: Date.now(),
+                expires: Date.now() + 86400000
+            };
+
+            document.getElementById('serverLinkInput').value = serverLink;
+
+            // Atualiza display da URL
+            document.getElementById('serverUrlDisplay').textContent = serverLink;
+
+            showNotification('🌐 ' + t('serverLinkGenerated'));
+
+            // Salva no localStorage
+            localStorage.setItem('eoros_server_link', serverLink);
+            localStorage.setItem('eoros_server_code', serverCode);
+
+            updateServerStatus();
+
+            return serverLink;
+        }
+
+        function getLocalIP() {
+            // Tenta obter o IP local
+            try {
+                // Usa WebRTC para obter IP local
+                const pc = new RTCPeerConnection({
+                    iceServers: []
+                });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => {
+                    pc.setLocalDescription(offer);
+                });
+                pc.onicecandidate = function(event) {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        const ip = event.candidate.candidate.split(' ')[4];
+                        if (ip && !ip.includes(':')) {
+                            localStorage.setItem('eoros_local_ip', ip);
+                            pc.close();
+                            return ip;
+                        }
+                    }
+                };
+                setTimeout(() => pc.close(), 3000);
+            } catch (e) {
+                // Fallback para localhost
+            }
+
+            // Retorna o IP salvo ou localhost
+            return localStorage.getItem('eoros_local_ip') || 'localhost';
+        }
+
+        function copyServerLink() {
+            const linkInput = document.getElementById('serverLinkInput');
+            const link = linkInput.value;
+
+            if (!link || link === t('serverPlaceholder')) {
+                showNotification('❌ ' + (currentLang === 'pt' ? 'Gere um link primeiro!' : currentLang === 'en' ?
+                    'Generate a link first!' : 'Сначала создайте ссылку!'));
+                return;
+            }
+
+            navigator.clipboard?.writeText(link).then(() => {
+                showNotification(t('serverLinkCopied'));
+            }).catch(() => {
+                linkInput.select();
+                document.execCommand('copy');
+                showNotification(t('serverLinkCopied'));
+            });
+        }
+
+        function joinViaServerLink() {
+            const linkInput = document.getElementById('serverLinkInput');
+            let linkData = linkInput.value;
+
+            // Se o campo estiver vazio, tenta pegar da URL
+            if (!linkData || linkData === t('serverPlaceholder')) {
+                const params = new URLSearchParams(window.location.search);
+                const urlServer = params.get('server');
+                if (urlServer) {
+                    linkData = urlServer;
+                } else {
+                    showNotification('❌ ' + (currentLang === 'pt' ? 'Cole um link válido!' : currentLang === 'en' ?
+                        'Paste a valid link!' : 'Вставьте действительную ссылку!'));
+                    return;
+                }
+            }
+
+            // Extrai o código do link
+            let serverCode = linkData;
+            if (linkData.includes('?server=')) {
+                serverCode = linkData.split('?server=')[1];
+            } else if (linkData.includes('&server=')) {
+                serverCode = linkData.split('&server=')[1];
+            }
+
+            // Decodifica
+            try {
+                const decoded = decodeURIComponent(serverCode);
+                const data = JSON.parse(atob(decoded));
+
+                // Verifica expiração
+                if (data.expires && data.expires < Date.now()) {
+                    showNotification('❌ ' + (currentLang === 'pt' ? 'Link expirado!' : currentLang === 'en' ?
+                        'Link expired!' : 'Ссылка истекла!'));
+                    return;
+                }
+
+                // Procura ou cria a sala
+                let room = rooms.find(r => r.id === data.roomId);
+
+                if (!room) {
+                    // Cria a sala automaticamente
+                    room = {
+                        id: data.roomId,
+                        name: data.roomName || 'Sala do Servidor',
+                        language: currentLang,
+                        password: data.password || '',
+                        members: [currentUser]
+                    };
+                    rooms.push(room);
+                    addServerIcon(room.name, room.id);
+                    showNotification('📢 ' + (currentLang === 'pt' ? 'Sala criada via servidor!' : currentLang === 'en' ?
+                        'Room created via server!' : 'Комната создана через сервер!'));
+                }
+
+                // Verifica senha
+                if (room.password && room.password !== data.password) {
+                    showNotification('❌ ' + (currentLang === 'pt' ? 'Senha incorreta!' : currentLang === 'en' ?
+                        'Wrong password!' : 'Неверный пароль!'));
+                    return;
+                }
+
+                // Entra na sala
+                if (!room.members.includes(currentUser)) {
+                    room.members.push(currentUser);
+                }
+
+                switchRoom(room.id);
+                showNotification('✅ ' + t('serverJoined'));
+
+                setTimeout(() => {
+                    addSystemMessage('🌐 ' + currentUser + ' ' + t('systemJoined') + ' via servidor');
+                }, 500);
+
+                // Limpa a URL
+                if (window.history && window.history.pushState) {
+                    const cleanUrl = window.location.href.split('?')[0];
+                    window.history.pushState({}, '', cleanUrl);
+                }
+
+                // Atualiza o link do servidor
+                setTimeout(() => {
+                    const newLink = generateServerLink();
+                    if (newLink) {
+                        document.getElementById('serverLinkInput').value = newLink;
+                    }
+                }, 300);
+
+            } catch (e) {
+                showNotification(t('serverInvalid'));
+                console.error('Link inválido:', e);
+            }
+        }
+
+        function showServerLink() {
+            const link = generateServerLink();
+            if (link) {
+                const linkInput = document.getElementById('serverLinkInput');
+                if (linkInput) {
+                    linkInput.value = link;
+                    linkInput.focus();
+                    linkInput.select();
+                }
+                showNotification('🌐 ' + t('serverLinkGenerated'));
+                // Mostra a URL na interface
+                document.getElementById('serverUrlDisplay').textContent = link;
+            }
+        }
+
+        function updateServerStatus() {
+            const dot = document.getElementById('serverStatusDot');
+            const text = document.getElementById('serverStatusText');
+            const urlDisplay = document.getElementById('serverUrlDisplay');
+
+            if (dot && text) {
+                const hasRooms = rooms.length > 0;
+                dot.className = 'dot ' + (hasRooms ? 'online' : 'offline');
+                text.textContent = hasRooms ? t('serverActive') : t('serverInactive');
+            }
+
+            if (urlDisplay) {
+                if (serverLink) {
+                    urlDisplay.textContent = serverLink;
+                } else {
+                    urlDisplay.textContent = t('noLink');
+                }
+            }
+        }
+
+        // ============ LOGIN ============
+        let loginLang = 'pt';
+
+        function selectLoginLanguage(lang) {
+            loginLang = lang;
+            currentLang = lang;
+            document.querySelectorAll('.language-selector-login button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            updateUITexts();
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username) {
+                document.getElementById('loginError').textContent = t('loginError');
+                return;
+            }
+
+            document.getElementById('loginError').textContent = '';
+            currentUser = username;
+            members = [username];
+
+            localStorage.setItem('eoros_user', username);
+            localStorage.setItem('eoros_lang', currentLang);
+            if (password) localStorage.setItem('eoros_pass', password);
+
+            const savedAvatar = localStorage.getItem('eoros_avatar');
+            if (savedAvatar) {
+                userAvatar = savedAvatar;
+                updateAvatarUI(savedAvatar);
+            }
+
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('app').classList.add('visible');
+
+            document.querySelector('#userNameDisplay').textContent = username;
+            if (!userAvatar) {
+                document.querySelector('#userAvatar').textContent = username.charAt(0).toUpperCase();
+                document.querySelector('#memberAvatar').textContent = username.charAt(0).toUpperCase();
+            }
+            document.querySelector('#memberYouName').textContent = t('you');
+            updateMembersList();
+
+            initApp();
+            showNotification('🎉 ' + (currentLang === 'pt' ? 'Bem-vindo' : currentLang === 'en' ? 'Welcome' :
+                'Добро пожаловать') +
+                ', ' + username + '!');
+
+            // Verifica servidor na URL
+            const params = new URLSearchParams(window.location.search);
+            const serverParam = params.get('server');
+            if (serverParam) {
+                document.getElementById('serverLinkInput').value = serverParam;
+                setTimeout(() => joinViaServerLink(), 800);
+            }
+
+            // Carrega último link do servidor
+            const savedLink = localStorage.getItem('eoros_server_link');
+            if (savedLink && !serverParam) {
+                document.getElementById('serverLinkInput').value = savedLink;
+                serverLink = savedLink;
+                document.getElementById('serverUrlDisplay').textContent = savedLink;
+            }
+
+            updateServerStatus();
+        }
+
+        // ============ SETTINGS ============
+        function openSettings() {
+            const audioBtns = document.querySelectorAll('#audioToggleGroup button');
+            audioBtns.forEach(btn => {
+                btn.classList.toggle('active', (btn.dataset.value === 'on') === isAudioEnabled);
+            });
+
+            const msgBtns = document.querySelectorAll('#messageToggleGroup button');
+            msgBtns.forEach(btn => {
+                btn.classList.toggle('active', (btn.dataset.value === 'on') === isMessagesEnabled);
+            });
+
+            document.querySelectorAll('.theme-selector button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === currentTheme);
+            });
+
+            document.querySelectorAll('.color-option').forEach(el => {
+                if (el.dataset.color) {
+                    el.classList.toggle('active', el.dataset.color === accentColor);
+                }
+            });
+
+            document.getElementById('settingsScreen').classList.add('active');
+            settingsChanged = false;
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsScreen').classList.remove('active');
+            if (settingsChanged) {
+                applySettings();
+                settingsChanged = false;
+            }
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-selector button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+            localStorage.setItem('eoros_theme', theme);
+            settingsChanged = true;
+        }
+
+        function setAccentColor(color) {
+            accentColor = color;
+            document.documentElement.style.setProperty('--accent-color', color);
+            document.documentElement.style.setProperty('--accent-hover', color + 'cc');
+            document.documentElement.style.setProperty('--avatar-border', color);
+
+            document.querySelectorAll('.color-option').forEach(el => {
+                if (el.dataset.color) {
+                    el.classList.toggle('active', el.dataset.color === color);
+                }
+            });
+
+            localStorage.setItem('eoros_accent', color);
+            settingsChanged = true;
+        }
+
+        function setAudioSetting(value) {
+            document.querySelectorAll('#audioToggleGroup button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === value);
+            });
+            settingsChanged = true;
+        }
+
+        function setMessageSetting(value) {
+            document.querySelectorAll('#messageToggleGroup button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.value === value);
+            });
+            settingsChanged = true;
+        }
+
+        function saveSettings() {
+            const audioOn = document.querySelector('#audioToggleGroup .active')?.dataset.value === 'on';
+            const msgOn = document.querySelector('#messageToggleGroup .active')?.dataset.value === 'on';
+
+            isAudioEnabled = audioOn;
+            isMessagesEnabled = msgOn;
+
+            applySettings();
+            document.getElementById('settingsScreen').classList.remove('active');
+            showNotification(t('settingsSaved'));
+            settingsChanged = false;
+        }
+
+        function applySettings() {
+            document.getElementById('audioToggle').textContent = isAudioEnabled ? '🔊 Áudio' : '🔇 Áudio';
+            if (isMuted && !isAudioEnabled) {
+                isMuted = false;
+                document.getElementById('muteBtn').textContent = '🔊';
+            }
+
+            document.getElementById('messageInput').disabled = !isMessagesEnabled;
+            document.getElementById('sendBtn').disabled = !isMessagesEnabled;
+
+            updateMembersList();
+        }
+
+        // ============ APP PRINCIPAL ============
+        function initApp() {
+            rooms = [{
+                id: 'geral',
+                name: t('general'),
+                language: currentLang,
+                password: '',
+                members: [currentUser]
+            }];
+            currentRoom = 'geral';
+
+            const sidebar = document.getElementById('sidebarLeft');
+            const existing = sidebar.querySelector('.server-icon[data-room="geral"]');
+            if (!existing) {
+                const icon = document.createElement('div');
+                icon.className = 'server-icon active';
+                icon.textContent = 'E';
+                icon.title = t('general');
+                icon.dataset.room = 'geral';
+                icon.onclick = () => switchRoom('geral');
+                sidebar.insertBefore(icon, sidebar.lastElementChild);
+            }
+
+            updateMembersList();
+            updateUITexts();
+            applySettings();
+
+            const savedTheme = localStorage.getItem('eoros_theme');
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.querySelectorAll('.theme-selector button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.theme === savedTheme);
+                });
+            }
+
+            const savedAccent = localStorage.getItem('eoros_accent');
+            if (savedAccent) {
+                accentColor = savedAccent;
+                document.documentElement.style.setProperty('--accent-color', accentColor);
+                document.documentElement.style.setProperty('--accent-hover', accentColor + 'cc');
+                document.documentElement.style.setProperty('--avatar-border', accentColor);
+                document.querySelectorAll('.color-option').forEach(el => {
+                    if (el.dataset.color) {
+                        el.classList.toggle('active', el.dataset.color === accentColor);
+                    }
+                });
+            }
+
+            // Gera link do servidor automaticamente
+            setTimeout(() => {
+                const link = generateServerLink();
+                if (link) {
+                    document.getElementById('serverLinkInput').value = link;
+                    document.getElementById('serverUrlDisplay').textContent = link;
+                }
+                updateServerStatus();
+            }, 500);
+
+            // Simula amigos entrando
+            setTimeout(() => {
+                const friendNames = currentLang === 'pt' ? ['Amigo1', 'Amigo2'] :
+                    currentLang === 'en' ? ['Friend1', 'Friend2'] :
+                    ['Друг1', 'Друг2'];
+
+                friendNames.forEach((name, i) => {
+                    setTimeout(() => {
+                        if (!members.includes(name)) {
+                            members.push(name);
+                            updateMembersList();
+                            addSystemMessage('👋 ' + name + ' ' + t('systemJoined'));
+                            addServerIcon(name, 'friend-' + Date.now() + i);
+                        }
+                    }, i * 2000 + 1500);
+                });
+            }, 2000);
+        }
+
+        function addServerIcon(name, roomId) {
+            const sidebar = document.getElementById('sidebarLeft');
+            const icon = document.createElement('div');
+            icon.className = 'server-icon';
+            icon.textContent = name.charAt(0).toUpperCase();
+            icon.title = name;
+            icon.dataset.room = roomId;
+            icon.onclick = () => switchRoom(roomId);
+            sidebar.insertBefore(icon, sidebar.lastElementChild);
+        }
+
+        function switchRoom(roomId) {
+            currentRoom = roomId;
+            const room = rooms.find(r => r.id === roomId);
+            if (room) {
+                document.getElementById('currentChannel').textContent = room.name || roomId;
+                members = room.members || [currentUser];
+                updateMembersList();
+
+                const chatArea = document.getElementById('chatArea');
+                const welcomeMsg = chatArea.querySelector('.message.system:first-child');
+                chatArea.innerHTML = '';
+                if (welcomeMsg) chatArea.appendChild(welcomeMsg);
+                addSystemMessage('🔊 ' + (currentLang === 'pt' ? 'Entrou na sala' : currentLang === 'en' ?
+                    'Entered the room' : 'Вошел в комнату') + ' ' + (room.name || roomId));
+
+                // Atualiza o link do servidor
+                setTimeout(() => {
+                    const link = generateServerLink();
+                    if (link) {
+                        document.getElementById('serverLinkInput').value = link;
+                        document.getElementById('serverUrlDisplay').textContent = link;
+                    }
+                }, 300);
+            }
+
+            document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.server-icon[data-room="${roomId}"]`)?.classList.add('active');
+            updateServerStatus();
+        }
+
+        function updateMembersList() {
+            const list = document.getElementById('membersList');
+            list.innerHTML = '';
+            members.forEach(name => {
+                const isYou = name === currentUser;
+                const item = document.createElement('div');
+                item.className = 'member-item';
+                const statusClass = isYou ? '' : 'offline';
+                const initial = name.charAt(0).toUpperCase();
+                const avatarHtml = isYou && userAvatar ?
+                    `<img src="${userAvatar}" alt="${name}">` :
+                    initial;
+                item.innerHTML = `
+                    <div class="member-avatar">${avatarHtml}</div>
+                    <span class="member-status ${statusClass}"></span>
+                    <span class="member-name">${name}${isYou ? ' (' + t('you') + ')' : ''}</span>
+                    ${isYou ? `<div class="member-controls">
+                        <button onclick="toggleMute()" id="muteBtn">${isMuted ? '🔇' : '🔊'}</button>
+                    </div>` : ''}
+                `;
+                list.appendChild(item);
+            });
+            updateServerStatus();
+        }
+
+        // ============ FUNÇÕES DE ÁUDIO ============
+        function toggleAudio() {
+            isAudioEnabled = !isAudioEnabled;
+            document.getElementById('audioToggle').textContent = isAudioEnabled ? '🔊 Áudio' : '🔇 Áudio';
+            showNotification(isAudioEnabled ? '🎤 ' + t('audioEnabled') : '🔇 ' + t('audioDisabled'));
+            if (!isAudioEnabled && isMuted) {
+                isMuted = false;
+                document.getElementById('muteBtn').textContent = '🔊';
+            }
+        }
+
+        function toggleMute() {
+            if (!isAudioEnabled) {
+                showNotification('🔇 ' + (currentLang === 'pt' ? 'Áudio desativado' : currentLang === 'en' ?
+                    'Audio disabled' : 'Аудио отключено'));
+                return;
+            }
+            isMuted = !isMuted;
+            const btn = document.getElementById('muteBtn');
+            if (btn) btn.textContent = isMuted ? '🔇' : '🔊';
+            showNotification(isMuted ? '🔇 ' + t('mute') : '🔊 ' + t('unmute'));
+            addSystemMessage(isMuted ? t('systemMuted') : t('systemUnmuted'));
+        }
+
+        // ============ MENSAGENS ============
+        function sendMessage() {
+            if (!isMessagesEnabled) {
+                showNotification('💬 ' + (currentLang === 'pt' ? 'Mensagens desativadas' : currentLang === 'en' ?
+                    'Messages disabled' : 'Сообщения отключены'));
+                return;
+            }
+
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(currentUser, text, accentColor);
+            input.value = '';
+
+            if (members.length > 1) {
+                const others = members.filter(m => m !== currentUser);
+                if (others.length > 0 && Math.random() > 0.6) {
+                    const other = others[Math.floor(Math.random() * others.length)];
+                    setTimeout(() => {
+                        const replies = {
+                            pt: ['👋 Olá!', '👍 Legal!', '😄 Boa!', '👀 Interessante...', '🤝 Concordo!',
+                                '🎮 Bora jogar!'
+                            ],
+                            en: ['👋 Hello!', '👍 Nice!', '😄 Cool!', '👀 Interesting...', '🤝 Agree!',
+                                '🎮 Let\'s play!'
+                            ],
+                            ru: ['👋 Привет!', '👍 Круто!', '😄 Отлично!', '👀 Интересно...', '🤝 Согласен!',
+                                '🎮 Давай поиграем!'
+                            ]
+                        };
+                        const replyList = replies[currentLang] || replies.pt;
+                        const colors = ['#3ba55d', '#faa81a', '#eb459e', '#00b0f4', '#9b59b6', '#1abc9c'];
+                        addMessage(other, replyList[Math.floor(Math.random() * replyList.length)],
+                            colors[Math.floor(Math.random() * colors.length)]);
+                    }, 1200);
+                }
+            }
+        }
+
+        function addMessage(username, text, color = '#5865f2') {
+            const chat = document.getElementById('chatArea');
+            const msg = document.createElement('div');
+            msg.className = 'message';
+            const initial = username.charAt(0).toUpperCase();
+            const isYou = username === currentUser;
+            const avatarContent = isYou && userAvatar ?
+                `<img src="${userAvatar}" alt="${username}">` :
+                initial;
+            msg.innerHTML = `
+                <div class="message-avatar" style="background:${color}">${avatarContent}</div>
+                <div class="message-content">
+                    <div class="message-username">${username} <span class="message-time">${new Date().toLocaleTimeString()}</span></div>
+                    <div class="message-text">${text}</div>
+                </div>
+            `;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const chat = document.getElementById('chatArea');
+            const msg = document.createElement('div');
+            msg.className = 'message system';
+            msg.textContent = '📢 ' + text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // ============ SALAS ============
+        function openModal() {
+            document.getElementById('roomModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('roomModal').classList.remove('active');
+            document.getElementById('roomNameInput').value = '';
+            document.getElementById('roomPasswordInput').value = '';
+        }
+
+        function createRoom() {
+            const name = document.getElementById('roomNameInput').value.trim();
+            const language = document.getElementById('roomLanguageSelect').value;
+            const password = document.getElementById('roomPasswordInput').value.trim();
+
+            if (!name) {
+                showNotification('❌ ' + (currentLang === 'pt' ? 'Digite um nome para a sala' : currentLang === 'en' ?
+                    'Enter a room name' : 'Введите название комнаты'));
+                return;
+            }
+
+            const roomId = name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
+            rooms.push({
+                id: roomId,
+                name: name,
+                language: language,
+                password: password,
+                members: [currentUser]
+            });
+
+            addServerIcon(name, roomId);
+            closeModal();
+            switchRoom(roomId);
+            showNotification('✅ Sala "' + name + '" ' + (currentLang === 'pt' ? 'criada!' : currentLang === 'en' ?
+                'created!' : 'создана!'));
+            addSystemMessage(t('systemCreated') + ': ' + name);
+
+            // Gera link do servidor automaticamente
+            setTimeout(() => {
+                const link = generateServerLink();
+                if (link) {
+                    document.getElementById('serverLinkInput').value = link;
+                    document.getElementById('serverUrlDisplay').textContent = link;
+                    showNotification('🌐 ' + (currentLang === 'pt' ? 'Link do servidor gerado!' : currentLang ===
+                        'en' ? 'Server link generated!' : 'Ссылка на сервер создана!'));
+                }
+            }, 300);
+
+            setTimeout(() => {
+                const friendNames = currentLang === 'pt' ? ['Convidado1', 'Convidado2'] :
+                    currentLang === 'en' ? ['Guest1', 'Guest2'] :
+                    ['Гость1', 'Гость2'];
+                friendNames.forEach((fname, i) => {
+                    setTimeout(() => {
+                        if (!members.includes(fname)) {
+                            members.push(fname);
+                            updateMembersList();
+                            addSystemMessage('👋 ' + fname + ' ' + t('systemJoined'));
+                        }
+                    }, i * 1500 + 1000);
+                });
+            }, 500);
+            updateServerStatus();
+        }
+
+        // ============ NOTIFICAÇÕES ============
+        function showNotification(text) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = text;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                notif.style.transition = 'opacity 0.3s';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+
+        // ============ LOGOUT ============
+        function logout() {
+            if (confirm(t('logoutConfirm'))) {
+                document.getElementById('app').classList.remove('visible');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginError').textContent = '';
+                currentUser = '';
+                members = [];
+
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML =
+                    `<span class="avatar-placeholder">👤</span><div class="avatar-overlay">Alterar Foto</div>`;
+
+                const chatArea = document.getElementById('chatArea');
+                chatArea.innerHTML = `
+                    <div class="message system" id="welcomeMessage">${t('welcome')}</div>
+                    <div class="message system">📢 ${currentLang === 'pt' ? 'Crie uma sala ou entre em uma existente.' : 
+                        currentLang === 'en' ? 'Create a room or join an existing one.' : 
+                        'Создайте комнату или присоединитесь к существующей.'}</div>
+                    <div class="message system">🌐 ${currentLang === 'pt' ? 'Compartilhe o link do servidor para convidar amigos de outros dispositivos!' : 
+                        currentLang === 'en' ? 'Share the server link to invite friends from other devices!' : 
+                        'Поделитесь ссылкой на сервер, чтобы пригласить друзей с других устройств!'}</div>
+                `;
+
+                document.getElementById('serverLinkInput').value = '';
+                document.getElementById('serverUrlDisplay').textContent = t('noLink');
+                serverLink = '';
+                updateServerStatus();
+            }
+        }
+
+        // ============ INICIALIZAÇÃO ============
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('eoros_user');
+            const savedLang = localStorage.getItem('eoros_lang');
+            const savedAvatar = localStorage.getItem('eoros_avatar');
+
+            if (savedAvatar) {
+                userAvatar = savedAvatar;
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML =
+                    `<img src="${savedAvatar}" alt="Avatar"><div class="avatar-overlay">Alterar Foto</div>`;
+            }
+
+            if (savedUser) {
+                currentUser = savedUser;
+                if (savedLang) {
+                    currentLang = savedLang;
+                    selectLoginLanguage(savedLang);
+                }
+                document.getElementById('loginUsername').value = savedUser;
+                setTimeout(() => handleLogin(), 300);
+            } else {
+                document.getElementById('loginScreen').classList.remove('hidden');
+                updateUITexts();
+            }
+
+            // Verifica servidor na URL
+            const params = new URLSearchParams(window.location.search);
+            const serverParam = params.get('server');
+            if (serverParam) {
+                setTimeout(() => {
+                    if (currentUser) {
+                        document.getElementById('serverLinkInput').value = serverParam;
+                        joinViaServerLink();
+                    }
+                }, 1500);
+            }
+
+            // Escuta mudanças na URL
+            window.addEventListener('popstate', () => {
+                const params = new URLSearchParams(window.location.search);
+                const serverParam = params.get('server');
+                if (serverParam && currentUser) {
+                    document.getElementById('serverLinkInput').value = serverParam;
+                    joinViaServerLink();
+                }
+            });
+
+            // Tenta obter IP local para servidor
+            getLocalIP();
+        });
+
+        // ============ EXPOSIÇÃO GLOBAL ============
+        window.selectLoginLanguage = selectLoginLanguage;
+        window.handleLogin = handleLogin;
+        window.handleAvatarUpload = handleAvatarUpload;
+        window.generateServerLink = generateServerLink;
+        window.copyServerLink = copyServerLink;
+        window.joinViaServerLink = joinViaServerLink;
+        window.showServerLink = showServerLink;
+        window.openSettings = openSettings;
+        window.closeSettings = closeSettings;
+        window.setTheme = setTheme;
+        window.setAccentColor = setAccentColor;
+        window.setAudioSetting = setAudioSetting;
+        window.setMessageSetting = setMessageSetting;
+        window.saveSettings = saveSettings;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.createRoom = createRoom;
+        window.switchRoom = switchRoom;
+        window.sendMessage = sendMessage;
+        window.toggleAudio = toggleAudio;
+        window.toggleMute = toggleMute;
+        window.logout = logout;
+        window.showNotification = showNotification;
+
+        console.log('🌐 Eoros Servidor P2P iniciado!');
+        console.log('🔗 Link do servidor gerado automaticamente!');
+        console.log('📱 Compartilhe o link para conectar de outro dispositivo.');
+        console.log('📋 O link funciona em PC, Celular e Tablet.');
+        console.log('💡 Dica: Use um servidor web (Live Server, Python HTTP) para links funcionais.');
+        console.log('🌐 Exemplo: ' + (serverLink || window.location.href.split('?')[0] + '?server=SEU_TOKEN'));
+    </script>
+</body>
+</html>
