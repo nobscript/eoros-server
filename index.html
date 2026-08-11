@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eoros - Servidor P2P</title>
+    <title>Eoros - Servidor Open Source</title>
     <style>
-        /* ========== ESTILOS COMPLETOS ========== */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
         * {
             margin: 0;
@@ -15,61 +14,59 @@
         }
 
         :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #1e1e2f;
-            --bg-tertiary: #2a2a3a;
-            --bg-hover: #3a3a4a;
-            --text-primary: #dcdcdc;
-            --text-secondary: #b0b0c0;
-            --text-muted: #6a6a7a;
-            --border-color: #2a2a3a;
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #111128;
+            --bg-tertiary: #1a1a3a;
+            --bg-hover: #2a2a4a;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0c0;
+            --text-muted: #6a6a8a;
+            --border-color: #2a2a4a;
             --accent-color: #5865f2;
             --accent-hover: #4752c4;
-            --shadow-color: rgba(0, 0, 0, 0.4);
+            --shadow-color: rgba(0, 0, 0, 0.6);
             --success-color: #3ba55d;
             --danger-color: #ed4245;
-            --input-bg: #2a2a3a;
-            --modal-bg: #1e1e2f;
-            --login-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            --card-bg: rgba(30, 30, 47, 0.95);
+            --input-bg: #1a1a3a;
+            --modal-bg: #111128;
+            --login-bg: linear-gradient(135deg, #0a0a1a 0%, #0f0f2a 50%, #1a0a2a 100%);
+            --card-bg: rgba(17, 17, 40, 0.95);
             --avatar-border: #5865f2;
-            --scrollbar-track: #1a1a2e;
-            --scrollbar-thumb: #2a2a3a;
-            --scrollbar-hover: #3a3a4a;
-            --message-system-bg: #252536;
-            --toggle-bg: #2a2a3a;
-            --token-bg: #1a1a2e;
-            --token-border: #2a2a3a;
-            --invite-bg: #1a1a2e;
-            --server-badge: #5865f2;
+            --scrollbar-track: #0a0a1a;
+            --scrollbar-thumb: #2a2a4a;
+            --scrollbar-hover: #3a3a5a;
+            --message-system-bg: #1a1a3a;
+            --toggle-bg: #1a1a3a;
+            --glow-color: rgba(88, 101, 242, 0.15);
+            --admin-color: #faa81a;
+            --admin-bg: rgba(250, 168, 26, 0.15);
         }
 
         [data-theme="light"] {
-            --bg-primary: #f0f2f5;
+            --bg-primary: #f0f2f7;
             --bg-secondary: #ffffff;
-            --bg-tertiary: #e8eaed;
-            --bg-hover: #dde0e4;
-            --text-primary: #2c2c2c;
+            --bg-tertiary: #e8eaef;
+            --bg-hover: #dde0e6;
+            --text-primary: #1a1a2a;
             --text-secondary: #5a5a6a;
             --text-muted: #8a8a9a;
-            --border-color: #d0d2d6;
+            --border-color: #d0d2d8;
             --accent-color: #5865f2;
             --accent-hover: #4752c4;
-            --shadow-color: rgba(0, 0, 0, 0.15);
-            --input-bg: #f0f2f5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-bg: #f0f2f7;
             --modal-bg: #ffffff;
-            --login-bg: linear-gradient(135deg, #e8eaf0 0%, #d5d8e0 50%, #c0c4d0 100%);
+            --login-bg: linear-gradient(135deg, #e8eaf0 0%, #d5d8e0 50%, #c8c5d8 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
             --avatar-border: #5865f2;
-            --scrollbar-track: #f0f2f5;
+            --scrollbar-track: #f0f2f7;
             --scrollbar-thumb: #c0c4d0;
             --scrollbar-hover: #a0a4b0;
-            --message-system-bg: #e8eaed;
-            --toggle-bg: #e8eaed;
-            --token-bg: #f0f2f5;
-            --token-border: #d0d2d6;
-            --invite-bg: #f0f2f5;
-            --server-badge: #5865f2;
+            --message-system-bg: #e8eaef;
+            --toggle-bg: #e8eaef;
+            --glow-color: rgba(88, 101, 242, 0.1);
+            --admin-color: #d4890a;
+            --admin-bg: rgba(212, 137, 10, 0.1);
         }
 
         body {
@@ -92,13 +89,33 @@
             }
         }
 
-        @keyframes pulse {
+        @keyframes glowPulse {
             0%,
             100% {
-                transform: scale(1);
+                box-shadow: 0 0 20px var(--glow-color);
             }
             50% {
-                transform: scale(1.05);
+                box-shadow: 0 0 40px var(--glow-color), 0 0 60px var(--glow-color);
+            }
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes adminGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(250, 168, 26, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(250, 168, 26, 0.4), 0 0 50px rgba(250, 168, 26, 0.2);
             }
         }
 
@@ -126,49 +143,113 @@
         .login-container {
             background: var(--card-bg);
             padding: 40px 50px;
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid var(--border-color);
             box-shadow: 0 20px 60px var(--shadow-color);
-            width: 480px;
+            width: 500px;
             max-width: 95%;
             text-align: center;
             animation: fadeInUp 0.6s ease;
             transition: background 0.3s ease, border-color 0.3s ease;
             max-height: 98vh;
             overflow-y: auto;
+            position: relative;
         }
 
-        .login-container h1 {
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, var(--accent-color), transparent, var(--accent-color));
+            z-index: -1;
+            opacity: 0.3;
+            animation: glowPulse 3s infinite;
+        }
+
+        .login-header {
+            margin-bottom: 25px;
+        }
+
+        .login-header .logo-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .login-header h1 {
             font-size: 42px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-color), #7289da);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-color), #7289da, var(--accent-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
             letter-spacing: -1px;
+            background-size: 200% 200%;
+            animation: glowPulse 4s infinite;
         }
 
-        .login-container .subtitle {
+        .login-header .subtitle {
             color: var(--text-secondary);
-            font-size: 16px;
-            margin-bottom: 25px;
+            font-size: 15px;
             font-weight: 300;
+            margin-top: 4px;
         }
 
-        .login-container .logo-icon {
-            font-size: 64px;
-            margin-bottom: 10px;
-            display: block;
+        .login-header .open-source-badge {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            color: var(--accent-color);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+            border: 1px solid var(--accent-color);
+            letter-spacing: 0.5px;
+        }
+
+        .login-container .language-selector-login {
+            display: flex;
+            gap: 8px;
+            margin: 14px 0;
+        }
+
+        .login-container .language-selector-login button {
+            flex: 1;
+            padding: 8px;
+            background: var(--bg-tertiary);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .login-container .language-selector-login button:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-color);
+        }
+
+        .login-container .language-selector-login button.active {
+            border-color: var(--accent-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         .login-container input,
         .login-container select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 18px;
             margin-bottom: 12px;
             background: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-primary);
             font-size: 14px;
             outline: none;
@@ -185,12 +266,12 @@
             color: var(--text-muted);
         }
 
-        /* Avatar Upload */
+        /* ========== AVATAR UPLOAD ========== */
         .avatar-upload {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .avatar-preview {
@@ -231,7 +312,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             font-size: 10px;
             padding: 4px;
@@ -248,225 +329,70 @@
             display: none;
         }
 
-        /* ========== SEÇÃO DE SERVIDOR ========== */
-        .server-section {
-            background: var(--invite-bg);
-            border: 2px solid var(--accent-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 12px 0;
-            transition: background 0.3s ease, border-color 0.3s ease;
-            position: relative;
-        }
-
-        .server-section .server-badge {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--server-badge);
-            color: white;
-            padding: 2px 16px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .server-section .server-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            display: block;
+        /* ========== BOTÕES DE LOGIN ========== */
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 4px;
-        }
-
-        .server-section .server-display {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .server-section .server-display input {
-            flex: 1;
-            padding: 10px 14px;
-            font-size: 13px;
-            font-family: 'Courier New', monospace;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--accent-color);
-            outline: none;
-            margin: 0;
-            letter-spacing: 0.5px;
-            min-width: 0;
-            font-weight: 500;
-        }
-
-        .server-section .server-display input:focus {
-            border-color: var(--accent-color);
-        }
-
-        .server-section .server-display button {
-            padding: 10px 16px;
-            background: var(--accent-color);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .server-section .server-display button:hover {
-            background: var(--accent-hover);
-            transform: scale(1.02);
-        }
-
-        .server-section .server-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .server-section .server-actions button {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .server-section .server-actions button:hover {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-            border-color: var(--accent-color);
-        }
-
-        .server-section .server-actions button.primary {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        .server-section .server-actions button.primary:hover {
-            background: var(--accent-hover);
-        }
-
-        .server-section .server-info {
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .server-section .server-info .status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .server-section .server-info .status .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .server-section .server-info .status .dot.online {
-            background: var(--success-color);
-            animation: pulse 2s infinite;
-        }
-
-        .server-section .server-info .status .dot.offline {
-            background: var(--text-muted);
-        }
-
-        .server-section .server-info .url-info {
-            font-family: monospace;
-            background: var(--bg-tertiary);
-            padding: 2px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .login-container .login-btn {
             width: 100%;
-            padding: 14px;
-            background: var(--accent-color);
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             color: white;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 8px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
         }
 
         .login-container .login-btn:hover {
-            background: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.3);
         }
 
         .login-container .login-btn:active {
             transform: translateY(0);
         }
 
-        .login-container .language-selector-login {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0;
+        .login-container .login-btn.user-btn {
+            background: var(--accent-color);
         }
 
-        .login-container .language-selector-login button {
-            flex: 1;
-            padding: 8px;
-            background: var(--bg-tertiary);
-            border: 2px solid transparent;
-            border-radius: 6px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-            font-weight: 500;
+        .login-container .login-btn.user-btn:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.4);
         }
 
-        .login-container .language-selector-login button:hover {
-            background: var(--bg-hover);
-            border-color: var(--border-color);
+        .login-container .login-btn.admin-btn {
+            background: linear-gradient(135deg, #faa81a, #e8940a);
+            animation: adminGlow 2s infinite;
         }
 
-        .login-container .language-selector-login button.active {
-            border-color: var(--accent-color);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+        .login-container .login-btn.admin-btn:hover {
+            background: linear-gradient(135deg, #e8940a, #d4890a);
+            box-shadow: 0 6px 25px rgba(250, 168, 26, 0.4);
         }
 
-        .login-container .error-msg {
-            color: var(--danger-color);
-            font-size: 13px;
-            margin-top: 8px;
-            min-height: 20px;
+        .login-container .login-btn .btn-icon {
+            margin-right: 8px;
+        }
+
+        .login-container .login-btn .btn-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .login-container .divider {
@@ -489,6 +415,147 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        /* Admin Login Modal */
+        .admin-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .admin-modal-overlay.active {
+            display: flex;
+        }
+
+        .admin-modal {
+            background: var(--card-bg);
+            padding: 40px 45px;
+            border-radius: 20px;
+            border: 2px solid var(--admin-color);
+            width: 420px;
+            max-width: 92%;
+            animation: fadeInUp 0.4s ease;
+            box-shadow: 0 0 60px rgba(250, 168, 26, 0.15);
+            position: relative;
+        }
+
+        .admin-modal::before {
+            content: '👑';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            background: var(--card-bg);
+            padding: 0 12px;
+        }
+
+        .admin-modal h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--admin-color);
+            text-align: center;
+        }
+
+        .admin-modal .admin-sub {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-modal .admin-info {
+            background: var(--admin-bg);
+            border: 1px solid var(--admin-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--admin-color);
+        }
+
+        .admin-modal .admin-info strong {
+            font-weight: 700;
+        }
+
+        .admin-modal input {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .admin-modal input:focus {
+            border-color: var(--admin-color);
+            box-shadow: 0 0 0 3px rgba(250, 168, 26, 0.2);
+        }
+
+        .admin-modal .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .admin-modal .admin-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .admin-modal .admin-actions .btn-admin-login {
+            background: linear-gradient(135deg, #faa81a, #e8940a);
+            color: white;
+        }
+
+        .admin-modal .admin-actions .btn-admin-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(250, 168, 26, 0.4);
+        }
+
+        .admin-modal .admin-actions .btn-cancel {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .admin-modal .admin-actions .btn-cancel:hover {
+            background: var(--bg-hover);
+        }
+
+        .admin-modal .admin-error {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .login-container .error-msg {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
         }
 
         /* ========== TELA DE CONFIGURAÇÕES ========== */
@@ -814,6 +881,17 @@
             object-fit: cover;
         }
 
+        .channel-header .left .user-info .admin-badge {
+            background: var(--admin-color);
+            color: #1a1a2a;
+            font-size: 9px;
+            padding: 1px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .channel-header h2 {
             font-size: 18px;
             font-weight: 500;
@@ -907,6 +985,18 @@
             font-size: 14px;
             color: var(--text-primary);
             margin-bottom: 2px;
+        }
+
+        .message-username .admin-tag {
+            background: var(--admin-color);
+            color: #1a1a2a;
+            font-size: 9px;
+            padding: 1px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .message-text {
@@ -1054,6 +1144,18 @@
             font-size: 14px;
             color: var(--text-primary);
             flex: 1;
+        }
+
+        .member-name .admin-tag {
+            background: var(--admin-color);
+            color: #1a1a2a;
+            font-size: 8px;
+            padding: 1px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-left: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .member-controls {
@@ -1224,18 +1326,14 @@
             .channel-header .left .user-info span {
                 display: none;
             }
-            .server-section .server-display {
-                flex-direction: column;
+            .login-header h1 {
+                font-size: 32px;
             }
-            .server-section .server-display button {
-                width: 100%;
+            .login-header .logo-icon {
+                font-size: 48px;
             }
-            .server-section .server-actions {
-                flex-direction: column;
-            }
-            .server-section .server-info {
-                flex-direction: column;
-                gap: 4px;
+            .admin-modal {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -1245,9 +1343,12 @@
     <!-- ========== TELA DE LOGIN ========== -->
     <div class="login-screen" id="loginScreen">
         <div class="login-container">
-            <span class="logo-icon">🌐</span>
-            <h1>EOROS</h1>
-            <p class="subtitle">Servidor P2P para sua comunidade</p>
+            <div class="login-header">
+                <span class="logo-icon">🌐</span>
+                <h1>EOROS</h1>
+                <p class="subtitle">Servidor Open Source para sua comunidade</p>
+                <span class="open-source-badge">⭐ Open Source</span>
+            </div>
 
             <div class="language-selector-login">
                 <button class="active" data-lang="pt" onclick="selectLoginLanguage('pt')">🇧🇷 PT</button>
@@ -1266,30 +1367,39 @@
             <input type="text" id="loginUsername" placeholder="Seu nome de usuário..." maxlength="20">
             <input type="password" id="loginPassword" placeholder="Senha (opcional)">
 
-            <!-- SEÇÃO DE SERVIDOR COM LINK FUNCIONAL -->
-            <div class="server-section" id="serverSection">
-                <span class="server-badge">🌐 SERVIDOR</span>
-                <span class="server-label">🔗 Link do Servidor</span>
-                <div class="server-display">
-                    <input type="text" id="serverLinkInput" class="server-link" placeholder="Clique em 'Gerar Link'" readonly>
-                    <button onclick="generateServerLink()">Gerar Link</button>
-                </div>
-                <div class="server-actions">
-                    <button onclick="copyServerLink()">📋 Copiar Link</button>
-                    <button class="primary" onclick="joinViaServerLink()">🚀 Entrar no Servidor</button>
-                </div>
-                <div class="server-info">
-                    <span class="status">
-                        <span class="dot online" id="serverStatusDot"></span>
-                        <span id="serverStatusText">Servidor ativo</span>
-                    </span>
-                    <span class="url-info" id="serverUrlDisplay">Nenhum link gerado</span>
-                </div>
+            <div class="login-buttons">
+                <button class="login-btn user-btn" onclick="handleLogin(false)">
+                    <span class="btn-icon">👤</span> Entrar como Usuário
+                </button>
+                <button class="login-btn admin-btn" onclick="openAdminModal()">
+                    <span class="btn-icon">👑</span> Entrar como Administrador
+                    <span class="btn-badge">Admin</span>
+                </button>
             </div>
 
-            <button class="login-btn" onclick="handleLogin()">🚀 Entrar no Eoros</button>
-
             <div class="error-msg" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL ADMIN ========== -->
+    <div class="admin-modal-overlay" id="adminModal">
+        <div class="admin-modal">
+            <h2>👑 Acesso Administrador</h2>
+            <p class="admin-sub">Digite as credenciais de administrador para acessar</p>
+
+            <div class="admin-info">
+                🔑 <strong>Host:</strong> eoros | <strong>Senha:</strong> eorosadmin9813
+            </div>
+
+            <input type="text" id="adminHost" placeholder="Host do servidor..." value="eoros">
+            <input type="password" id="adminPassword" placeholder="Senha do administrador...">
+
+            <div class="admin-actions">
+                <button class="btn-cancel" onclick="closeAdminModal()">Cancelar</button>
+                <button class="btn-admin-login" onclick="handleAdminLogin()">🔓 Entrar como Admin</button>
+            </div>
+
+            <div class="admin-error" id="adminError"></div>
         </div>
     </div>
 
@@ -1379,11 +1489,11 @@
                     <div class="user-info">
                         <div class="avatar-small" id="userAvatar">U</div>
                         <span id="userNameDisplay">Usuário</span>
+                        <span class="admin-badge" id="adminBadge" style="display:none;">👑 Admin</span>
                     </div>
                     <h2 id="currentChannel">geral</h2>
                 </div>
                 <div class="channel-actions">
-                    <button onclick="showServerLink()">🌐 Link</button>
                     <button onclick="toggleAudio()" id="audioToggle">🔊 Áudio</button>
                     <button onclick="openSettings()">⚙️</button>
                     <button class="danger-btn" onclick="logout()">Sair</button>
@@ -1393,7 +1503,7 @@
             <div class="chat-area" id="chatArea">
                 <div class="message system" id="welcomeMessage">Bem-vindo ao Eoros! Conecte-se com seus amigos.</div>
                 <div class="message system">📢 Crie uma sala ou entre em uma existente.</div>
-                <div class="message system">🌐 Compartilhe o link do servidor para convidar amigos de outros dispositivos!</div>
+                <div class="message system">👑 Administradores têm poderes especiais!</div>
             </div>
 
             <div class="message-input-area">
@@ -1409,6 +1519,7 @@
                     <div class="member-avatar" id="memberAvatar">U</div>
                     <span class="member-status"></span>
                     <span class="member-name" id="memberYouName">Você</span>
+                    <span class="admin-tag" id="memberAdminTag" style="display:none;">Admin</span>
                     <div class="member-controls">
                         <button onclick="toggleMute()" id="muteBtn">🔊</button>
                     </div>
@@ -1422,10 +1533,19 @@
         const translations = {
             pt: {
                 appName: 'EOROS',
-                subtitle: 'Servidor P2P para sua comunidade',
-                enter: '🚀 Entrar no Eoros',
-                username: 'Seu nome de usuário...',
-                password: 'Senha (opcional)',
+                subtitle: 'Servidor Open Source para sua comunidade',
+                enterUser: '👤 Entrar como Usuário',
+                enterAdmin: '👑 Entrar como Administrador',
+                adminBadge: 'Admin',
+                adminTitle: '👑 Acesso Administrador',
+                adminSub: 'Digite as credenciais de administrador para acessar',
+                adminHost: 'Host do servidor...',
+                adminPassword: 'Senha do administrador...',
+                adminLogin: '🔓 Entrar como Admin',
+                adminCancel: 'Cancelar',
+                adminError: '❌ Host ou senha incorretos!',
+                adminWelcome: '👑 Administrador logado com sucesso!',
+                adminJoined: 'entrou como Administrador',
                 welcome: 'Bem-vindo ao Eoros! Conecte-se com seus amigos.',
                 createRoom: 'Criar Nova Sala',
                 roomName: 'Nome da sala...',
@@ -1443,18 +1563,6 @@
                 settings: '⚙️ Configurações',
                 back: 'Voltar',
                 save: 'Salvar',
-                invite: '🔗 Link do servidor copiado!',
-                serverLinkGenerated: '🌐 Link do servidor gerado! Compartilhe com seus amigos.',
-                serverLinkCopied: '📋 Link do servidor copiado para a área de transferência!',
-                serverJoined: '✅ Entrou no servidor via link!',
-                serverInvalid: '❌ Link do servidor inválido ou expirado!',
-                serverPlaceholder: 'Clique em "Gerar Link"',
-                generateLink: 'Gerar Link',
-                copyLink: '📋 Copiar Link',
-                joinLink: '🚀 Entrar no Servidor',
-                serverActive: 'Servidor ativo',
-                serverInactive: 'Servidor inativo',
-                noLink: 'Nenhum link gerado',
                 general: 'geral',
                 members: '👥 Membros',
                 you: 'Você',
@@ -1475,15 +1583,23 @@
                 theme: 'Tema',
                 dark: '🌙 Escuro',
                 light: '☀️ Claro',
-                mainColor: 'Cor Principal',
-                serverLabel: '🌐 Link do Servidor'
+                mainColor: 'Cor Principal'
             },
             en: {
                 appName: 'EOROS',
-                subtitle: 'P2P Server for your community',
-                enter: '🚀 Enter Eoros',
-                username: 'Your username...',
-                password: 'Password (optional)',
+                subtitle: 'Open Source Server for your community',
+                enterUser: '👤 Login as User',
+                enterAdmin: '👑 Login as Administrator',
+                adminBadge: 'Admin',
+                adminTitle: '👑 Administrator Access',
+                adminSub: 'Enter administrator credentials to access',
+                adminHost: 'Server host...',
+                adminPassword: 'Administrator password...',
+                adminLogin: '🔓 Login as Admin',
+                adminCancel: 'Cancel',
+                adminError: '❌ Incorrect host or password!',
+                adminWelcome: '👑 Administrator logged in successfully!',
+                adminJoined: 'joined as Administrator',
                 welcome: 'Welcome to Eoros! Connect with your friends.',
                 createRoom: 'Create New Room',
                 roomName: 'Room name...',
@@ -1501,18 +1617,6 @@
                 settings: '⚙️ Settings',
                 back: 'Back',
                 save: 'Save',
-                invite: '🔗 Server link copied!',
-                serverLinkGenerated: '🌐 Server link generated! Share with your friends.',
-                serverLinkCopied: '📋 Server link copied to clipboard!',
-                serverJoined: '✅ Joined server via link!',
-                serverInvalid: '❌ Invalid or expired server link!',
-                serverPlaceholder: 'Click "Generate Link"',
-                generateLink: 'Generate Link',
-                copyLink: '📋 Copy Link',
-                joinLink: '🚀 Join Server',
-                serverActive: 'Server active',
-                serverInactive: 'Server inactive',
-                noLink: 'No link generated',
                 general: 'general',
                 members: '👥 Members',
                 you: 'You',
@@ -1533,15 +1637,23 @@
                 theme: 'Theme',
                 dark: '🌙 Dark',
                 light: '☀️ Light',
-                mainColor: 'Main Color',
-                serverLabel: '🌐 Server Link'
+                mainColor: 'Main Color'
             },
             ru: {
                 appName: 'EOROS',
-                subtitle: 'P2P сервер для вашего сообщества',
-                enter: '🚀 Войти в Eoros',
-                username: 'Ваше имя пользователя...',
-                password: 'Пароль (опционально)',
+                subtitle: 'Сервер с открытым исходным кодом для вашего сообщества',
+                enterUser: '👤 Войти как пользователь',
+                enterAdmin: '👑 Войти как администратор',
+                adminBadge: 'Админ',
+                adminTitle: '👑 Доступ администратора',
+                adminSub: 'Введите учетные данные администратора для доступа',
+                adminHost: 'Хост сервера...',
+                adminPassword: 'Пароль администратора...',
+                adminLogin: '🔓 Войти как администратор',
+                adminCancel: 'Отмена',
+                adminError: '❌ Неверный хост или пароль!',
+                adminWelcome: '👑 Администратор успешно вошел!',
+                adminJoined: 'вошел как Администратор',
                 welcome: 'Добро пожаловать в Eoros! Общайтесь с друзьями.',
                 createRoom: 'Создать новую комнату',
                 roomName: 'Название комнаты...',
@@ -1559,18 +1671,6 @@
                 settings: '⚙️ Настройки',
                 back: 'Назад',
                 save: 'Сохранить',
-                invite: '🔗 Ссылка на сервер скопирована!',
-                serverLinkGenerated: '🌐 Ссылка на сервер создана! Поделитесь с друзьями.',
-                serverLinkCopied: '📋 Ссылка на сервер скопирована в буфер обмена!',
-                serverJoined: '✅ Присоединился к серверу по ссылке!',
-                serverInvalid: '❌ Неверная или просроченная ссылка на сервер!',
-                serverPlaceholder: 'Нажмите "Создать ссылку"',
-                generateLink: 'Создать ссылку',
-                copyLink: '📋 Копировать ссылку',
-                joinLink: '🚀 Войти на сервер',
-                serverActive: 'Сервер активен',
-                serverInactive: 'Сервер неактивен',
-                noLink: 'Ссылка не создана',
                 general: 'общий',
                 members: '👥 Участники',
                 you: 'Вы',
@@ -1591,8 +1691,7 @@
                 theme: 'Тема',
                 dark: '🌙 Темная',
                 light: '☀️ Светлая',
-                mainColor: 'Основной цвет',
-                serverLabel: '🌐 Ссылка на сервер'
+                mainColor: 'Основной цвет'
             }
         };
 
@@ -1603,14 +1702,17 @@
         let isMuted = false;
         let isAudioEnabled = true;
         let isMessagesEnabled = true;
+        let isAdmin = false;
         let rooms = [];
         let currentRoom = 'geral';
         let members = [];
         let settingsChanged = false;
         let currentTheme = 'dark';
         let accentColor = '#5865f2';
-        let serverLink = '';
-        let serverLinkData = {};
+
+        // Credenciais Admin - HOST = "eoros"
+        const ADMIN_HOST = 'eoros';
+        const ADMIN_PASSWORD = 'eorosadmin9813';
 
         // ============ FUNÇÕES DE TRADUÇÃO ============
         function t(key) {
@@ -1618,18 +1720,21 @@
         }
 
         function updateUITexts() {
-            document.querySelector('.login-container h1').textContent = t('appName');
-            document.querySelector('.login-container .subtitle').textContent = t('subtitle');
-            document.querySelector('.login-btn').textContent = t('enter');
+            document.querySelector('.login-header h1').textContent = t('appName');
+            document.querySelector('.login-header .subtitle').textContent = t('subtitle');
+            document.querySelector('.login-btn.user-btn').innerHTML =
+                `<span class="btn-icon">👤</span> ${t('enterUser')}`;
+            document.querySelector('.login-btn.admin-btn').innerHTML =
+                `<span class="btn-icon">👑</span> ${t('enterAdmin')} <span class="btn-badge">${t('adminBadge')}</span>`;
             document.querySelector('#loginUsername').placeholder = t('username');
             document.querySelector('#loginPassword').placeholder = t('password');
 
-            document.querySelector('.server-section .server-label').textContent = t('serverLabel');
-            document.querySelector('#serverLinkInput').placeholder = t('serverPlaceholder');
-            document.querySelector('.server-section .server-display button').textContent = t('generateLink');
-            document.querySelectorAll('.server-actions button')[0].textContent = t('copyLink');
-            document.querySelectorAll('.server-actions button')[1].textContent = t('joinLink');
-            document.querySelector('#serverStatusText').textContent = t('serverActive');
+            document.querySelector('.admin-modal h2').textContent = t('adminTitle');
+            document.querySelector('.admin-modal .admin-sub').textContent = t('adminSub');
+            document.querySelector('#adminHost').placeholder = t('adminHost');
+            document.querySelector('#adminPassword').placeholder = t('adminPassword');
+            document.querySelector('.admin-actions .btn-admin-login').textContent = t('adminLogin');
+            document.querySelector('.admin-actions .btn-cancel').textContent = t('adminCancel');
 
             const settingsLabels = document.querySelectorAll('.setting-group label');
             if (settingsLabels.length >= 4) {
@@ -1664,8 +1769,6 @@
             if (currentUser) {
                 document.querySelector('#userNameDisplay').textContent = currentUser;
             }
-
-            updateServerStatus();
         }
 
         // ============ AVATAR ============
@@ -1697,235 +1800,33 @@
             }
         }
 
-        // ============ SISTEMA DE SERVIDOR COM LINK FUNCIONAL ============
-        function generateServerLink() {
-            const room = rooms.find(r => r.id === currentRoom) || rooms[0];
-            if (!room) {
-                showNotification('❌ ' + (currentLang === 'pt' ? 'Crie uma sala primeiro!' : currentLang === 'en' ?
-                    'Create a room first!' : 'Сначала создайте комнату!'));
-                return;
-            }
-
-            // Gera um código único para o servidor
-            const serverCode = btoa(JSON.stringify({
-                roomId: room.id,
-                roomName: room.name,
-                password: room.password || '',
-                server: 'Eoros',
-                created: Date.now(),
-                expires: Date.now() + 86400000 // 24 horas
-            }));
-
-            // Obtém a URL base (funciona em servidor web ou local)
-            let baseUrl = window.location.href.split('?')[0];
-            // Se for file://, tenta usar localhost ou IP
-            if (baseUrl.startsWith('file://')) {
-                // Tenta obter o IP local
-                const localIP = getLocalIP();
-                baseUrl = `http://${localIP}:8080/`;
-            }
-
-            // Monta o link completo
-            serverLink = baseUrl + '?server=' + encodeURIComponent(serverCode);
-
-            serverLinkData = {
-                code: serverCode,
-                roomId: room.id,
-                created: Date.now(),
-                expires: Date.now() + 86400000
-            };
-
-            document.getElementById('serverLinkInput').value = serverLink;
-
-            // Atualiza display da URL
-            document.getElementById('serverUrlDisplay').textContent = serverLink;
-
-            showNotification('🌐 ' + t('serverLinkGenerated'));
-
-            // Salva no localStorage
-            localStorage.setItem('eoros_server_link', serverLink);
-            localStorage.setItem('eoros_server_code', serverCode);
-
-            updateServerStatus();
-
-            return serverLink;
+        // ============ ADMIN MODAL ============
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+            document.getElementById('adminError').textContent = '';
+            document.getElementById('adminHost').value = 'eoros';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
         }
 
-        function getLocalIP() {
-            // Tenta obter o IP local
-            try {
-                // Usa WebRTC para obter IP local
-                const pc = new RTCPeerConnection({
-                    iceServers: []
-                });
-                pc.createDataChannel('');
-                pc.createOffer().then(offer => {
-                    pc.setLocalDescription(offer);
-                });
-                pc.onicecandidate = function(event) {
-                    if (event && event.candidate && event.candidate.candidate) {
-                        const ip = event.candidate.candidate.split(' ')[4];
-                        if (ip && !ip.includes(':')) {
-                            localStorage.setItem('eoros_local_ip', ip);
-                            pc.close();
-                            return ip;
-                        }
-                    }
-                };
-                setTimeout(() => pc.close(), 3000);
-            } catch (e) {
-                // Fallback para localhost
-            }
-
-            // Retorna o IP salvo ou localhost
-            return localStorage.getItem('eoros_local_ip') || 'localhost';
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+            document.getElementById('adminError').textContent = '';
         }
 
-        function copyServerLink() {
-            const linkInput = document.getElementById('serverLinkInput');
-            const link = linkInput.value;
+        function handleAdminLogin() {
+            const host = document.getElementById('adminHost').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
 
-            if (!link || link === t('serverPlaceholder')) {
-                showNotification('❌ ' + (currentLang === 'pt' ? 'Gere um link primeiro!' : currentLang === 'en' ?
-                    'Generate a link first!' : 'Сначала создайте ссылку!'));
-                return;
-            }
-
-            navigator.clipboard?.writeText(link).then(() => {
-                showNotification(t('serverLinkCopied'));
-            }).catch(() => {
-                linkInput.select();
-                document.execCommand('copy');
-                showNotification(t('serverLinkCopied'));
-            });
-        }
-
-        function joinViaServerLink() {
-            const linkInput = document.getElementById('serverLinkInput');
-            let linkData = linkInput.value;
-
-            // Se o campo estiver vazio, tenta pegar da URL
-            if (!linkData || linkData === t('serverPlaceholder')) {
-                const params = new URLSearchParams(window.location.search);
-                const urlServer = params.get('server');
-                if (urlServer) {
-                    linkData = urlServer;
-                } else {
-                    showNotification('❌ ' + (currentLang === 'pt' ? 'Cole um link válido!' : currentLang === 'en' ?
-                        'Paste a valid link!' : 'Вставьте действительную ссылку!'));
-                    return;
-                }
-            }
-
-            // Extrai o código do link
-            let serverCode = linkData;
-            if (linkData.includes('?server=')) {
-                serverCode = linkData.split('?server=')[1];
-            } else if (linkData.includes('&server=')) {
-                serverCode = linkData.split('&server=')[1];
-            }
-
-            // Decodifica
-            try {
-                const decoded = decodeURIComponent(serverCode);
-                const data = JSON.parse(atob(decoded));
-
-                // Verifica expiração
-                if (data.expires && data.expires < Date.now()) {
-                    showNotification('❌ ' + (currentLang === 'pt' ? 'Link expirado!' : currentLang === 'en' ?
-                        'Link expired!' : 'Ссылка истекла!'));
-                    return;
-                }
-
-                // Procura ou cria a sala
-                let room = rooms.find(r => r.id === data.roomId);
-
-                if (!room) {
-                    // Cria a sala automaticamente
-                    room = {
-                        id: data.roomId,
-                        name: data.roomName || 'Sala do Servidor',
-                        language: currentLang,
-                        password: data.password || '',
-                        members: [currentUser]
-                    };
-                    rooms.push(room);
-                    addServerIcon(room.name, room.id);
-                    showNotification('📢 ' + (currentLang === 'pt' ? 'Sala criada via servidor!' : currentLang === 'en' ?
-                        'Room created via server!' : 'Комната создана через сервер!'));
-                }
-
-                // Verifica senha
-                if (room.password && room.password !== data.password) {
-                    showNotification('❌ ' + (currentLang === 'pt' ? 'Senha incorreta!' : currentLang === 'en' ?
-                        'Wrong password!' : 'Неверный пароль!'));
-                    return;
-                }
-
-                // Entra na sala
-                if (!room.members.includes(currentUser)) {
-                    room.members.push(currentUser);
-                }
-
-                switchRoom(room.id);
-                showNotification('✅ ' + t('serverJoined'));
-
-                setTimeout(() => {
-                    addSystemMessage('🌐 ' + currentUser + ' ' + t('systemJoined') + ' via servidor');
-                }, 500);
-
-                // Limpa a URL
-                if (window.history && window.history.pushState) {
-                    const cleanUrl = window.location.href.split('?')[0];
-                    window.history.pushState({}, '', cleanUrl);
-                }
-
-                // Atualiza o link do servidor
-                setTimeout(() => {
-                    const newLink = generateServerLink();
-                    if (newLink) {
-                        document.getElementById('serverLinkInput').value = newLink;
-                    }
-                }, 300);
-
-            } catch (e) {
-                showNotification(t('serverInvalid'));
-                console.error('Link inválido:', e);
-            }
-        }
-
-        function showServerLink() {
-            const link = generateServerLink();
-            if (link) {
-                const linkInput = document.getElementById('serverLinkInput');
-                if (linkInput) {
-                    linkInput.value = link;
-                    linkInput.focus();
-                    linkInput.select();
-                }
-                showNotification('🌐 ' + t('serverLinkGenerated'));
-                // Mostra a URL na interface
-                document.getElementById('serverUrlDisplay').textContent = link;
-            }
-        }
-
-        function updateServerStatus() {
-            const dot = document.getElementById('serverStatusDot');
-            const text = document.getElementById('serverStatusText');
-            const urlDisplay = document.getElementById('serverUrlDisplay');
-
-            if (dot && text) {
-                const hasRooms = rooms.length > 0;
-                dot.className = 'dot ' + (hasRooms ? 'online' : 'offline');
-                text.textContent = hasRooms ? t('serverActive') : t('serverInactive');
-            }
-
-            if (urlDisplay) {
-                if (serverLink) {
-                    urlDisplay.textContent = serverLink;
-                } else {
-                    urlDisplay.textContent = t('noLink');
-                }
+            if (host === ADMIN_HOST && password === ADMIN_PASSWORD) {
+                closeAdminModal();
+                document.getElementById('loginUsername').value = 'Administrador';
+                isAdmin = true;
+                handleLogin(true);
+            } else {
+                document.getElementById('adminError').textContent = t('adminError');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
             }
         }
 
@@ -1941,9 +1842,13 @@
             updateUITexts();
         }
 
-        function handleLogin() {
-            const username = document.getElementById('loginUsername').value.trim();
+        function handleLogin(isAdminUser) {
+            let username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
+
+            if (isAdminUser) {
+                username = 'Administrador';
+            }
 
             if (!username) {
                 document.getElementById('loginError').textContent = t('loginError');
@@ -1953,9 +1858,11 @@
             document.getElementById('loginError').textContent = '';
             currentUser = username;
             members = [username];
+            isAdmin = isAdminUser || false;
 
             localStorage.setItem('eoros_user', username);
             localStorage.setItem('eoros_lang', currentLang);
+            localStorage.setItem('eoros_admin', isAdmin ? 'true' : 'false');
             if (password) localStorage.setItem('eoros_pass', password);
 
             const savedAvatar = localStorage.getItem('eoros_avatar');
@@ -1973,30 +1880,26 @@
                 document.querySelector('#memberAvatar').textContent = username.charAt(0).toUpperCase();
             }
             document.querySelector('#memberYouName').textContent = t('you');
+
+            if (isAdmin) {
+                document.querySelector('#adminBadge').style.display = 'inline';
+                document.querySelector('#memberAdminTag').style.display = 'inline';
+                document.querySelector('#userNameDisplay').textContent = '👑 ' + username;
+            } else {
+                document.querySelector('#adminBadge').style.display = 'none';
+                document.querySelector('#memberAdminTag').style.display = 'none';
+            }
+
             updateMembersList();
-
             initApp();
-            showNotification('🎉 ' + (currentLang === 'pt' ? 'Bem-vindo' : currentLang === 'en' ? 'Welcome' :
-                'Добро пожаловать') +
-                ', ' + username + '!');
 
-            // Verifica servidor na URL
-            const params = new URLSearchParams(window.location.search);
-            const serverParam = params.get('server');
-            if (serverParam) {
-                document.getElementById('serverLinkInput').value = serverParam;
-                setTimeout(() => joinViaServerLink(), 800);
+            if (isAdmin) {
+                showNotification('👑 ' + t('adminWelcome'));
+                addSystemMessage('👑 ' + username + ' ' + t('adminJoined'));
+            } else {
+                showNotification('🎉 ' + (currentLang === 'pt' ? 'Bem-vindo' : currentLang === 'en' ? 'Welcome' :
+                    'Добро пожаловать') + ', ' + username + '!');
             }
-
-            // Carrega último link do servidor
-            const savedLink = localStorage.getItem('eoros_server_link');
-            if (savedLink && !serverParam) {
-                document.getElementById('serverLinkInput').value = savedLink;
-                serverLink = savedLink;
-                document.getElementById('serverUrlDisplay').textContent = savedLink;
-            }
-
-            updateServerStatus();
         }
 
         // ============ SETTINGS ============
@@ -2148,17 +2051,6 @@
                 });
             }
 
-            // Gera link do servidor automaticamente
-            setTimeout(() => {
-                const link = generateServerLink();
-                if (link) {
-                    document.getElementById('serverLinkInput').value = link;
-                    document.getElementById('serverUrlDisplay').textContent = link;
-                }
-                updateServerStatus();
-            }, 500);
-
-            // Simula amigos entrando
             setTimeout(() => {
                 const friendNames = currentLang === 'pt' ? ['Amigo1', 'Amigo2'] :
                     currentLang === 'en' ? ['Friend1', 'Friend2'] :
@@ -2202,20 +2094,10 @@
                 if (welcomeMsg) chatArea.appendChild(welcomeMsg);
                 addSystemMessage('🔊 ' + (currentLang === 'pt' ? 'Entrou na sala' : currentLang === 'en' ?
                     'Entered the room' : 'Вошел в комнату') + ' ' + (room.name || roomId));
-
-                // Atualiza o link do servidor
-                setTimeout(() => {
-                    const link = generateServerLink();
-                    if (link) {
-                        document.getElementById('serverLinkInput').value = link;
-                        document.getElementById('serverUrlDisplay').textContent = link;
-                    }
-                }, 300);
             }
 
             document.querySelectorAll('.server-icon').forEach(el => el.classList.remove('active'));
             document.querySelector(`.server-icon[data-room="${roomId}"]`)?.classList.add('active');
-            updateServerStatus();
         }
 
         function updateMembersList() {
@@ -2230,17 +2112,17 @@
                 const avatarHtml = isYou && userAvatar ?
                     `<img src="${userAvatar}" alt="${name}">` :
                     initial;
+                const isAdminUser = isYou && isAdmin;
                 item.innerHTML = `
                     <div class="member-avatar">${avatarHtml}</div>
                     <span class="member-status ${statusClass}"></span>
-                    <span class="member-name">${name}${isYou ? ' (' + t('you') + ')' : ''}</span>
+                    <span class="member-name">${name}${isYou ? ' (' + t('you') + ')' : ''}${isAdminUser ? ' <span class="admin-tag">👑 Admin</span>' : ''}</span>
                     ${isYou ? `<div class="member-controls">
                         <button onclick="toggleMute()" id="muteBtn">${isMuted ? '🔇' : '🔊'}</button>
                     </div>` : ''}
                 `;
                 list.appendChild(item);
             });
-            updateServerStatus();
         }
 
         // ============ FUNÇÕES DE ÁUDIO ============
@@ -2279,7 +2161,7 @@
             const text = input.value.trim();
             if (!text) return;
 
-            addMessage(currentUser, text, accentColor);
+            addMessage(currentUser, text, isAdmin ? '#faa81a' : accentColor);
             input.value = '';
 
             if (members.length > 1) {
@@ -2316,10 +2198,11 @@
             const avatarContent = isYou && userAvatar ?
                 `<img src="${userAvatar}" alt="${username}">` :
                 initial;
+            const isAdminUser = isYou && isAdmin;
             msg.innerHTML = `
                 <div class="message-avatar" style="background:${color}">${avatarContent}</div>
                 <div class="message-content">
-                    <div class="message-username">${username} <span class="message-time">${new Date().toLocaleTimeString()}</span></div>
+                    <div class="message-username">${username}${isAdminUser ? ' <span class="admin-tag">👑 Admin</span>' : ''} <span class="message-time">${new Date().toLocaleTimeString()}</span></div>
                     <div class="message-text">${text}</div>
                 </div>
             `;
@@ -2374,17 +2257,6 @@
                 'created!' : 'создана!'));
             addSystemMessage(t('systemCreated') + ': ' + name);
 
-            // Gera link do servidor automaticamente
-            setTimeout(() => {
-                const link = generateServerLink();
-                if (link) {
-                    document.getElementById('serverLinkInput').value = link;
-                    document.getElementById('serverUrlDisplay').textContent = link;
-                    showNotification('🌐 ' + (currentLang === 'pt' ? 'Link do servidor gerado!' : currentLang ===
-                        'en' ? 'Server link generated!' : 'Ссылка на сервер создана!'));
-                }
-            }, 300);
-
             setTimeout(() => {
                 const friendNames = currentLang === 'pt' ? ['Convidado1', 'Convidado2'] :
                     currentLang === 'en' ? ['Guest1', 'Guest2'] :
@@ -2399,7 +2271,6 @@
                     }, i * 1500 + 1000);
                 });
             }, 500);
-            updateServerStatus();
         }
 
         // ============ NOTIFICAÇÕES ============
@@ -2429,6 +2300,10 @@
                 document.getElementById('loginError').textContent = '';
                 currentUser = '';
                 members = [];
+                isAdmin = false;
+
+                document.querySelector('#adminBadge').style.display = 'none';
+                document.querySelector('#memberAdminTag').style.display = 'none';
 
                 const preview = document.getElementById('avatarPreview');
                 preview.innerHTML =
@@ -2440,15 +2315,12 @@
                     <div class="message system">📢 ${currentLang === 'pt' ? 'Crie uma sala ou entre em uma existente.' : 
                         currentLang === 'en' ? 'Create a room or join an existing one.' : 
                         'Создайте комнату или присоединитесь к существующей.'}</div>
-                    <div class="message system">🌐 ${currentLang === 'pt' ? 'Compartilhe o link do servidor para convidar amigos de outros dispositivos!' : 
-                        currentLang === 'en' ? 'Share the server link to invite friends from other devices!' : 
-                        'Поделитесь ссылкой на сервер, чтобы пригласить друзей с других устройств!'}</div>
+                    <div class="message system">👑 ${currentLang === 'pt' ? 'Administradores têm poderes especiais!' : 
+                        currentLang === 'en' ? 'Administrators have special powers!' : 
+                        'У администраторов есть особые полномочия!'}</div>
                 `;
 
-                document.getElementById('serverLinkInput').value = '';
-                document.getElementById('serverUrlDisplay').textContent = t('noLink');
-                serverLink = '';
-                updateServerStatus();
+                localStorage.removeItem('eoros_admin');
             }
         }
 
@@ -2457,6 +2329,7 @@
             const savedUser = localStorage.getItem('eoros_user');
             const savedLang = localStorage.getItem('eoros_lang');
             const savedAvatar = localStorage.getItem('eoros_avatar');
+            const savedAdmin = localStorage.getItem('eoros_admin');
 
             if (savedAvatar) {
                 userAvatar = savedAvatar;
@@ -2472,46 +2345,47 @@
                     selectLoginLanguage(savedLang);
                 }
                 document.getElementById('loginUsername').value = savedUser;
-                setTimeout(() => handleLogin(), 300);
+                if (savedAdmin === 'true') {
+                    isAdmin = true;
+                    setTimeout(() => handleLogin(true), 300);
+                } else {
+                    setTimeout(() => handleLogin(false), 300);
+                }
             } else {
                 document.getElementById('loginScreen').classList.remove('hidden');
                 updateUITexts();
             }
 
-            // Verifica servidor na URL
-            const params = new URLSearchParams(window.location.search);
-            const serverParam = params.get('server');
-            if (serverParam) {
-                setTimeout(() => {
-                    if (currentUser) {
-                        document.getElementById('serverLinkInput').value = serverParam;
-                        joinViaServerLink();
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    if (isAdmin) {
+                        handleLogin(true);
+                    } else {
+                        handleLogin(false);
                     }
-                }, 1500);
-            }
-
-            // Escuta mudanças na URL
-            window.addEventListener('popstate', () => {
-                const params = new URLSearchParams(window.location.search);
-                const serverParam = params.get('server');
-                if (serverParam && currentUser) {
-                    document.getElementById('serverLinkInput').value = serverParam;
-                    joinViaServerLink();
                 }
             });
 
-            // Tenta obter IP local para servidor
-            getLocalIP();
+            document.getElementById('loginUsername').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('loginPassword').focus();
+                }
+            });
+
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleAdminLogin();
+                }
+            });
         });
 
         // ============ EXPOSIÇÃO GLOBAL ============
         window.selectLoginLanguage = selectLoginLanguage;
         window.handleLogin = handleLogin;
         window.handleAvatarUpload = handleAvatarUpload;
-        window.generateServerLink = generateServerLink;
-        window.copyServerLink = copyServerLink;
-        window.joinViaServerLink = joinViaServerLink;
-        window.showServerLink = showServerLink;
+        window.openAdminModal = openAdminModal;
+        window.closeAdminModal = closeAdminModal;
+        window.handleAdminLogin = handleAdminLogin;
         window.openSettings = openSettings;
         window.closeSettings = closeSettings;
         window.setTheme = setTheme;
@@ -2529,12 +2403,9 @@
         window.logout = logout;
         window.showNotification = showNotification;
 
-        console.log('🌐 Eoros Servidor P2P iniciado!');
-        console.log('🔗 Link do servidor gerado automaticamente!');
-        console.log('📱 Compartilhe o link para conectar de outro dispositivo.');
-        console.log('📋 O link funciona em PC, Celular e Tablet.');
-        console.log('💡 Dica: Use um servidor web (Live Server, Python HTTP) para links funcionais.');
-        console.log('🌐 Exemplo: ' + (serverLink || window.location.href.split('?')[0] + '?server=SEU_TOKEN'));
+        console.log('🌐 Eoros Servidor Open Source iniciado!');
+        console.log('👑 Admin: host=eoros | senha=eorosadmin9813');
+        console.log('👤 Usuário normal: qualquer nome');
     </script>
 </body>
 </html>
