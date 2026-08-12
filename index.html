@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Eoros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* ===== VARIÁVEIS ===== */
         :root {
-            --bg-primary: rgba(10, 10, 15, 0.92);
-            --bg-secondary: rgba(18, 18, 26, 0.85);
-            --bg-tertiary: rgba(26, 26, 46, 0.7);
-            --bg-input: rgba(10, 10, 15, 0.6);
+            --bg-primary: #000000;
+            --bg-secondary: rgba(18, 18, 26, 0.92);
+            --bg-tertiary: rgba(10, 10, 20, 0.8);
+            --bg-input: rgba(0, 0, 0, 0.6);
             --text-primary: #e8e8f0;
             --text-secondary: #8888aa;
             --text-muted: #555577;
@@ -18,34 +19,62 @@
             --accent: #5865f2;
             --accent-hover: #4752c4;
             --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6);
-            --shadow: 0 20px 60px rgba(0,0,0,0.6);
+            --shadow: 0 20px 60px rgba(0,0,0,0.8);
             --message-own: #5865f2;
-            --message-other: rgba(26, 26, 46, 0.8);
+            --message-other: rgba(26, 26, 46, 0.9);
             --success: #4caf50;
             --error: #f44336;
             --warning: #ff9800;
-            --card-bg: rgba(18, 18, 26, 0.8);
-            --input-bg: rgba(10, 10, 15, 0.6);
+            --card-bg: rgba(18, 18, 26, 0.95);
+            --input-bg: rgba(0, 0, 0, 0.6);
             --hover-bg: rgba(42, 42, 62, 0.5);
             --container-width: 480px;
             --container-height: 95vh;
             --border-radius: 24px;
             --message-own-text: #ffffff;
             --message-other-text: #e8e8f0;
-            --glass-bg: rgba(18, 18, 26, 0.7);
+            --glass-bg: rgba(18, 18, 26, 0.9);
             --topic-bg: rgba(88, 101, 242, 0.1);
             --topic-border: rgba(88, 101, 242, 0.2);
+            --font-brand: 'Great Vibes', cursive;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ===== TEMA CLARO ===== */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: rgba(255, 255, 255, 0.95);
+            --bg-tertiary: rgba(240, 242, 245, 0.8);
+            --bg-input: rgba(255, 255, 255, 0.8);
+            --text-primary: #1a1a2e;
+            --text-secondary: #555577;
+            --text-muted: #8888aa;
+            --border-color: rgba(208, 210, 214, 0.5);
+            --shadow: 0 20px 60px rgba(0,0,0,0.08);
+            --message-other: rgba(240, 242, 245, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --message-other-text: #1a1a2e;
+            --message-own-text: #ffffff;
         }
 
         /* ===== CORES PERSONALIZÁVEIS ===== */
-        [data-color="blue"] { --accent: #5865f2; --accent-hover: #4752c4; --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6); --message-own: #5865f2; --topic-bg: rgba(88, 101, 242, 0.15); --topic-border: rgba(88, 101, 242, 0.3); }
-        [data-color="purple"] { --accent: #8b5cf6; --accent-hover: #7c3aed; --accent-gradient: linear-gradient(135deg, #8b5cf6, #a78bfa); --message-own: #8b5cf6; --topic-bg: rgba(139, 92, 246, 0.15); --topic-border: rgba(139, 92, 246, 0.3); }
-        [data-color="pink"] { --accent: #ec4899; --accent-hover: #db2777; --accent-gradient: linear-gradient(135deg, #ec4899, #f472b6); --message-own: #ec4899; --topic-bg: rgba(236, 72, 153, 0.15); --topic-border: rgba(236, 72, 153, 0.3); }
-        [data-color="red"] { --accent: #ef4444; --accent-hover: #dc2626; --accent-gradient: linear-gradient(135deg, #ef4444, #f87171); --message-own: #ef4444; --topic-bg: rgba(239, 68, 68, 0.15); --topic-border: rgba(239, 68, 68, 0.3); }
-        [data-color="orange"] { --accent: #f59e0b; --accent-hover: #d97706; --accent-gradient: linear-gradient(135deg, #f59e0b, #fbbf24); --message-own: #f59e0b; --topic-bg: rgba(245, 158, 11, 0.15); --topic-border: rgba(245, 158, 11, 0.3); }
-        [data-color="green"] { --accent: #10b981; --accent-hover: #059669; --accent-gradient: linear-gradient(135deg, #10b981, #34d399); --message-own: #10b981; --topic-bg: rgba(16, 185, 129, 0.15); --topic-border: rgba(16, 185, 129, 0.3); }
-        [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; --topic-bg: rgba(20, 184, 166, 0.15); --topic-border: rgba(20, 184, 166, 0.3); }
-        [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; --topic-bg: rgba(6, 182, 212, 0.15); --topic-border: rgba(6, 182, 212, 0.3); }
+        [data-color="blue"] { --accent: #5865f2; --accent-hover: #4752c4; --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6); --message-own: #5865f2; }
+        [data-color="purple"] { --accent: #8b5cf6; --accent-hover: #7c3aed; --accent-gradient: linear-gradient(135deg, #8b5cf6, #a78bfa); --message-own: #8b5cf6; }
+        [data-color="pink"] { --accent: #ec4899; --accent-hover: #db2777; --accent-gradient: linear-gradient(135deg, #ec4899, #f472b6); --message-own: #ec4899; }
+        [data-color="red"] { --accent: #ef4444; --accent-hover: #dc2626; --accent-gradient: linear-gradient(135deg, #ef4444, #f87171); --message-own: #ef4444; }
+        [data-color="orange"] { --accent: #f59e0b; --accent-hover: #d97706; --accent-gradient: linear-gradient(135deg, #f59e0b, #fbbf24); --message-own: #f59e0b; }
+        [data-color="green"] { --accent: #10b981; --accent-hover: #059669; --accent-gradient: linear-gradient(135deg, #10b981, #34d399); --message-own: #10b981; }
+        [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; }
+        [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s, box-shadow 0.3s, opacity 0.3s, transform 0.3s;
+        }
 
         body {
             background: var(--bg-primary);
@@ -56,21 +85,6 @@
             align-items: center;
             padding: 12px;
             margin: 0;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(88, 101, 242, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 100%, rgba(88, 101, 242, 0.05) 0%, transparent 40%);
-            pointer-events: none;
-            z-index: 0;
         }
 
         .chat-container {
@@ -91,27 +105,6 @@
             z-index: 1;
         }
 
-        [data-theme="light"] {
-            --bg-primary: rgba(240, 242, 245, 0.92);
-            --bg-secondary: rgba(255, 255, 255, 0.85);
-            --bg-tertiary: rgba(245, 246, 248, 0.7);
-            --bg-input: rgba(240, 242, 245, 0.6);
-            --text-primary: #1a1a2e;
-            --text-secondary: #555577;
-            --text-muted: #8888aa;
-            --border-color: rgba(208, 210, 214, 0.5);
-            --shadow: 0 20px 60px rgba(0,0,0,0.06);
-            --message-other: rgba(232, 234, 237, 0.8);
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --input-bg: rgba(240, 242, 245, 0.6);
-            --hover-bg: rgba(232, 234, 237, 0.5);
-            --message-other-text: #1a1a2e;
-            --message-own-text: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --topic-bg: rgba(88, 101, 242, 0.08);
-            --topic-border: rgba(88, 101, 242, 0.15);
-        }
-
         [data-device="desktop"] {
             --container-width: 820px;
             --container-height: 88vh;
@@ -125,7 +118,7 @@
         [data-device="desktop"] .input-area { padding: 14px 24px 18px; }
         [data-device="desktop"] .input-area .action-btn { width: 48px; height: 48px; font-size: 20px; }
         [data-device="desktop"] .chat-header { padding: 16px 24px; }
-        [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 20px; }
+        [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 28px; }
         [data-device="desktop"] .chat-header .header-left .user-avatar { width: 38px; height: 38px; }
         [data-device="desktop"] .message .msg-avatar { width: 32px; height: 32px; }
         [data-device="desktop"] .message .msg-text { font-size: 15px; padding-left: 40px; }
@@ -137,12 +130,32 @@
         [data-device="mobile"] .message { max-width: 88%; }
         [data-device="mobile"] .login-screen .login-box { max-width: 400px; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s, box-shadow 0.3s, opacity 0.3s, transform 0.3s;
+        /* ===== FONTE CURSIVA ===== */
+        .brand-cursive {
+            font-family: var(--font-brand) !important;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .login-screen .login-box .logo h1 {
+            font-size: 42px;
+            font-weight: 400;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: var(--font-brand);
+            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(88, 101, 242, 0.2);
+        }
+
+        .chat-header .header-left .logo-mini .brand {
+            font-size: 24px;
+            font-weight: 400;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: var(--font-brand);
+            letter-spacing: 1px;
         }
 
         /* ===== TELA DE LOGIN ===== */
@@ -174,7 +187,7 @@
             border: 1px solid var(--border-color);
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
         .login-screen .login-box .logo {
@@ -199,19 +212,10 @@
             fill: white;
         }
 
-        .login-screen .login-box .logo h1 {
-            font-size: 28px;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-
         .login-screen .login-box .logo .greeting {
             color: var(--text-secondary);
             font-size: 14px;
-            margin-top: 6px;
+            margin-top: 4px;
             font-weight: 400;
             -webkit-text-fill-color: var(--text-secondary);
         }
@@ -236,6 +240,8 @@
             color: var(--text-secondary);
             margin-top: 8px;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .profile-photo-container {
@@ -284,7 +290,7 @@
             display: block;
             color: var(--text-secondary);
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 4px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -302,6 +308,7 @@
             transition: 0.2s;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-weight: 400;
         }
 
         .login-screen .login-box .form-group input:focus {
@@ -310,6 +317,93 @@
         }
 
         .login-screen .login-box .form-group input::placeholder { color: var(--text-muted); }
+
+        .captcha-container {
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .captcha-container .captcha-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .captcha-container .captcha-text {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            user-select: none;
+            border: 1px dashed var(--border-color);
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .captcha-container .captcha-refresh {
+            background: none;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px 14px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .captcha-container .captcha-refresh:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: rotate(180deg);
+        }
+
+        .captcha-container .captcha-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-weight: 400;
+        }
+
+        .captcha-container .captcha-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.15);
+        }
+
+        .captcha-container .captcha-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .captcha-container .captcha-error {
+            color: var(--error);
+            font-size: 12px;
+            text-align: center;
+            min-height: 16px;
+            font-weight: 500;
+        }
 
         .login-screen .login-box .btn-login {
             width: 100%;
@@ -340,6 +434,7 @@
             margin-top: 8px;
             text-align: center;
             min-height: 20px;
+            font-weight: 500;
         }
 
         .login-screen .login-box .success-msg {
@@ -348,6 +443,7 @@
             margin-top: 8px;
             text-align: center;
             min-height: 20px;
+            font-weight: 500;
         }
 
         .login-screen .login-box .language-selector {
@@ -427,15 +523,6 @@
             fill: white;
         }
 
-        .chat-header .header-left .logo-mini .brand {
-            font-size: 17px;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
         .chat-header .header-left .user-avatar {
             width: 30px;
             height: 30px;
@@ -502,6 +589,7 @@
             border: 1px solid var(--border-color);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-weight: 500;
         }
 
         .chat-header .device-badge {
@@ -513,6 +601,7 @@
             color: var(--text-secondary);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-weight: 500;
         }
 
         .chat-header .device-badge.mobile { border-color: var(--warning); color: var(--warning); }
@@ -832,10 +921,11 @@
         .message .msg-text {
             color: var(--message-other-text);
             font-size: 14px;
-            line-height: 1.4;
+            line-height: 1.5;
             word-break: break-word;
             padding-left: 32px;
             transition: color 0.5s;
+            font-weight: 400;
         }
 
         .message.own .msg-text { color: var(--message-own-text); }
@@ -853,6 +943,7 @@
             margin-top: 2px;
             text-align: right;
             padding-left: 32px;
+            font-weight: 400;
         }
 
         .message.own .msg-time { color: rgba(255,255,255,0.6); }
@@ -865,6 +956,7 @@
             background: transparent;
             border: none;
             align-self: center;
+            font-weight: 400;
         }
 
         .system-msg.server { color: var(--accent); font-weight: 600; }
@@ -918,6 +1010,7 @@
             min-width: 0;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-weight: 400;
         }
 
         .input-area input:focus {
@@ -1004,7 +1097,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.85);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1030,8 +1123,8 @@
         }
 
         .approval-overlay .approval-box .icon { font-size: 44px; margin-bottom: 8px; }
-        .approval-overlay .approval-box h2 { color: var(--text-primary); font-size: 19px; margin-bottom: 6px; }
-        .approval-overlay .approval-box p { color: var(--text-secondary); font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
+        .approval-overlay .approval-box h2 { color: var(--text-primary); font-size: 19px; margin-bottom: 6px; font-weight: 700; }
+        .approval-overlay .approval-box p { color: var(--text-secondary); font-size: 13px; margin-bottom: 14px; line-height: 1.5; font-weight: 400; }
 
         .approval-overlay .approval-box .user-info {
             background: var(--bg-primary);
@@ -1046,6 +1139,7 @@
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .approval-overlay .approval-box .user-info .value {
@@ -1096,6 +1190,7 @@
             transition: background-color 0.5s;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            font-weight: 400;
         }
 
         .status-bar .status-dot {
@@ -1119,7 +1214,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.85);
             z-index: 1500;
             display: flex;
             align-items: center;
@@ -1149,6 +1244,7 @@
             font-size: 20px;
             margin-bottom: 18px;
             text-align: center;
+            font-weight: 700;
         }
 
         .config-modal .config-box .form-group { margin-bottom: 14px; }
@@ -1157,7 +1253,7 @@
             display: block;
             color: var(--text-secondary);
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 4px;
         }
 
@@ -1174,6 +1270,7 @@
             transition: 0.2s;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-weight: 400;
         }
 
         .config-modal .config-box .form-group input:focus,
@@ -1288,6 +1385,7 @@
         .config-modal .config-box .admin-section p {
             color: var(--text-secondary);
             font-size: 12px;
+            font-weight: 400;
         }
 
         /* ===== IMAGE MODAL ===== */
@@ -1297,7 +1395,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.92);
             z-index: 3000;
             display: flex;
             align-items: center;
@@ -1311,7 +1409,7 @@
         /* ===== RESPONSIVO ===== */
         @media (max-width: 480px) {
             .chat-container { height: 100vh; max-height: none; border-radius: 0; }
-            .chat-header .header-left .logo-mini .brand { font-size: 15px; }
+            .chat-header .header-left .logo-mini .brand { font-size: 20px; }
             .chat-header .header-left .logo-mini .logo-icon-mini { width: 28px; height: 28px; padding: 4px; }
             .server-btn { font-size: 10px; padding: 4px 8px; min-width: 55px; }
             .input-area .action-btn { width: 36px; height: 36px; font-size: 14px; }
@@ -1332,6 +1430,7 @@
             .topic-create-input { width: 80px; font-size: 10px; }
             .config-modal .config-box .btn-group .btn-logout { flex: 1; }
             .login-screen .login-box .logo .logo-icon { width: 64px; height: 64px; padding: 10px; }
+            .login-screen .login-box .logo h1 { font-size: 34px; }
 
             [data-device="desktop"] .chat-container {
                 max-width: 480px;
@@ -1346,7 +1445,7 @@
             [data-device="desktop"] .input-area { padding: 8px 12px 12px; }
             [data-device="desktop"] .input-area .action-btn { width: 36px; height: 36px; font-size: 14px; }
             [data-device="desktop"] .chat-header { padding: 10px 14px; }
-            [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 15px; }
+            [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 20px; }
             [data-device="desktop"] .chat-header .header-left .user-avatar { width: 26px; height: 26px; }
             [data-device="desktop"] .message .msg-avatar { width: 20px; height: 20px; }
             [data-device="desktop"] .message .msg-text { font-size: 14px; padding-left: 0; }
@@ -1356,6 +1455,7 @@
             [data-device="desktop"] .topics-bar { padding: 4px 10px; }
             [data-device="desktop"] .topic-btn { font-size: 10px; padding: 3px 10px; }
             [data-device="desktop"] .login-screen .login-box .logo .logo-icon { width: 64px; height: 64px; padding: 10px; }
+            [data-device="desktop"] .login-screen .login-box .logo h1 { font-size: 34px; }
         }
 
         @media (max-width: 380px) {
@@ -1363,9 +1463,10 @@
             .input-area input { font-size: 12px; padding: 6px 10px; }
             .server-btn { font-size: 9px; padding: 3px 6px; min-width: 45px; }
             .config-modal .config-box .color-options .color-btn { width: 26px; height: 26px; }
-            .login-screen .login-box .logo h1 { font-size: 24px; }
+            .login-screen .login-box .logo h1 { font-size: 30px; }
             .topic-create-input { width: 60px; }
             .login-screen .login-box .logo .logo-icon { width: 56px; height: 56px; padding: 8px; }
+            .captcha-container .captcha-text { font-size: 18px; min-width: 80px; }
         }
     </style>
 </head>
@@ -1376,7 +1477,6 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <div class="logo">
-                <!-- SVG Logo do Eoros -->
                 <div class="logo-icon">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <path d="M50 10 L60 35 L85 35 L65 50 L75 75 L50 60 L25 75 L35 50 L15 35 L40 35 Z" 
@@ -1390,7 +1490,7 @@
                         <line x1="50" y1="50" x2="65" y2="50" stroke="white" stroke-width="2" opacity="0.3"/>
                     </svg>
                 </div>
-                <h1>EOROS</h1>
+                <h1 class="brand-cursive">Eoros</h1>
                 <p class="greeting">👋 <span>Olá</span>, bem-vindo de volta!</p>
                 <div class="device-info" id="loginDeviceInfo">📱 Carregando...</div>
             </div>
@@ -1423,6 +1523,16 @@
             <div class="form-group" id="confirmPasswordGroup" style="display:none;">
                 <label id="loginConfirmLabel">Confirmar Senha</label>
                 <input type="password" id="loginConfirmPassword" placeholder="Confirme sua senha">
+            </div>
+
+            <!-- CAPTCHA -->
+            <div class="captcha-container" id="captchaContainer">
+                <div class="captcha-top">
+                    <span class="captcha-text" id="captchaText">A7K9Z</span>
+                    <button class="captcha-refresh" id="captchaRefresh" title="Atualizar CAPTCHA">🔄</button>
+                </div>
+                <input type="text" class="captcha-input" id="captchaInput" placeholder="Digite o código acima" maxlength="6">
+                <div class="captcha-error" id="captchaError"></div>
             </div>
 
             <div class="error-msg" id="loginError"></div>
@@ -1514,7 +1624,7 @@
                         <path d="M50 10 L60 35 L85 35 L65 50 L75 75 L50 60 L25 75 L35 50 L15 35 L40 35 Z" fill="white"/>
                     </svg>
                 </div>
-                <span class="brand">EOROS</span>
+                <span class="brand brand-cursive">Eoros</span>
             </div>
         </div>
         <div class="header-right">
@@ -1593,9 +1703,39 @@
     (function() {
         'use strict';
 
-        // ===== SERVIDOR ÚNICO FIXO =====
-        const SERVER_ID = 'eoros-chat-server-unico';
+        // ===== SERVIDOR ÚNICO FIXO - USANDO PEERJS CLOUD =====
+        // IMPORTANTE: Todos os dispositivos usam o MESMO ID para se conectar
+        const SERVER_ID = 'eoros-chat-universal-server';
         const SERVER_NAME = 'Servidor Principal';
+
+        // ===== CAPTCHA =====
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return captcha;
+        }
+
+        let currentCaptcha = generateCaptcha();
+
+        function refreshCaptcha() {
+            currentCaptcha = generateCaptcha();
+            const captchaText = document.getElementById('captchaText');
+            if (captchaText) captchaText.textContent = currentCaptcha;
+            const captchaInput = document.getElementById('captchaInput');
+            if (captchaInput) {
+                captchaInput.value = '';
+                captchaInput.style.borderColor = '';
+            }
+            const captchaError = document.getElementById('captchaError');
+            if (captchaError) captchaError.textContent = '';
+        }
+
+        function validateCaptcha(input) {
+            return input.toUpperCase() === currentCaptcha;
+        }
 
         // ===== DETECTAR DISPOSITIVO =====
         function detectDevice() {
@@ -1657,7 +1797,9 @@
                 photoRequired: '⚠️ Por favor, adicione uma foto de perfil.',
                 imageTooLarge: '⚠️ A imagem é muito grande. Máximo 5MB.',
                 invalidImage: '⚠️ Formato de imagem inválido.',
-                colorTheme: '🎨 Cor do Tema'
+                colorTheme: '🎨 Cor do Tema',
+                captchaPlaceholder: 'Digite o código acima',
+                captchaError: '❌ Código incorreto. Tente novamente.'
             },
             en: {
                 greeting: '👋 Hello, welcome back!',
@@ -1683,7 +1825,9 @@
                 photoRequired: '⚠️ Please add a profile photo.',
                 imageTooLarge: '⚠️ Image is too large. Max 5MB.',
                 invalidImage: '⚠️ Invalid image format.',
-                colorTheme: '🎨 Color Theme'
+                colorTheme: '🎨 Color Theme',
+                captchaPlaceholder: 'Enter the code above',
+                captchaError: '❌ Incorrect code. Try again.'
             },
             es: {
                 greeting: '👋 Hola, ¡bienvenido de nuevo!',
@@ -1709,7 +1853,9 @@
                 photoRequired: '⚠️ Por favor, agregue una foto de perfil.',
                 imageTooLarge: '⚠️ La imagen es demasiado grande. Máximo 5MB.',
                 invalidImage: '⚠️ Formato de imagen inválido.',
-                colorTheme: '🎨 Tema de Color'
+                colorTheme: '🎨 Tema de Color',
+                captchaPlaceholder: 'Ingrese el código de arriba',
+                captchaError: '❌ Código incorrecto. Intente de nuevo.'
             },
             ru: {
                 greeting: '👋 Привет, добро пожаловать!',
@@ -1735,7 +1881,9 @@
                 photoRequired: '⚠️ Пожалуйста, добавьте фото профиля.',
                 imageTooLarge: '⚠️ Изображение слишком большое. Максимум 5МБ.',
                 invalidImage: '⚠️ Неверный формат изображения.',
-                colorTheme: '🎨 Цветовая тема'
+                colorTheme: '🎨 Цветовая тема',
+                captchaPlaceholder: 'Введите код выше',
+                captchaError: '❌ Неверный код. Попробуйте снова.'
             }
         };
 
@@ -1753,6 +1901,11 @@
         const loginPhotoInput = document.getElementById('loginPhotoInput');
         const loginPhotoPlaceholder = document.getElementById('loginPhotoPlaceholder');
         const loginDeviceInfo = document.getElementById('loginDeviceInfo');
+
+        const captchaText = document.getElementById('captchaText');
+        const captchaRefresh = document.getElementById('captchaRefresh');
+        const captchaInput = document.getElementById('captchaInput');
+        const captchaError = document.getElementById('captchaError');
 
         const configModal = document.getElementById('configModal');
         const configBtn = document.getElementById('configBtn');
@@ -1882,10 +2035,25 @@
                 if (loginConfirmPassword) loginConfirmPassword.placeholder = t('confirmPassword');
                 if (greeting) greeting.innerHTML = t('greeting');
                 if (logoutBtn) logoutBtn.textContent = t('logout');
+                if (captchaInput) captchaInput.placeholder = t('captchaPlaceholder');
             } catch (e) {
                 console.warn('Erro ao atualizar textos:', e);
             }
         }
+
+        // ===== CAPTCHA EVENTOS =====
+        if (captchaRefresh) {
+            captchaRefresh.addEventListener('click', refreshCaptcha);
+        }
+
+        if (captchaInput) {
+            captchaInput.addEventListener('focus', () => {
+                if (captchaError) captchaError.textContent = '';
+                if (captchaInput) captchaInput.style.borderColor = '';
+            });
+        }
+
+        refreshCaptcha();
 
         // ===== FUNÇÕES DE TÓPICOS =====
         function saveTopics() {
@@ -2085,6 +2253,7 @@
                 currentLang = btn.dataset.lang;
                 if (configLanguage) configLanguage.value = currentLang;
                 updateLoginTexts();
+                refreshCaptcha();
             });
         });
 
@@ -2262,6 +2431,7 @@
                     userCountSpan.textContent = '👥 0';
                     
                     showSystemMessage('✅ Você saiu com sucesso!', false, false, false, true);
+                    refreshCaptcha();
                 }
             });
         }
@@ -2331,9 +2501,21 @@
                 const username = loginUsername ? loginUsername.value.trim() : '';
                 const password = loginPassword ? loginPassword.value : '';
                 const confirmPassword = loginConfirmPassword ? loginConfirmPassword.value : '';
+                const captchaValue = captchaInput ? captchaInput.value.trim() : '';
 
                 if (loginError) loginError.textContent = '';
                 if (loginSuccess) loginSuccess.textContent = '';
+
+                if (!validateCaptcha(captchaValue)) {
+                    if (captchaError) captchaError.textContent = t('captchaError');
+                    if (captchaInput) {
+                        captchaInput.style.borderColor = 'var(--error)';
+                        captchaInput.focus();
+                        captchaInput.select();
+                    }
+                    refreshCaptcha();
+                    return;
+                }
 
                 if (!username) {
                     showLoginError('Por favor, digite um nome de usuário.');
@@ -2412,6 +2594,7 @@
 
                 if (users[username].password !== password) {
                     showLoginError(t('loginError'));
+                    refreshCaptcha();
                     return;
                 }
 
@@ -2432,6 +2615,7 @@
             } catch (e) {
                 console.error('Erro no login:', e);
                 showLoginError('Erro ao fazer login. Tente novamente.');
+                refreshCaptcha();
             }
         }
 
@@ -2722,18 +2906,27 @@
             markServerActive();
             updateServerStatus('creating');
             
-            peer = new Peer({
+            // Cria um peer com ID aleatório (cada dispositivo tem um ID único)
+            peer = new Peer(undefined, {
                 debug: 0,
-                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+                config: { 
+                    'iceServers': [
+                        { 'urls': 'stun:stun.l.google.com:19302' },
+                        { 'urls': 'stun:stun1.l.google.com:19302' }
+                    ] 
+                }
             });
 
             peer.on('open', (id) => {
-                console.log('Cliente ID:', id);
+                console.log('🟢 Cliente ID:', id);
+                console.log('📱 Dispositivo:', deviceInfo.type);
                 
+                // Tenta conectar ao servidor com ID fixo
                 const conn = peer.connect(SERVER_ID, { reliable: true });
                 serverConnection = conn;
                 
                 conn.on('open', () => {
+                    console.log('✅ Conectado ao servidor!');
                     isWaitingApproval = true;
                     if (approvalServerName) approvalServerName.textContent = SERVER_NAME;
                     if (approvalStatus) {
@@ -2750,6 +2943,7 @@
                 });
 
                 conn.on('close', () => {
+                    console.warn('⚠️ Conexão fechada');
                     if (isConnected) {
                         isConnected = false;
                         serverConnection = null;
@@ -2766,7 +2960,7 @@
                 });
 
                 conn.on('error', (err) => {
-                    console.warn('Erro de conexão:', err);
+                    console.warn('❌ Erro de conexão:', err);
                     if (err.type === 'peer-unavailable') {
                         showSystemMessage(`⚠️ Servidor não encontrado. Iniciando como servidor...`, false, true);
                         updateServerStatus('offline');
@@ -2782,7 +2976,7 @@
             });
 
             peer.on('error', (err) => {
-                console.error('Erro no cliente:', err);
+                console.error('❌ Peer error:', err);
                 if (err.type === 'unavailable-id') {
                     cleanup();
                     setTimeout(() => connectToServer(), 1000);
@@ -2807,18 +3001,24 @@
             updateServerStatus('online');
             updateUserCount(0);
             
+            // Cria o servidor com o ID FIXO
             peer = new Peer(SERVER_ID, {
                 debug: 0,
-                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+                config: { 
+                    'iceServers': [
+                        { 'urls': 'stun:stun.l.google.com:19302' },
+                        { 'urls': 'stun:stun1.l.google.com:19302' }
+                    ] 
+                }
             });
 
             peer.on('open', (id) => {
-                console.log(`Servidor iniciado:`, id);
-                showSystemMessage(`🟢 Servidor pronto!`, true);
+                console.log('🟢 Servidor iniciado com ID:', id);
+                showSystemMessage(`🟢 Servidor pronto! ID: ${id}`, true);
             });
 
             peer.on('connection', (conn) => {
-                console.log('Nova conexão recebida:', conn.peer);
+                console.log('📥 Nova conexão recebida:', conn.peer);
                 pendingApprovals[conn.peer] = { conn: conn, status: 'pending' };
                 
                 conn.on('open', () => {
@@ -2832,6 +3032,7 @@
                 });
 
                 conn.on('close', () => {
+                    console.log('📤 Conexão fechada:', conn.peer);
                     delete pendingApprovals[conn.peer];
                     if (clients[conn.peer]) {
                         delete clients[conn.peer];
@@ -2841,7 +3042,7 @@
                 });
 
                 conn.on('error', (err) => {
-                    console.warn('Erro na conexão:', err);
+                    console.warn('❌ Erro na conexão:', err);
                     delete pendingApprovals[conn.peer];
                     delete clients[conn.peer];
                     updateUserCount(Object.keys(clients).length);
@@ -2849,7 +3050,7 @@
             });
 
             peer.on('error', (err) => {
-                console.error('Erro no servidor:', err);
+                console.error('❌ Erro no servidor:', err);
                 if (err.type === 'unavailable-id') {
                     showSystemMessage(`⚠️ Servidor já está ocupado. Conectando como cliente...`, false, true);
                     isServer = false;
@@ -3419,6 +3620,7 @@
         console.log('🎨 Tema:', currentTheme);
         console.log('🎨 Cor:', currentColor);
         console.log('📌 Tópicos:', Object.keys(topics));
+        console.log('🆔 Server ID:', SERVER_ID);
 
         if (loginScreen) loginScreen.classList.remove('hidden');
         updateLoginTexts();
@@ -3426,6 +3628,7 @@
             confirmPasswordGroup.style.display = 'none';
         }
 
+        // Tenta conectar automaticamente após o login
         window.connectToServer = connectToServer;
 
     })();
