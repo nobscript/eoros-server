@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Eoros - Tópicos</title>
+    <title>Eoros</title>
     <style>
         /* ===== VARIÁVEIS ===== */
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a2e;
-            --bg-input: #0a0a0f;
+            --bg-primary: rgba(10, 10, 15, 0.92);
+            --bg-secondary: rgba(18, 18, 26, 0.85);
+            --bg-tertiary: rgba(26, 26, 46, 0.7);
+            --bg-input: rgba(10, 10, 15, 0.6);
             --text-primary: #e8e8f0;
             --text-secondary: #8888aa;
             --text-muted: #555577;
-            --border-color: #2a2a3e;
+            --border-color: rgba(42, 42, 62, 0.5);
             --accent: #5865f2;
             --accent-hover: #4752c4;
             --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6);
-            --shadow: 0 20px 60px rgba(0,0,0,0.8);
+            --shadow: 0 20px 60px rgba(0,0,0,0.6);
             --message-own: #5865f2;
-            --message-other: #1a1a2e;
+            --message-other: rgba(26, 26, 46, 0.8);
             --success: #4caf50;
             --error: #f44336;
             --warning: #ff9800;
-            --card-bg: #12121a;
-            --input-bg: #0a0a0f;
-            --hover-bg: #2a2a3e;
+            --card-bg: rgba(18, 18, 26, 0.8);
+            --input-bg: rgba(10, 10, 15, 0.6);
+            --hover-bg: rgba(42, 42, 62, 0.5);
             --container-width: 480px;
             --container-height: 95vh;
             --border-radius: 24px;
             --message-own-text: #ffffff;
             --message-other-text: #e8e8f0;
-            --glass-bg: rgba(18, 18, 26, 0.85);
+            --glass-bg: rgba(18, 18, 26, 0.7);
             --topic-bg: rgba(88, 101, 242, 0.1);
             --topic-border: rgba(88, 101, 242, 0.2);
         }
@@ -47,90 +47,30 @@
         [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; --topic-bg: rgba(20, 184, 166, 0.15); --topic-border: rgba(20, 184, 166, 0.3); }
         [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; --topic-bg: rgba(6, 182, 212, 0.15); --topic-border: rgba(6, 182, 212, 0.3); }
 
-        /* ===== FUNDO COM COR ===== */
         body {
             background: var(--bg-primary);
             transition: background-color 0.5s;
-        }
-
-        .chat-container {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.5s, border-color 0.5s;
-        }
-
-        .messages {
-            background: var(--bg-tertiary);
-            transition: background-color 0.5s;
-        }
-
-        /* ===== TEMA CLARO ===== */
-        [data-theme="light"] {
-            --bg-primary: #f0f2f5;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f5f6f8;
-            --bg-input: #f0f2f5;
-            --text-primary: #1a1a2e;
-            --text-secondary: #555577;
-            --text-muted: #8888aa;
-            --border-color: #d0d2d6;
-            --shadow: 0 20px 60px rgba(0,0,0,0.06);
-            --message-other: #e8eaed;
-            --card-bg: #ffffff;
-            --input-bg: #f0f2f5;
-            --hover-bg: #e8eaed;
-            --message-other-text: #1a1a2e;
-            --message-own-text: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --topic-bg: rgba(88, 101, 242, 0.08);
-            --topic-border: rgba(88, 101, 242, 0.15);
-        }
-
-        /* ===== LAYOUT DESKTOP ===== */
-        [data-device="desktop"] {
-            --container-width: 820px;
-            --container-height: 88vh;
-            --border-radius: 20px;
-        }
-
-        [data-device="desktop"] .chat-container { max-width: var(--container-width); border-radius: var(--border-radius); }
-        [data-device="desktop"] .messages { padding: 20px 24px 12px; }
-        [data-device="desktop"] .message { max-width: 70%; }
-        [data-device="desktop"] .login-screen .login-box { max-width: 440px; }
-        [data-device="desktop"] .server-selector { padding: 12px 24px; gap: 12px; }
-        [data-device="desktop"] .server-btn { padding: 10px 20px; font-size: 13px; min-width: 110px; border-radius: 20px; }
-        [data-device="desktop"] .input-area { padding: 14px 24px 18px; }
-        [data-device="desktop"] .input-area .action-btn { width: 48px; height: 48px; font-size: 20px; }
-        [data-device="desktop"] .chat-header { padding: 16px 24px; }
-        [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 20px; }
-        [data-device="desktop"] .chat-header .header-left .user-avatar { width: 38px; height: 38px; }
-        [data-device="desktop"] .message .msg-avatar { width: 32px; height: 32px; }
-        [data-device="desktop"] .message .msg-text { font-size: 15px; padding-left: 40px; }
-        [data-device="desktop"] .message .msg-user { font-size: 14px; }
-        [data-device="desktop"] .profile-photo-preview { width: 120px; height: 120px; }
-
-        /* ===== LAYOUT MOBILE ===== */
-        [data-device="mobile"] .chat-container { max-width: 480px; height: 100vh; max-height: none; border-radius: 0; }
-        [data-device="mobile"] .messages { padding: 12px 14px 8px; }
-        [data-device="mobile"] .message { max-width: 88%; }
-        [data-device="mobile"] .login-screen .login-box { max-width: 400px; }
-
-        /* ===== ESTILOS GERAIS ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s, box-shadow 0.3s, opacity 0.3s, transform 0.3s;
-        }
-
-        body {
-            background: var(--bg-primary);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 12px;
+            margin: 0;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(88, 101, 242, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(88, 101, 242, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .chat-container {
@@ -146,6 +86,63 @@
             overflow: hidden;
             position: relative;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: rgba(240, 242, 245, 0.92);
+            --bg-secondary: rgba(255, 255, 255, 0.85);
+            --bg-tertiary: rgba(245, 246, 248, 0.7);
+            --bg-input: rgba(240, 242, 245, 0.6);
+            --text-primary: #1a1a2e;
+            --text-secondary: #555577;
+            --text-muted: #8888aa;
+            --border-color: rgba(208, 210, 214, 0.5);
+            --shadow: 0 20px 60px rgba(0,0,0,0.06);
+            --message-other: rgba(232, 234, 237, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --input-bg: rgba(240, 242, 245, 0.6);
+            --hover-bg: rgba(232, 234, 237, 0.5);
+            --message-other-text: #1a1a2e;
+            --message-own-text: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --topic-bg: rgba(88, 101, 242, 0.08);
+            --topic-border: rgba(88, 101, 242, 0.15);
+        }
+
+        [data-device="desktop"] {
+            --container-width: 820px;
+            --container-height: 88vh;
+            --border-radius: 20px;
+        }
+
+        [data-device="desktop"] .chat-container { max-width: var(--container-width); border-radius: var(--border-radius); }
+        [data-device="desktop"] .messages { padding: 20px 24px 12px; }
+        [data-device="desktop"] .message { max-width: 70%; }
+        [data-device="desktop"] .login-screen .login-box { max-width: 440px; }
+        [data-device="desktop"] .input-area { padding: 14px 24px 18px; }
+        [data-device="desktop"] .input-area .action-btn { width: 48px; height: 48px; font-size: 20px; }
+        [data-device="desktop"] .chat-header { padding: 16px 24px; }
+        [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 20px; }
+        [data-device="desktop"] .chat-header .header-left .user-avatar { width: 38px; height: 38px; }
+        [data-device="desktop"] .message .msg-avatar { width: 32px; height: 32px; }
+        [data-device="desktop"] .message .msg-text { font-size: 15px; padding-left: 40px; }
+        [data-device="desktop"] .message .msg-user { font-size: 14px; }
+        [data-device="desktop"] .profile-photo-preview { width: 120px; height: 120px; }
+
+        [data-device="mobile"] .chat-container { max-width: 480px; height: 100vh; max-height: none; border-radius: 0; }
+        [data-device="mobile"] .messages { padding: 12px 14px 8px; }
+        [data-device="mobile"] .message { max-width: 88%; }
+        [data-device="mobile"] .login-screen .login-box { max-width: 400px; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s, box-shadow 0.3s, opacity 0.3s, transform 0.3s;
         }
 
         /* ===== TELA DE LOGIN ===== */
@@ -168,8 +165,8 @@
 
         .login-screen .login-box {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border-radius: 24px;
             padding: 32px 28px;
             max-width: 400px;
@@ -177,25 +174,29 @@
             border: 1px solid var(--border-color);
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
         .login-screen .login-box .logo {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .login-screen .login-box .logo .logo-icon {
-            font-size: 48px;
+            width: 80px;
+            height: 80px;
             display: block;
-            margin-bottom: 6px;
-            animation: lightning 2s infinite;
+            margin: 0 auto 10px;
+            border-radius: 20px;
+            background: var(--accent-gradient);
+            padding: 12px;
+            box-shadow: 0 8px 32px rgba(88, 101, 242, 0.3);
         }
 
-        @keyframes lightning {
-            0%, 90%, 100% { opacity: 1; transform: scale(1); }
-            92% { opacity: 0.4; transform: scale(0.95); }
-            94% { opacity: 1; transform: scale(1.02); }
-            96% { opacity: 0.6; transform: scale(0.98); }
+        .login-screen .login-box .logo .logo-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
         }
 
         .login-screen .login-box .logo h1 {
@@ -299,6 +300,8 @@
             font-size: 15px;
             outline: none;
             transition: 0.2s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .login-screen .login-box .form-group input:focus {
@@ -367,6 +370,8 @@
             transition: 0.2s;
             text-align: center;
             min-width: 50px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .login-screen .login-box .language-selector .lang-btn:hover {
@@ -389,6 +394,8 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .chat-header .header-left {
@@ -400,12 +407,24 @@
         .chat-header .header-left .logo-mini {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .chat-header .header-left .logo-mini .lightning {
-            font-size: 20px;
-            animation: lightning 2s infinite;
+        .chat-header .header-left .logo-mini .logo-icon-mini {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--accent-gradient);
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header .header-left .logo-mini .logo-icon-mini svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
         }
 
         .chat-header .header-left .logo-mini .brand {
@@ -451,7 +470,7 @@
 
         .chat-header .header-right .theme-btn,
         .chat-header .header-right .config-btn {
-            background: none;
+            background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             width: 30px;
@@ -463,6 +482,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .chat-header .header-right .theme-btn:hover,
@@ -479,6 +500,8 @@
             padding: 2px 10px;
             border-radius: 30px;
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .chat-header .device-badge {
@@ -488,6 +511,8 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .chat-header .device-badge.mobile { border-color: var(--warning); color: var(--warning); }
@@ -503,6 +528,8 @@
             gap: 6px;
             flex-wrap: wrap;
             flex-shrink: 0;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .server-btn {
@@ -518,6 +545,8 @@
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .server-btn:hover {
@@ -556,6 +585,8 @@
             align-items: center;
             flex-shrink: 0;
             min-height: 40px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .topics-bar .topics-label {
@@ -578,6 +609,8 @@
             cursor: pointer;
             transition: all 0.3s;
             white-space: nowrap;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .topic-btn:hover {
@@ -645,6 +678,8 @@
             outline: none;
             width: 120px;
             transition: 0.2s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .topic-create-input:focus {
@@ -713,6 +748,8 @@
             align-self: flex-start;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             transition: background-color 0.5s, border-color 0.5s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .message.own {
@@ -820,12 +857,6 @@
 
         .message.own .msg-time { color: rgba(255,255,255,0.6); }
 
-        .message.topic-message {
-            border-left: 3px solid var(--accent);
-            padding-left: 10px;
-        }
-
-        /* ===== SYSTEM MESSAGES ===== */
         .system-msg {
             text-align: center;
             font-size: 11px;
@@ -863,6 +894,8 @@
             gap: 4px;
             flex-shrink: 0;
             transition: background-color 0.5s;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .input-area .input-row {
@@ -883,6 +916,8 @@
             outline: none;
             transition: 0.2s;
             min-width: 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .input-area input:focus {
@@ -908,6 +943,8 @@
             transition: 0.2s;
             flex-shrink: 0;
             position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .input-area .action-btn:hover {
@@ -967,14 +1004,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.7);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             padding: 20px;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .approval-overlay.hidden { display: none; }
 
@@ -987,6 +1025,8 @@
             text-align: center;
             border: 1px solid var(--border-color);
             animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
         }
 
         .approval-overlay .approval-box .icon { font-size: 44px; margin-bottom: 8px; }
@@ -1054,6 +1094,8 @@
             display: flex;
             justify-content: space-between;
             transition: background-color 0.5s;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .status-bar .status-dot {
@@ -1077,13 +1119,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.7);
             z-index: 1500;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .config-modal.hidden { display: none; }
 
@@ -1097,6 +1140,8 @@
             max-height: 90vh;
             overflow-y: auto;
             animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
         }
 
         .config-modal .config-box h2 {
@@ -1127,6 +1172,8 @@
             font-size: 14px;
             outline: none;
             transition: 0.2s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .config-modal .config-box .form-group input:focus,
@@ -1207,13 +1254,15 @@
         .config-modal .config-box .btn-close:hover { background: var(--hover-bg); }
 
         .config-modal .config-box .btn-logout {
-            background: var(--error);
+            background: rgba(244, 67, 54, 0.8);
             color: white;
             flex: 0.5;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .config-modal .config-box .btn-logout:hover {
-            background: #da190b;
+            background: rgba(218, 25, 11, 0.9);
             transform: translateY(-2px);
         }
 
@@ -1248,7 +1297,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.92);
+            background: rgba(0,0,0,0.85);
             z-index: 3000;
             display: flex;
             align-items: center;
@@ -1263,7 +1312,7 @@
         @media (max-width: 480px) {
             .chat-container { height: 100vh; max-height: none; border-radius: 0; }
             .chat-header .header-left .logo-mini .brand { font-size: 15px; }
-            .chat-header .header-left .logo-mini .lightning { font-size: 18px; }
+            .chat-header .header-left .logo-mini .logo-icon-mini { width: 28px; height: 28px; padding: 4px; }
             .server-btn { font-size: 10px; padding: 4px 8px; min-width: 55px; }
             .input-area .action-btn { width: 36px; height: 36px; font-size: 14px; }
             .input-area input { font-size: 13px; padding: 8px 12px; }
@@ -1282,6 +1331,7 @@
             .topic-btn { font-size: 10px; padding: 3px 10px; }
             .topic-create-input { width: 80px; font-size: 10px; }
             .config-modal .config-box .btn-group .btn-logout { flex: 1; }
+            .login-screen .login-box .logo .logo-icon { width: 64px; height: 64px; padding: 10px; }
 
             [data-device="desktop"] .chat-container {
                 max-width: 480px;
@@ -1305,6 +1355,7 @@
             [data-device="desktop"] .config-modal .config-box .profile-photo-preview { width: 56px; height: 56px; }
             [data-device="desktop"] .topics-bar { padding: 4px 10px; }
             [data-device="desktop"] .topic-btn { font-size: 10px; padding: 3px 10px; }
+            [data-device="desktop"] .login-screen .login-box .logo .logo-icon { width: 64px; height: 64px; padding: 10px; }
         }
 
         @media (max-width: 380px) {
@@ -1314,6 +1365,7 @@
             .config-modal .config-box .color-options .color-btn { width: 26px; height: 26px; }
             .login-screen .login-box .logo h1 { font-size: 24px; }
             .topic-create-input { width: 60px; }
+            .login-screen .login-box .logo .logo-icon { width: 56px; height: 56px; padding: 8px; }
         }
     </style>
 </head>
@@ -1324,7 +1376,20 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <div class="logo">
-                <span class="logo-icon">⚡</span>
+                <!-- SVG Logo do Eoros -->
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 10 L60 35 L85 35 L65 50 L75 75 L50 60 L25 75 L35 50 L15 35 L40 35 Z" 
+                              fill="white" opacity="0.9"/>
+                        <path d="M50 15 L58 33 L78 33 L62 46 L70 65 L50 52 L30 65 L38 46 L22 33 L42 33 Z" 
+                              fill="rgba(255,255,255,0.3)"/>
+                        <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="35" r="4" fill="white" opacity="0.8"/>
+                        <circle cx="50" cy="65" r="4" fill="white" opacity="0.8"/>
+                        <line x1="50" y1="50" x2="50" y2="35" stroke="white" stroke-width="2" opacity="0.3"/>
+                        <line x1="50" y1="50" x2="65" y2="50" stroke="white" stroke-width="2" opacity="0.3"/>
+                    </svg>
+                </div>
                 <h1>EOROS</h1>
                 <p class="greeting">👋 <span>Olá</span>, bem-vindo de volta!</p>
                 <div class="device-info" id="loginDeviceInfo">📱 Carregando...</div>
@@ -1444,7 +1509,11 @@
                 <div class="placeholder" id="headerAvatarPlaceholder">👤</div>
             </div>
             <div class="logo-mini">
-                <span class="lightning">⚡</span>
+                <div class="logo-icon-mini">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 10 L60 35 L85 35 L65 50 L75 75 L50 60 L25 75 L35 50 L15 35 L40 35 Z" fill="white"/>
+                    </svg>
+                </div>
                 <span class="brand">EOROS</span>
             </div>
         </div>
@@ -1458,14 +1527,8 @@
 
     <!-- SERVER SELECTOR -->
     <div class="server-selector" id="serverSelector">
-        <button class="server-btn" data-server="1" id="server1Btn">
-            <span class="status-indicator" id="status1"></span> Servidor 1
-        </button>
-        <button class="server-btn" data-server="2" id="server2Btn">
-            <span class="status-indicator" id="status2"></span> Servidor 2
-        </button>
-        <button class="server-btn" data-server="3" id="server3Btn">
-            <span class="status-indicator" id="status3"></span> Servidor 3
+        <button class="server-btn active" data-server="1" id="server1Btn">
+            <span class="status-indicator" id="status1"></span> Servidor Principal
         </button>
     </div>
 
@@ -1484,7 +1547,7 @@
 
     <!-- MESSAGES -->
     <div class="messages" id="messagesContainer">
-        <div class="system-msg">⚡ Selecione um servidor para entrar</div>
+        <div class="system-msg">⚡ Conecte-se ao servidor para começar</div>
     </div>
 
     <!-- APPROVAL OVERLAY -->
@@ -1495,7 +1558,7 @@
             <p>O administrador do servidor precisa aprovar sua entrada.</p>
             <div class="user-info">
                 <div class="label">Solicitando entrada em</div>
-                <div class="value" id="approvalServerName">Servidor 1</div>
+                <div class="value" id="approvalServerName">Servidor Principal</div>
             </div>
             <div class="status-message" id="approvalStatus">⏳ Aguardando resposta...</div>
             <div class="buttons">
@@ -1521,7 +1584,7 @@
     <!-- STATUS BAR -->
     <div class="status-bar">
         <span><span class="status-dot" id="statusDot"></span> <span id="statusText">Desconectado</span></span>
-        <span id="connectionStatus">Selecione um servidor</span>
+        <span id="connectionStatus">Conecte-se ao servidor</span>
     </div>
 </div>
 
@@ -1529,6 +1592,10 @@
 <script>
     (function() {
         'use strict';
+
+        // ===== SERVIDOR ÚNICO FIXO =====
+        const SERVER_ID = 'eoros-chat-server-unico';
+        const SERVER_NAME = 'Servidor Principal';
 
         // ===== DETECTAR DISPOSITIVO =====
         function detectDevice() {
@@ -1716,12 +1783,8 @@
         const connectionStatusSpan = document.getElementById('connectionStatus');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
-        const serverBtns = document.querySelectorAll('.server-btn');
-        const statusIndicators = {
-            1: document.getElementById('status1'),
-            2: document.getElementById('status2'),
-            3: document.getElementById('status3')
-        };
+        const serverBtn = document.getElementById('server1Btn');
+        const statusIndicator = document.getElementById('status1');
         const approvalOverlay = document.getElementById('approvalOverlay');
         const approvalServerName = document.getElementById('approvalServerName');
         const approvalStatus = document.getElementById('approvalStatus');
@@ -1850,7 +1913,6 @@
                 
                 btn.addEventListener('click', () => {
                     if (topic.closed && !topic.users.includes(currentUser)) {
-                        // Pedir para entrar no tópico
                         if (confirm(`O tópico "${topic.name}" é privado. Deseja solicitar entrada?`)) {
                             requestTopicAccess(key);
                         }
@@ -1866,7 +1928,6 @@
         function switchTopic(topicId) {
             if (!topics[topicId]) return;
             
-            // Verifica se o usuário tem acesso ao tópico
             if (topics[topicId].closed && !topics[topicId].users.includes(currentUser) && topicId !== 'geral') {
                 showSystemMessage('🔒 Este tópico é privado. Solicite entrada.', false, false, true);
                 return;
@@ -1875,10 +1936,8 @@
             currentTopic = topicId;
             renderTopics();
             
-            // Mostra mensagens do tópico
             messagesContainer.innerHTML = '';
             
-            // Mostra mensagens do tópico
             const topicMsgs = topics[topicId].messages || [];
             if (topicMsgs.length === 0) {
                 const msg = document.createElement('div');
@@ -1891,7 +1950,6 @@
                 });
             }
             
-            // Atualiza mensagens do servidor
             if (isConnected) {
                 broadcastMessage({
                     type: 'topic_switch',
@@ -1903,7 +1961,7 @@
 
         function requestTopicAccess(topicId) {
             if (!isConnected) {
-                showSystemMessage('⚠️ Conecte-se a um servidor primeiro', false, true);
+                showSystemMessage('⚠️ Conecte-se ao servidor primeiro', false, true);
                 return;
             }
             
@@ -1939,7 +1997,6 @@
             switchTopic(id);
             showSystemMessage(`✅ Tópico "${name.trim()}" criado!`, false, false, false, true);
             
-            // Notificar outros usuários
             if (isConnected) {
                 broadcastMessage({
                     type: 'topic_created',
@@ -1970,25 +2027,6 @@
             if (isConnected) {
                 broadcastMessage({
                     type: 'topic_closed',
-                    topic: topicId,
-                    username: currentUser
-                });
-            }
-        }
-
-        function joinTopic(topicId) {
-            if (!topics[topicId]) return;
-            if (topics[topicId].users.includes(currentUser)) return;
-            
-            topics[topicId].users.push(currentUser);
-            saveTopics();
-            renderTopics();
-            
-            showSystemMessage(`👤 ${currentUser} entrou no tópico "${topics[topicId].name}"`);
-            
-            if (isConnected) {
-                broadcastMessage({
-                    type: 'topic_join',
                     topic: topicId,
                     username: currentUser
                 });
@@ -2151,7 +2189,6 @@
             isCreatingTopic = false;
         });
 
-        // Clique direito no tópico para fechar (admin apenas)
         topicsContainer.addEventListener('contextmenu', (e) => {
             const btn = e.target.closest('.topic-btn');
             if (!btn) return;
@@ -2203,18 +2240,15 @@
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 if (confirm('Tem certeza que deseja sair?')) {
-                    // Limpar dados da sessão
                     currentUser = null;
                     isAdmin = false;
                     isConnected = false;
                     isServer = false;
                     cleanup();
                     
-                    // Mostrar tela de login
                     if (loginScreen) loginScreen.classList.remove('hidden');
                     if (configModal) configModal.classList.add('hidden');
                     
-                    // Limpar mensagens
                     if (messagesContainer) {
                         messagesContainer.innerHTML = '';
                         const msg = document.createElement('div');
@@ -2225,7 +2259,6 @@
                     
                     updateStatus('Desconectado', 'offline');
                     setInputEnabled(false);
-                    markServerActive(null);
                     userCountSpan.textContent = '👥 0';
                     
                     showSystemMessage('✅ Você saiu com sucesso!', false, false, false, true);
@@ -2338,7 +2371,7 @@
                         if (loginScreen) loginScreen.classList.add('hidden');
                         updateHeaderAvatar(currentUser);
                         renderTopics();
-                        initChat();
+                        connectToServer();
                     }, 1000);
                     return;
                 }
@@ -2372,7 +2405,7 @@
                         if (loginScreen) loginScreen.classList.add('hidden');
                         updateHeaderAvatar(currentUser);
                         renderTopics();
-                        initChat();
+                        connectToServer();
                     }, 1000);
                     return;
                 }
@@ -2394,7 +2427,7 @@
                     if (loginScreen) loginScreen.classList.add('hidden');
                     updateHeaderAvatar(currentUser);
                     renderTopics();
-                    initChat();
+                    connectToServer();
                 }, 500);
             } catch (e) {
                 console.error('Erro no login:', e);
@@ -2637,7 +2670,7 @@
                     if (isServer) {
                         connectionStatusSpan.textContent = '👑 Servidor';
                     } else if (isConnected) {
-                        connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
+                        connectionStatusSpan.textContent = `✅ Conectado ao ${SERVER_NAME}`;
                     } else if (isWaitingApproval) {
                         connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
                     } else {
@@ -2663,32 +2696,496 @@
             } catch (e) {}
         }
 
-        function updateServerStatus(serverId, status) {
+        function updateServerStatus(status) {
             try {
-                const indicator = statusIndicators[serverId];
-                if (!indicator) return;
-                indicator.className = 'status-indicator';
-                if (status === 'online') indicator.classList.add('online');
-                else if (status === 'offline') indicator.classList.add('offline');
-                else if (status === 'creating') indicator.classList.add('creating');
+                if (!statusIndicator) return;
+                statusIndicator.className = 'status-indicator';
+                if (status === 'online') statusIndicator.classList.add('online');
+                else if (status === 'offline') statusIndicator.classList.add('offline');
+                else if (status === 'creating') statusIndicator.classList.add('creating');
             } catch (e) {}
         }
 
-        function markServerActive(serverId) {
+        function markServerActive() {
             try {
-                serverBtns.forEach(btn => {
-                    const btnServer = parseInt(btn.dataset.server);
-                    btn.classList.toggle('active', btnServer === serverId);
+                if (serverBtn) serverBtn.classList.add('active');
+            } catch (e) {}
+        }
+
+        // ===== CONECTAR AO SERVIDOR ÚNICO =====
+        function connectToServer() {
+            cleanup();
+            
+            updateStatus('Conectando ao servidor...', 'connecting');
+            showSystemMessage(`🔗 Tentando conectar ao ${SERVER_NAME}...`);
+            setInputEnabled(false);
+            markServerActive();
+            updateServerStatus('creating');
+            
+            peer = new Peer({
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('open', (id) => {
+                console.log('Cliente ID:', id);
+                
+                const conn = peer.connect(SERVER_ID, { reliable: true });
+                serverConnection = conn;
+                
+                conn.on('open', () => {
+                    isWaitingApproval = true;
+                    if (approvalServerName) approvalServerName.textContent = SERVER_NAME;
+                    if (approvalStatus) {
+                        approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
+                        approvalStatus.style.color = '#ff9800';
+                    }
+                    if (approvalOverlay) approvalOverlay.classList.remove('hidden');
+                    updateStatus(`Aguardando aprovação em ${SERVER_NAME}`, 'waiting');
+                    conn.send({ type: 'join', username: currentUser });
                 });
-            } catch (e) {}
+
+                conn.on('data', (data) => {
+                    handleServerData(data, conn);
+                });
+
+                conn.on('close', () => {
+                    if (isConnected) {
+                        isConnected = false;
+                        serverConnection = null;
+                        updateStatus(`Desconectado do servidor`, 'offline');
+                        showSystemMessage(`⚠️ Conexão com ${SERVER_NAME} perdida!`, false, true);
+                        setInputEnabled(false);
+                        updateServerStatus('offline');
+                        setTimeout(() => {
+                            if (!isConnected && !isServer) {
+                                connectToServer();
+                            }
+                        }, 3000);
+                    }
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro de conexão:', err);
+                    if (err.type === 'peer-unavailable') {
+                        showSystemMessage(`⚠️ Servidor não encontrado. Iniciando como servidor...`, false, true);
+                        updateServerStatus('offline');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                        setTimeout(() => startAsServer(), 1000);
+                    } else if (!isConnected) {
+                        updateStatus('Erro', 'offline');
+                        setInputEnabled(false);
+                        updateServerStatus('offline');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    }
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no cliente:', err);
+                if (err.type === 'unavailable-id') {
+                    cleanup();
+                    setTimeout(() => connectToServer(), 1000);
+                }
+            });
         }
 
-        // ===== SERVIDORES =====
-        const SERVERS = {
-            1: { id: 'chat-server-1', name: 'Servidor 1' },
-            2: { id: 'chat-server-2', name: 'Servidor 2' },
-            3: { id: 'chat-server-3', name: 'Servidor 3' }
-        };
+        // ===== INICIAR COMO SERVIDOR =====
+        function startAsServer() {
+            if (isServer) return;
+            cleanup();
+            
+            isServer = true;
+            isConnected = true;
+            clients = {};
+            
+            updateStatus(`👑 Servidor ativo`, 'online');
+            showSystemMessage(`✅ Você é o servidor do ${SERVER_NAME}!`, true);
+            showSystemMessage(`🔐 Você pode aprovar ou rejeitar novas entradas`, true);
+            setInputEnabled(true);
+            markServerActive();
+            updateServerStatus('online');
+            updateUserCount(0);
+            
+            peer = new Peer(SERVER_ID, {
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('open', (id) => {
+                console.log(`Servidor iniciado:`, id);
+                showSystemMessage(`🟢 Servidor pronto!`, true);
+            });
+
+            peer.on('connection', (conn) => {
+                console.log('Nova conexão recebida:', conn.peer);
+                pendingApprovals[conn.peer] = { conn: conn, status: 'pending' };
+                
+                conn.on('open', () => {
+                    showSystemMessage(`👤 ${conn.peer} está solicitando entrada`, false, false, true);
+                    showSystemMessage(`🔐 Clique em "Aceitar" ou "Rejeitar"`, false, false, true);
+                    conn.send({ type: 'approval_request', serverId: SERVER_ID, serverName: SERVER_NAME });
+                });
+
+                conn.on('data', (data) => {
+                    handleServerData(data, conn);
+                });
+
+                conn.on('close', () => {
+                    delete pendingApprovals[conn.peer];
+                    if (clients[conn.peer]) {
+                        delete clients[conn.peer];
+                        showSystemMessage(`👤 ${conn.peer} saiu do chat`);
+                        updateUserCount(Object.keys(clients).length);
+                    }
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro na conexão:', err);
+                    delete pendingApprovals[conn.peer];
+                    delete clients[conn.peer];
+                    updateUserCount(Object.keys(clients).length);
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no servidor:', err);
+                if (err.type === 'unavailable-id') {
+                    showSystemMessage(`⚠️ Servidor já está ocupado. Conectando como cliente...`, false, true);
+                    isServer = false;
+                    isConnected = false;
+                    cleanup();
+                    setTimeout(() => connectToServer(), 1000);
+                }
+            });
+        }
+
+        // ===== MANIPULAR DADOS DO SERVIDOR =====
+        function handleServerData(data, conn) {
+            if (data.type === 'approval_request') {
+                if (approvalStatus) {
+                    approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
+                    approvalStatus.style.color = '#ff9800';
+                }
+            } else if (data.type === 'approval_result') {
+                if (data.accepted) {
+                    isConnected = true;
+                    isWaitingApproval = false;
+                    if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    updateStatus(`Conectado ao servidor`, 'online');
+                    showSystemMessage(`✅ Você foi aceito no servidor!`, false, false, false, true);
+                    setInputEnabled(true);
+                    updateServerStatus('online');
+                    if (approvalStatus) {
+                        approvalStatus.textContent = '✅ Aceito!';
+                        approvalStatus.style.color = '#4caf50';
+                    }
+                    setTimeout(() => {
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    }, 1000);
+                } else {
+                    isWaitingApproval = false;
+                    if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    updateStatus(`Rejeitado`, 'offline');
+                    updateServerStatus('offline');
+                    setInputEnabled(false);
+                    setTimeout(() => { try { conn.close(); } catch (e) {} }, 500);
+                }
+            } else if (data.type === 'message') {
+                if (isConnected || isServer) {
+                    const topicId = data.topic || 'geral';
+                    if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                        addMessageToDOM(data.username, data.text, false);
+                    }
+                    if (topics[topicId]) {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: data.text,
+                            time: data.time
+                        });
+                        saveTopics();
+                    }
+                    if (isServer) {
+                        broadcastMessage(data, conn);
+                    }
+                }
+            } else if (data.type === 'audio') {
+                if (isConnected || isServer) {
+                    const topicId = data.topic || 'geral';
+                    if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                        addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                    }
+                    if (topics[topicId]) {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: '🎤 Áudio',
+                            time: data.time,
+                            audio: data.audio
+                        });
+                        saveTopics();
+                    }
+                    if (isServer) {
+                        broadcastMessage(data, conn);
+                    }
+                }
+            } else if (data.type === 'image') {
+                if (isConnected || isServer) {
+                    const topicId = data.topic || 'geral';
+                    if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                        addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                    }
+                    if (topics[topicId]) {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: '🖼️ Imagem',
+                            time: data.time,
+                            image: data.image
+                        });
+                        saveTopics();
+                    }
+                    if (isServer) {
+                        broadcastMessage(data, conn);
+                    }
+                }
+            } else if (data.type === 'join') {
+                if (isServer) {
+                    pendingApprovals[conn.peer].username = data.username;
+                    const displayName = users[data.username]?.displayName || data.username;
+                    showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar`, false, false, true);
+                    showApprovalButtons(conn.peer, data.username);
+                }
+            } else if (data.type === 'topic_switch') {
+                if (isServer && clients[conn.peer]) {
+                    clients[conn.peer].currentTopic = data.topic;
+                }
+            } else if (data.type === 'topic_request') {
+                if (isServer && (isAdmin || users[currentUser]?.isAdmin)) {
+                    const topicId = data.topic;
+                    if (topics[topicId] && topics[topicId].closed) {
+                        showSystemMessage(`📨 ${data.username} solicitou entrada no tópico "${topics[topicId].name}"`);
+                        if (!topics[topicId].users.includes(data.username)) {
+                            topics[topicId].users.push(data.username);
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`✅ ${data.username} foi adicionado ao tópico "${topics[topicId].name}"`);
+                            conn.send({
+                                type: 'topic_join_accept',
+                                topic: topicId
+                            });
+                        }
+                    }
+                }
+            } else if (data.type === 'topic_join_accept') {
+                const topicId = data.topic;
+                if (topics[topicId] && !topics[topicId].users.includes(currentUser)) {
+                    topics[topicId].users.push(currentUser);
+                    saveTopics();
+                    renderTopics();
+                    showSystemMessage(`✅ Você foi adicionado ao tópico "${topics[topicId].name}"`);
+                }
+            } else if (data.type === 'topic_created') {
+                if (!topics[data.topic]) {
+                    topics[data.topic] = {
+                        name: data.name,
+                        createdBy: data.username,
+                        users: [data.username],
+                        messages: [],
+                        active: true,
+                        closed: false
+                    };
+                    saveTopics();
+                    renderTopics();
+                    showSystemMessage(`📌 Novo tópico "${data.name}" criado por ${data.username}`);
+                }
+            } else if (data.type === 'topic_closed') {
+                if (topics[data.topic]) {
+                    topics[data.topic].closed = true;
+                    saveTopics();
+                    renderTopics();
+                    showSystemMessage(`🔒 Tópico "${topics[data.topic].name}" foi fechado`);
+                }
+            } else if (data.type === 'topic_join') {
+                if (topics[data.topic] && !topics[data.topic].users.includes(data.username)) {
+                    topics[data.topic].users.push(data.username);
+                    saveTopics();
+                    renderTopics();
+                    showSystemMessage(`👤 ${data.username} entrou no tópico "${topics[data.topic].name}"`);
+                }
+            } else if (data.type === 'history') {
+                if (isConnected) {
+                    const topicId = data.topic || 'geral';
+                    if (!topics[topicId]) {
+                        topics[topicId] = {
+                            name: topicId === 'geral' ? 'Geral' : topicId,
+                            createdBy: 'system',
+                            users: [currentUser],
+                            messages: [],
+                            active: true,
+                            closed: false
+                        };
+                    }
+                    if (data.audio) {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: '🎤 Áudio',
+                            time: data.time,
+                            audio: data.audio
+                        });
+                    } else if (data.image) {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: '🖼️ Imagem',
+                            time: data.time,
+                            image: data.image
+                        });
+                    } else {
+                        topics[topicId].messages.push({
+                            username: data.username,
+                            text: data.text,
+                            time: data.time
+                        });
+                    }
+                    saveTopics();
+                    renderTopics();
+                    
+                    if (topicId === currentTopic) {
+                        if (data.audio) {
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                        } else if (data.image) {
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                        } else {
+                            addMessageToDOM(data.username, data.text, false);
+                        }
+                    }
+                }
+            } else if (data.type === 'system') {
+                if (isConnected || isServer) showSystemMessage(data.text);
+            } else if (data.type === 'ping') {
+                if (conn) conn.send({ type: 'pong' });
+            }
+        }
+
+        // ===== APROVAÇÃO DE USUÁRIOS =====
+        function showApprovalButtons(peerId, username) {
+            try {
+                const oldBtns = document.querySelectorAll('.approval-buttons');
+                oldBtns.forEach(btn => btn.remove());
+                
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'system-msg approval-buttons';
+                msgDiv.style.display = 'flex';
+                msgDiv.style.gap = '10px';
+                msgDiv.style.justifyContent = 'center';
+                msgDiv.style.padding = '8px 0';
+                
+                const acceptBtn = document.createElement('button');
+                acceptBtn.textContent = '✅ Aceitar';
+                acceptBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #4caf50;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: 0.2s;
+                `;
+                acceptBtn.onmouseover = () => acceptBtn.style.transform = 'scale(1.05)';
+                acceptBtn.onmouseout = () => acceptBtn.style.transform = 'scale(1)';
+                acceptBtn.onclick = () => acceptUser(peerId);
+                
+                const rejectBtn = document.createElement('button');
+                rejectBtn.textContent = '❌ Rejeitar';
+                rejectBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #f44336;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: 0.2s;
+                `;
+                rejectBtn.onmouseover = () => rejectBtn.style.transform = 'scale(1.05)';
+                rejectBtn.onmouseout = () => rejectBtn.style.transform = 'scale(1)';
+                rejectBtn.onclick = () => rejectUser(peerId);
+                
+                msgDiv.appendChild(acceptBtn);
+                msgDiv.appendChild(rejectBtn);
+                if (messagesContainer) {
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (e) {
+                console.warn('Erro ao mostrar botões de aprovação:', e);
+            }
+        }
+
+        function acceptUser(peerId) {
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                clients[peerId] = conn;
+                clients[peerId].currentTopic = 'geral';
+                showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
+                updateUserCount(Object.keys(clients).length);
+                
+                conn.send({ type: 'approval_result', accepted: true });
+                
+                Object.keys(topics).forEach(topicId => {
+                    const topic = topics[topicId];
+                    if (!topic.closed || topic.users.includes(username)) {
+                        topic.messages.forEach(msg => {
+                            conn.send({
+                                type: 'history',
+                                username: msg.username,
+                                text: msg.text || '🎤 Áudio',
+                                audio: msg.audio || null,
+                                image: msg.image || null,
+                                time: msg.time,
+                                topic: topicId
+                            });
+                        });
+                    }
+                });
+                
+                conn.send({
+                    type: 'topic_list',
+                    topics: topics
+                });
+                
+                broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao aceitar usuário:', e);
+            }
+        }
+
+        function rejectUser(peerId) {
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
+                conn.send({ type: 'approval_result', accepted: false });
+                
+                setTimeout(() => { try { conn.close(); } catch (e) {} }, 1000);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao rejeitar usuário:', e);
+            }
+        }
 
         // ===== FUNÇÕES DE ENVIO =====
         function sendMessage() {
@@ -2699,13 +3196,11 @@
                     return;
                 }
 
-                // Adiciona ao tópico atual
                 if (!topics[currentTopic]) {
                     showSystemMessage('⚠️ Tópico não encontrado', false, true);
                     return;
                 }
 
-                // Verifica se o usuário tem acesso ao tópico
                 if (topics[currentTopic].closed && !topics[currentTopic].users.includes(currentUser) && currentTopic !== 'geral') {
                     showSystemMessage('🔒 Você não tem acesso a este tópico', false, true);
                     return;
@@ -2713,7 +3208,6 @@
 
                 addMessageToDOM(currentUser, text, true);
                 
-                // Salva no tópico
                 topics[currentTopic].messages.push({
                     username: currentUser,
                     text: text,
@@ -2873,623 +3367,7 @@
             if (mediaRecorder && isRecording) mediaRecorder.stop();
         }
 
-        // ===== INICIAR COMO SERVIDOR =====
-        function startAsServer(serverId) {
-            if (isServer && currentServer === serverId) return;
-            cleanup();
-            const serverInfo = SERVERS[serverId];
-            if (!serverInfo) return;
-            
-            isServer = true;
-            isConnected = true;
-            currentServer = serverId;
-            clients = {};
-            
-            updateStatus(`👑 Servidor (${serverInfo.name})`, 'online');
-            showSystemMessage(`✅ Você é o servidor do ${serverInfo.name}!`, true);
-            showSystemMessage(`🔐 Você pode aprovar ou rejeitar novas entradas`, true);
-            setInputEnabled(true);
-            markServerActive(serverId);
-            updateServerStatus(serverId, 'online');
-            updateUserCount(0);
-            
-            peer = new Peer(serverInfo.id, {
-                debug: 0,
-                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
-            });
-
-            peer.on('open', (id) => {
-                console.log(`Servidor ${serverInfo.name} iniciado:`, id);
-                showSystemMessage(`🟢 ${serverInfo.name} pronto!`, true);
-            });
-
-            peer.on('connection', (conn) => {
-                console.log('Nova conexão recebida:', conn.peer);
-                pendingApprovals[conn.peer] = { conn: conn, status: 'pending' };
-                
-                conn.on('open', () => {
-                    showSystemMessage(`👤 ${conn.peer} está solicitando entrada`, false, false, true);
-                    showSystemMessage(`🔐 Clique em "Aceitar" ou "Rejeitar"`, false, false, true);
-                    conn.send({ type: 'approval_request', serverId: serverId, serverName: serverInfo.name });
-                });
-
-                conn.on('data', (data) => {
-                    if (data.type === 'approval_response') {
-                        if (data.accepted) acceptUser(conn.peer);
-                        else rejectUser(conn.peer);
-                    } else if (data.type === 'message') {
-                        if (clients[conn.peer]) {
-                            // Verifica tópico
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
-                                // Usuário não tem acesso
-                                return;
-                            }
-                            if (!topics[topicId]) return;
-                            
-                            topics[topicId].messages.push({
-                                username: data.username,
-                                text: data.text,
-                                time: data.time
-                            });
-                            saveTopics();
-                            
-                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
-                                addMessageToDOM(data.username, data.text, false);
-                            }
-                            broadcastMessage(data, conn);
-                        }
-                    } else if (data.type === 'audio') {
-                        if (clients[conn.peer]) {
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
-                                return;
-                            }
-                            if (!topics[topicId]) return;
-                            
-                            topics[topicId].messages.push({
-                                username: data.username,
-                                text: '🎤 Áudio',
-                                time: data.time,
-                                audio: data.audio
-                            });
-                            saveTopics();
-                            
-                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
-                            }
-                            broadcastMessage(data, conn);
-                        }
-                    } else if (data.type === 'image') {
-                        if (clients[conn.peer]) {
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
-                                return;
-                            }
-                            if (!topics[topicId]) return;
-                            
-                            topics[topicId].messages.push({
-                                username: data.username,
-                                text: '🖼️ Imagem',
-                                time: data.time,
-                                image: data.image
-                            });
-                            saveTopics();
-                            
-                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
-                            }
-                            broadcastMessage(data, conn);
-                        }
-                    } else if (data.type === 'join') {
-                        pendingApprovals[conn.peer].username = data.username;
-                        const displayName = users[data.username]?.displayName || data.username;
-                        showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar`, false, false, true);
-                        showApprovalButtons(conn.peer, data.username);
-                    } else if (data.type === 'topic_switch') {
-                        if (clients[conn.peer]) {
-                            clients[conn.peer].currentTopic = data.topic;
-                        }
-                    } else if (data.type === 'topic_request') {
-                        // Solicitação para entrar em tópico privado
-                        if (isAdmin || users[currentUser]?.isAdmin) {
-                            const topicId = data.topic;
-                            if (topics[topicId] && topics[topicId].closed) {
-                                showSystemMessage(`📨 ${data.username} solicitou entrada no tópico "${topics[topicId].name}"`);
-                                // Aceitar automaticamente (admin)
-                                if (!topics[topicId].users.includes(data.username)) {
-                                    topics[topicId].users.push(data.username);
-                                    saveTopics();
-                                    renderTopics();
-                                    showSystemMessage(`✅ ${data.username} foi adicionado ao tópico "${topics[topicId].name}"`);
-                                    conn.send({
-                                        type: 'topic_join_accept',
-                                        topic: topicId
-                                    });
-                                }
-                            }
-                        }
-                    } else if (data.type === 'topic_join_accept') {
-                        // Usuário foi aceito no tópico
-                        const topicId = data.topic;
-                        if (topics[topicId] && !topics[topicId].users.includes(currentUser)) {
-                            topics[topicId].users.push(currentUser);
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`✅ Você foi adicionado ao tópico "${topics[topicId].name}"`);
-                        }
-                    } else if (data.type === 'topic_created') {
-                        // Criar tópico localmente
-                        if (!topics[data.topic]) {
-                            topics[data.topic] = {
-                                name: data.name,
-                                createdBy: data.username,
-                                users: [data.username],
-                                messages: [],
-                                active: true,
-                                closed: false
-                            };
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`📌 Novo tópico "${data.name}" criado por ${data.username}`);
-                        }
-                    } else if (data.type === 'topic_closed') {
-                        if (topics[data.topic]) {
-                            topics[data.topic].closed = true;
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`🔒 Tópico "${topics[data.topic].name}" foi fechado`);
-                        }
-                    } else if (data.type === 'topic_join') {
-                        if (topics[data.topic] && !topics[data.topic].users.includes(data.username)) {
-                            topics[data.topic].users.push(data.username);
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`👤 ${data.username} entrou no tópico "${topics[data.topic].name}"`);
-                        }
-                    }
-                });
-
-                conn.on('close', () => {
-                    delete pendingApprovals[conn.peer];
-                    if (clients[conn.peer]) {
-                        delete clients[conn.peer];
-                        showSystemMessage(`👤 ${conn.peer} saiu do chat`);
-                        updateUserCount(Object.keys(clients).length);
-                    }
-                });
-
-                conn.on('error', (err) => {
-                    console.warn('Erro na conexão:', err);
-                    delete pendingApprovals[conn.peer];
-                    delete clients[conn.peer];
-                    updateUserCount(Object.keys(clients).length);
-                });
-            });
-
-            peer.on('error', (err) => {
-                console.error('Erro no servidor:', err);
-                if (err.type === 'unavailable-id') {
-                    showSystemMessage(`⚠️ ${serverInfo.name} já está ocupado. Conectando...`, false, true);
-                    isServer = false;
-                    isConnected = false;
-                    cleanup();
-                    setTimeout(() => connectAsClient(serverId), 1000);
-                }
-            });
-        }
-
-        function showApprovalButtons(peerId, username) {
-            try {
-                const oldBtns = document.querySelectorAll('.approval-buttons');
-                oldBtns.forEach(btn => btn.remove());
-                
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'system-msg approval-buttons';
-                msgDiv.style.display = 'flex';
-                msgDiv.style.gap = '10px';
-                msgDiv.style.justifyContent = 'center';
-                msgDiv.style.padding = '8px 0';
-                
-                const acceptBtn = document.createElement('button');
-                acceptBtn.textContent = '✅ Aceitar';
-                acceptBtn.style.cssText = `
-                    padding: 6px 16px;
-                    border: none;
-                    border-radius: 16px;
-                    background: #4caf50;
-                    color: white;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 13px;
-                    transition: 0.2s;
-                `;
-                acceptBtn.onmouseover = () => acceptBtn.style.transform = 'scale(1.05)';
-                acceptBtn.onmouseout = () => acceptBtn.style.transform = 'scale(1)';
-                acceptBtn.onclick = () => acceptUser(peerId);
-                
-                const rejectBtn = document.createElement('button');
-                rejectBtn.textContent = '❌ Rejeitar';
-                rejectBtn.style.cssText = `
-                    padding: 6px 16px;
-                    border: none;
-                    border-radius: 16px;
-                    background: #f44336;
-                    color: white;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 13px;
-                    transition: 0.2s;
-                `;
-                rejectBtn.onmouseover = () => rejectBtn.style.transform = 'scale(1.05)';
-                rejectBtn.onmouseout = () => rejectBtn.style.transform = 'scale(1)';
-                rejectBtn.onclick = () => rejectUser(peerId);
-                
-                msgDiv.appendChild(acceptBtn);
-                msgDiv.appendChild(rejectBtn);
-                if (messagesContainer) {
-                    messagesContainer.appendChild(msgDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
-            } catch (e) {
-                console.warn('Erro ao mostrar botões de aprovação:', e);
-            }
-        }
-
-        function acceptUser(peerId) {
-            try {
-                if (!pendingApprovals[peerId]) return;
-                const pending = pendingApprovals[peerId];
-                const conn = pending.conn;
-                const username = pending.username || conn.peer;
-                const displayName = users[username]?.displayName || username;
-                
-                clients[peerId] = conn;
-                clients[peerId].currentTopic = 'geral';
-                showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
-                updateUserCount(Object.keys(clients).length);
-                
-                conn.send({ type: 'approval_result', accepted: true });
-                
-                // Envia tópicos e histórico
-                Object.keys(topics).forEach(topicId => {
-                    const topic = topics[topicId];
-                    if (!topic.closed || topic.users.includes(username)) {
-                        topic.messages.forEach(msg => {
-                            conn.send({
-                                type: 'history',
-                                username: msg.username,
-                                text: msg.text || '🎤 Áudio',
-                                audio: msg.audio || null,
-                                image: msg.image || null,
-                                time: msg.time,
-                                topic: topicId
-                            });
-                        });
-                    }
-                });
-                
-                // Envia lista de tópicos
-                conn.send({
-                    type: 'topic_list',
-                    topics: topics
-                });
-                
-                broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
-                delete pendingApprovals[peerId];
-                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
-            } catch (e) {
-                console.warn('Erro ao aceitar usuário:', e);
-            }
-        }
-
-        function rejectUser(peerId) {
-            try {
-                if (!pendingApprovals[peerId]) return;
-                const pending = pendingApprovals[peerId];
-                const conn = pending.conn;
-                const username = pending.username || conn.peer;
-                const displayName = users[username]?.displayName || username;
-                
-                showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
-                conn.send({ type: 'approval_result', accepted: false });
-                
-                setTimeout(() => { try { conn.close(); } catch (e) {} }, 1000);
-                delete pendingApprovals[peerId];
-                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
-            } catch (e) {
-                console.warn('Erro ao rejeitar usuário:', e);
-            }
-        }
-
-        // ===== CONECTAR COMO CLIENTE =====
-        function connectAsClient(serverId) {
-            if (isServer && currentServer === serverId) return;
-            cleanup();
-            
-            const serverInfo = SERVERS[serverId];
-            if (!serverInfo) return;
-            
-            isServer = false;
-            isConnected = false;
-            currentServer = serverId;
-            
-            updateStatus(`Conectando a ${serverInfo.name}...`, 'connecting');
-            showSystemMessage(`🔗 Tentando conectar ao ${serverInfo.name}...`);
-            setInputEnabled(false);
-            markServerActive(serverId);
-            updateServerStatus(serverId, 'creating');
-            
-            peer = new Peer({
-                debug: 0,
-                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
-            });
-
-            peer.on('open', (id) => {
-                console.log('Cliente ID:', id);
-                const conn = peer.connect(serverInfo.id, { reliable: true });
-                serverConnection = conn;
-                
-                conn.on('open', () => {
-                    isWaitingApproval = true;
-                    if (approvalServerName) approvalServerName.textContent = serverInfo.name;
-                    if (approvalStatus) {
-                        approvalStatus.textContent = '⏳ Aguardando resposta...';
-                        approvalStatus.style.color = '#ff9800';
-                    }
-                    if (approvalOverlay) approvalOverlay.classList.remove('hidden');
-                    updateStatus(`Aguardando aprovação em ${serverInfo.name}`, 'waiting');
-                    conn.send({ type: 'join', username: currentUser });
-                });
-
-                conn.on('data', (data) => {
-                    if (data.type === 'approval_request') {
-                        if (approvalStatus) {
-                            approvalStatus.textContent = '⏳ Aguardando resposta...';
-                            approvalStatus.style.color = '#ff9800';
-                        }
-                    } else if (data.type === 'approval_result') {
-                        if (data.accepted) {
-                            isConnected = true;
-                            isWaitingApproval = false;
-                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                            updateStatus(`Conectado a ${serverInfo.name}`, 'online');
-                            showSystemMessage(`✅ Você foi aceito no ${serverInfo.name}!`, false, false, false, true);
-                            setInputEnabled(true);
-                            updateServerStatus(serverId, 'online');
-                            if (approvalStatus) {
-                                approvalStatus.textContent = '✅ Aceito!';
-                                approvalStatus.style.color = '#4caf50';
-                            }
-                            setTimeout(() => {
-                                if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                            }, 1000);
-                        } else {
-                            isWaitingApproval = false;
-                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                            updateStatus(`Rejeitado em ${serverInfo.name}`, 'offline');
-                            updateServerStatus(serverId, 'offline');
-                            setInputEnabled(false);
-                            markServerActive(null);
-                            setTimeout(() => { try { conn.close(); } catch (e) {} }, 500);
-                        }
-                    } else if (data.type === 'message') {
-                        if (isConnected) {
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
-                                addMessageToDOM(data.username, data.text, false);
-                            }
-                            // Sempre salva no tópico
-                            if (topics[topicId]) {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: data.text,
-                                    time: data.time
-                                });
-                                saveTopics();
-                            }
-                        }
-                    } else if (data.type === 'audio') {
-                        if (isConnected) {
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
-                            }
-                            if (topics[topicId]) {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: '🎤 Áudio',
-                                    time: data.time,
-                                    audio: data.audio
-                                });
-                                saveTopics();
-                            }
-                        }
-                    } else if (data.type === 'image') {
-                        if (isConnected) {
-                            const topicId = data.topic || 'geral';
-                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
-                            }
-                            if (topics[topicId]) {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: '🖼️ Imagem',
-                                    time: data.time,
-                                    image: data.image
-                                });
-                                saveTopics();
-                            }
-                        }
-                    } else if (data.type === 'history') {
-                        if (isConnected) {
-                            const topicId = data.topic || 'geral';
-                            if (!topics[topicId]) {
-                                topics[topicId] = {
-                                    name: topicId === 'geral' ? 'Geral' : topicId,
-                                    createdBy: 'system',
-                                    users: [currentUser],
-                                    messages: [],
-                                    active: true,
-                                    closed: false
-                                };
-                            }
-                            if (data.audio) {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: '🎤 Áudio',
-                                    time: data.time,
-                                    audio: data.audio
-                                });
-                            } else if (data.image) {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: '🖼️ Imagem',
-                                    time: data.time,
-                                    image: data.image
-                                });
-                            } else {
-                                topics[topicId].messages.push({
-                                    username: data.username,
-                                    text: data.text,
-                                    time: data.time
-                                });
-                            }
-                            saveTopics();
-                            renderTopics();
-                            
-                            if (topicId === currentTopic) {
-                                if (data.audio) {
-                                    addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
-                                } else if (data.image) {
-                                    addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
-                                } else {
-                                    addMessageToDOM(data.username, data.text, false);
-                                }
-                            }
-                        }
-                    } else if (data.type === 'topic_list') {
-                        if (isConnected) {
-                            // Recebe lista de tópicos do servidor
-                            Object.keys(data.topics).forEach(key => {
-                                if (!topics[key]) {
-                                    topics[key] = data.topics[key];
-                                } else {
-                                    // Atualiza usuários
-                                    if (data.topics[key].users) {
-                                        topics[key].users = data.topics[key].users;
-                                    }
-                                    if (data.topics[key].closed !== undefined) {
-                                        topics[key].closed = data.topics[key].closed;
-                                    }
-                                }
-                            });
-                            saveTopics();
-                            renderTopics();
-                        }
-                    } else if (data.type === 'topic_created') {
-                        if (!topics[data.topic]) {
-                            topics[data.topic] = {
-                                name: data.name,
-                                createdBy: data.username,
-                                users: [data.username],
-                                messages: [],
-                                active: true,
-                                closed: false
-                            };
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`📌 Novo tópico "${data.name}" criado por ${data.username}`);
-                        }
-                    } else if (data.type === 'topic_closed') {
-                        if (topics[data.topic]) {
-                            topics[data.topic].closed = true;
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`🔒 Tópico "${topics[data.topic].name}" foi fechado`);
-                        }
-                    } else if (data.type === 'topic_join') {
-                        if (topics[data.topic] && !topics[data.topic].users.includes(data.username)) {
-                            topics[data.topic].users.push(data.username);
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`👤 ${data.username} entrou no tópico "${topics[data.topic].name}"`);
-                        }
-                    } else if (data.type === 'topic_request') {
-                        // Solicitação para entrar em tópico privado
-                        if (isAdmin || users[currentUser]?.isAdmin) {
-                            const topicId = data.topic;
-                            if (topics[topicId] && topics[topicId].closed) {
-                                showSystemMessage(`📨 ${data.username} solicitou entrada no tópico "${topics[topicId].name}"`);
-                                if (!topics[topicId].users.includes(data.username)) {
-                                    topics[topicId].users.push(data.username);
-                                    saveTopics();
-                                    renderTopics();
-                                    showSystemMessage(`✅ ${data.username} foi adicionado ao tópico "${topics[topicId].name}"`);
-                                    conn.send({
-                                        type: 'topic_join_accept',
-                                        topic: topicId
-                                    });
-                                }
-                            }
-                        }
-                    } else if (data.type === 'topic_join_accept') {
-                        const topicId = data.topic;
-                        if (topics[topicId] && !topics[topicId].users.includes(currentUser)) {
-                            topics[topicId].users.push(currentUser);
-                            saveTopics();
-                            renderTopics();
-                            showSystemMessage(`✅ Você foi adicionado ao tópico "${topics[topicId].name}"`);
-                        }
-                    } else if (data.type === 'topic_switch') {
-                        // Atualiza tópico atual do usuário
-                        if (clients[conn.peer]) {
-                            clients[conn.peer].currentTopic = data.topic;
-                        }
-                    } else if (data.type === 'system') {
-                        if (isConnected) showSystemMessage(data.text);
-                    } else if (data.type === 'ping') {
-                        conn.send({ type: 'pong' });
-                    }
-                });
-
-                conn.on('close', () => {
-                    if (isConnected) {
-                        isConnected = false;
-                        serverConnection = null;
-                        updateStatus(`Desconectado de ${serverInfo.name}`, 'offline');
-                        showSystemMessage(`⚠️ Conexão com ${serverInfo.name} perdida!`, false, true);
-                        setInputEnabled(false);
-                        updateServerStatus(serverId, 'offline');
-                        markServerActive(null);
-                    }
-                });
-
-                conn.on('error', (err) => {
-                    console.warn('Erro de conexão:', err);
-                    if (err.type === 'peer-unavailable') {
-                        showSystemMessage(`⚠️ ${serverInfo.name} não encontrado. Iniciando...`, false, true);
-                        updateServerStatus(serverId, 'offline');
-                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                        setTimeout(() => startAsServer(serverId), 1000);
-                    } else if (!isConnected) {
-                        updateStatus('Erro', 'offline');
-                        setInputEnabled(false);
-                        updateServerStatus(serverId, 'offline');
-                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                    }
-                });
-            });
-
-            peer.on('error', (err) => {
-                console.error('Erro no cliente:', err);
-                if (err.type === 'unavailable-id') {
-                    cleanup();
-                    setTimeout(() => connectAsClient(serverId), 1000);
-                }
-            });
-        }
-
+        // ===== LIMPEZA =====
         function cleanup() {
             try {
                 if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
@@ -3502,73 +3380,7 @@
             } catch (e) {}
         }
 
-        function selectServer(serverId) {
-            try {
-                if (serverId === currentServer && isConnected) {
-                    showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
-                    return;
-                }
-                
-                if (messagesContainer) messagesContainer.innerHTML = '';
-                messageHistory = [];
-                if (approvalOverlay) approvalOverlay.classList.add('hidden');
-                
-                // Recarregar tópicos
-                renderTopics();
-                
-                const msg = document.createElement('div');
-                msg.className = 'system-msg';
-                msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
-                if (messagesContainer) messagesContainer.appendChild(msg);
-                
-                connectAsClient(serverId);
-                
-                setTimeout(() => {
-                    if (!isConnected && !isServer && !isWaitingApproval) {
-                        startAsServer(serverId);
-                    }
-                }, 5000);
-            } catch (e) {
-                console.error('Erro ao selecionar servidor:', e);
-            }
-        }
-
-        // ===== INICIALIZAR CHAT =====
-        function initChat() {
-            try {
-                Object.keys(SERVERS).forEach(id => updateServerStatus(parseInt(id), 'offline'));
-                
-                showSystemMessage('⚡ Selecione um servidor para entrar');
-                updateStatus('Selecione um servidor', 'offline');
-                setInputEnabled(false);
-                
-                // Carrega tópicos
-                renderTopics();
-                
-                // Carrega mensagens do tópico atual
-                if (topics[currentTopic] && topics[currentTopic].messages) {
-                    topics[currentTopic].messages.forEach(msg => {
-                        addMessageToDOM(msg.username, msg.text, false, false, false, false, false, false, msg.audio, msg.image);
-                    });
-                }
-                
-                const displayName = users[currentUser]?.displayName || currentUser;
-                showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
-                showSystemMessage(`💻 Dispositivo: ${deviceInfo.icon} ${deviceInfo.label}`, false, false, false, true);
-                updateHeaderAvatar(currentUser);
-            } catch (e) {
-                console.error('Erro ao iniciar chat:', e);
-            }
-        }
-
-        // ===== EVENT LISTENERS DO CHAT =====
-        serverBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const serverId = parseInt(btn.dataset.server);
-                selectServer(serverId);
-            });
-        });
-
+        // ===== EVENT LISTENERS =====
         if (sendBtn) sendBtn.addEventListener('click', sendMessage);
         
         if (messageInput) {
@@ -3591,29 +3403,18 @@
                     showSystemMessage('❌ Solicitação cancelada', false, true);
                     updateStatus('Desconectado', 'offline');
                     setInputEnabled(false);
-                    markServerActive(null);
                     cleanup();
                     setTimeout(() => {
                         if (!isConnected && !isServer) {
-                            const serverId = currentServer;
-                            if (serverId) selectServer(serverId);
+                            connectToServer();
                         }
                     }, 2000);
                 }
             });
         }
 
-        // ===== VERIFICAÇÃO DE SAÚDE =====
-        setInterval(() => {
-            try {
-                if (!isServer && isConnected && serverConnection) {
-                    try { serverConnection.send({ type: 'ping' }); } catch (e) {}
-                }
-            } catch (e) {}
-        }, 5000);
-
         // ===== INICIALIZAR =====
-        console.log('⚡ EOROS Chat System - Tópicos');
+        console.log('⚡ EOROS Chat System');
         console.log('📱 Dispositivo:', deviceInfo);
         console.log('🎨 Tema:', currentTheme);
         console.log('🎨 Cor:', currentColor);
@@ -3624,6 +3425,8 @@
         if (users['admin']?.password && confirmPasswordGroup) {
             confirmPasswordGroup.style.display = 'none';
         }
+
+        window.connectToServer = connectToServer;
 
     })();
 </script>
