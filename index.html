@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Eoros</title>
+    <title>Eoros - Tópicos</title>
     <style>
         /* ===== VARIÁVEIS ===== */
         :root {
@@ -33,17 +33,36 @@
             --message-own-text: #ffffff;
             --message-other-text: #e8e8f0;
             --glass-bg: rgba(18, 18, 26, 0.85);
+            --topic-bg: rgba(88, 101, 242, 0.1);
+            --topic-border: rgba(88, 101, 242, 0.2);
         }
 
         /* ===== CORES PERSONALIZÁVEIS ===== */
-        [data-color="blue"] { --accent: #5865f2; --accent-hover: #4752c4; --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6); --message-own: #5865f2; }
-        [data-color="purple"] { --accent: #8b5cf6; --accent-hover: #7c3aed; --accent-gradient: linear-gradient(135deg, #8b5cf6, #a78bfa); --message-own: #8b5cf6; }
-        [data-color="pink"] { --accent: #ec4899; --accent-hover: #db2777; --accent-gradient: linear-gradient(135deg, #ec4899, #f472b6); --message-own: #ec4899; }
-        [data-color="red"] { --accent: #ef4444; --accent-hover: #dc2626; --accent-gradient: linear-gradient(135deg, #ef4444, #f87171); --message-own: #ef4444; }
-        [data-color="orange"] { --accent: #f59e0b; --accent-hover: #d97706; --accent-gradient: linear-gradient(135deg, #f59e0b, #fbbf24); --message-own: #f59e0b; }
-        [data-color="green"] { --accent: #10b981; --accent-hover: #059669; --accent-gradient: linear-gradient(135deg, #10b981, #34d399); --message-own: #10b981; }
-        [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; }
-        [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; }
+        [data-color="blue"] { --accent: #5865f2; --accent-hover: #4752c4; --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6); --message-own: #5865f2; --topic-bg: rgba(88, 101, 242, 0.15); --topic-border: rgba(88, 101, 242, 0.3); }
+        [data-color="purple"] { --accent: #8b5cf6; --accent-hover: #7c3aed; --accent-gradient: linear-gradient(135deg, #8b5cf6, #a78bfa); --message-own: #8b5cf6; --topic-bg: rgba(139, 92, 246, 0.15); --topic-border: rgba(139, 92, 246, 0.3); }
+        [data-color="pink"] { --accent: #ec4899; --accent-hover: #db2777; --accent-gradient: linear-gradient(135deg, #ec4899, #f472b6); --message-own: #ec4899; --topic-bg: rgba(236, 72, 153, 0.15); --topic-border: rgba(236, 72, 153, 0.3); }
+        [data-color="red"] { --accent: #ef4444; --accent-hover: #dc2626; --accent-gradient: linear-gradient(135deg, #ef4444, #f87171); --message-own: #ef4444; --topic-bg: rgba(239, 68, 68, 0.15); --topic-border: rgba(239, 68, 68, 0.3); }
+        [data-color="orange"] { --accent: #f59e0b; --accent-hover: #d97706; --accent-gradient: linear-gradient(135deg, #f59e0b, #fbbf24); --message-own: #f59e0b; --topic-bg: rgba(245, 158, 11, 0.15); --topic-border: rgba(245, 158, 11, 0.3); }
+        [data-color="green"] { --accent: #10b981; --accent-hover: #059669; --accent-gradient: linear-gradient(135deg, #10b981, #34d399); --message-own: #10b981; --topic-bg: rgba(16, 185, 129, 0.15); --topic-border: rgba(16, 185, 129, 0.3); }
+        [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; --topic-bg: rgba(20, 184, 166, 0.15); --topic-border: rgba(20, 184, 166, 0.3); }
+        [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; --topic-bg: rgba(6, 182, 212, 0.15); --topic-border: rgba(6, 182, 212, 0.3); }
+
+        /* ===== FUNDO COM COR ===== */
+        body {
+            background: var(--bg-primary);
+            transition: background-color 0.5s;
+        }
+
+        .chat-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.5s, border-color 0.5s;
+        }
+
+        .messages {
+            background: var(--bg-tertiary);
+            transition: background-color 0.5s;
+        }
 
         /* ===== TEMA CLARO ===== */
         [data-theme="light"] {
@@ -63,6 +82,8 @@
             --message-other-text: #1a1a2e;
             --message-own-text: #ffffff;
             --glass-bg: rgba(255, 255, 255, 0.85);
+            --topic-bg: rgba(88, 101, 242, 0.08);
+            --topic-border: rgba(88, 101, 242, 0.15);
         }
 
         /* ===== LAYOUT DESKTOP ===== */
@@ -72,11 +93,7 @@
             --border-radius: 20px;
         }
 
-        [data-device="desktop"] .chat-container {
-            max-width: var(--container-width);
-            border-radius: var(--border-radius);
-        }
-
+        [data-device="desktop"] .chat-container { max-width: var(--container-width); border-radius: var(--border-radius); }
         [data-device="desktop"] .messages { padding: 20px 24px 12px; }
         [data-device="desktop"] .message { max-width: 70%; }
         [data-device="desktop"] .login-screen .login-box { max-width: 440px; }
@@ -93,13 +110,7 @@
         [data-device="desktop"] .profile-photo-preview { width: 120px; height: 120px; }
 
         /* ===== LAYOUT MOBILE ===== */
-        [data-device="mobile"] .chat-container {
-            max-width: 480px;
-            height: 100vh;
-            max-height: none;
-            border-radius: 0;
-        }
-
+        [data-device="mobile"] .chat-container { max-width: 480px; height: 100vh; max-height: none; border-radius: 0; }
         [data-device="mobile"] .messages { padding: 12px 14px 8px; }
         [data-device="mobile"] .message { max-width: 88%; }
         [data-device="mobile"] .login-screen .login-box { max-width: 400px; }
@@ -153,7 +164,6 @@
             padding: 30px 20px;
             overflow-y: auto;
         }
-
         .login-screen.hidden { display: none; }
 
         .login-screen .login-box {
@@ -227,7 +237,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* ===== FOTO PERFIL ===== */
         .profile-photo-container {
             display: flex;
             flex-direction: column;
@@ -250,23 +259,9 @@
             position: relative;
         }
 
-        .profile-photo-preview:hover {
-            border-color: var(--accent-hover);
-            transform: scale(1.03);
-        }
-
-        .profile-photo-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-photo-preview .placeholder {
-            color: var(--text-muted);
-            font-size: 36px;
-            text-align: center;
-        }
-
+        .profile-photo-preview:hover { border-color: var(--accent-hover); transform: scale(1.03); }
+        .profile-photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-photo-preview .placeholder { color: var(--text-muted); font-size: 36px; text-align: center; }
         .profile-photo-preview .upload-overlay {
             position: absolute;
             bottom: 0;
@@ -280,13 +275,10 @@
             opacity: 0;
             transition: 0.3s;
         }
-
         .profile-photo-preview:hover .upload-overlay { opacity: 1; }
         .profile-photo-input { display: none; }
 
-        /* ===== FORMULÁRIO ===== */
         .login-screen .login-box .form-group { margin-bottom: 14px; }
-
         .login-screen .login-box .form-group label {
             display: block;
             color: var(--text-secondary);
@@ -314,9 +306,7 @@
             box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.15);
         }
 
-        .login-screen .login-box .form-group input::placeholder {
-            color: var(--text-muted);
-        }
+        .login-screen .login-box .form-group input::placeholder { color: var(--text-muted); }
 
         .login-screen .login-box .btn-login {
             width: 100%;
@@ -555,6 +545,146 @@
         .server-btn .status-indicator.offline { background: var(--error); }
         .server-btn .status-indicator.creating { background: var(--warning); animation: pulse 0.5s infinite; }
 
+        /* ===== TOPICS BAR ===== */
+        .topics-bar {
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            flex-shrink: 0;
+            min-height: 40px;
+        }
+
+        .topics-bar .topics-label {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+        }
+
+        .topic-btn {
+            padding: 4px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .topic-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .topic-btn.active {
+            border-color: var(--accent);
+            background: var(--topic-bg);
+            color: var(--accent);
+        }
+
+        .topic-btn.private {
+            border-color: var(--topic-border);
+            background: var(--topic-bg);
+        }
+
+        .topic-btn .topic-status {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .topic-btn .topic-status.open { background: var(--success); }
+        .topic-btn .topic-status.closed { background: var(--error); }
+        .topic-btn .topic-status.private { background: var(--warning); }
+
+        .topic-btn .topic-users {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .topic-btn .topic-users.active-users {
+            color: var(--success);
+        }
+
+        .topic-create-btn {
+            padding: 4px 12px;
+            border: 1.5px dashed var(--border-color);
+            border-radius: 14px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .topic-create-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .topic-create-input {
+            padding: 4px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 11px;
+            outline: none;
+            width: 120px;
+            transition: 0.2s;
+        }
+
+        .topic-create-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+        }
+
+        .topic-create-confirm {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 14px;
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .topic-create-confirm:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .topic-create-cancel {
+            padding: 4px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .topic-create-cancel:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
         /* ===== MESSAGES ===== */
         .messages {
             flex: 1;
@@ -565,6 +695,7 @@
             gap: 4px;
             background: var(--bg-tertiary);
             scroll-behavior: smooth;
+            transition: background-color 0.5s;
         }
 
         .messages::-webkit-scrollbar { width: 3px; }
@@ -581,6 +712,7 @@
             border: 1px solid var(--border-color);
             align-self: flex-start;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.5s, border-color 0.5s;
         }
 
         .message.own {
@@ -666,6 +798,7 @@
             line-height: 1.4;
             word-break: break-word;
             padding-left: 32px;
+            transition: color 0.5s;
         }
 
         .message.own .msg-text { color: var(--message-own-text); }
@@ -687,76 +820,10 @@
 
         .message.own .msg-time { color: rgba(255,255,255,0.6); }
 
-        /* ===== IMAGEM MENSAGEM ===== */
-        .image-message {
-            max-width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        .message.topic-message {
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
         }
-
-        .image-message:hover { filter: brightness(0.9); }
-        .image-message img { max-width: 100%; max-height: 280px; border-radius: 8px; display: block; }
-
-        /* ===== ÁUDIO MESSAGE ===== */
-        .audio-message {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-primary);
-            padding: 4px 10px;
-            border-radius: 10px;
-            margin: 2px 0;
-            min-width: 120px;
-        }
-
-        .message.own .audio-message { background: rgba(255,255,255,0.1); }
-
-        .audio-message .play-btn {
-            background: var(--accent);
-            border: none;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-
-        .audio-message .play-btn:hover { background: var(--accent-hover); transform: scale(1.1); }
-        .audio-message .play-btn:active { transform: scale(0.9); }
-
-        .audio-message .audio-progress {
-            flex: 1;
-            height: 3px;
-            background: var(--border-color);
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-            min-width: 40px;
-        }
-
-        .audio-message .audio-progress .progress-bar {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.1s;
-        }
-
-        .audio-message .audio-time {
-            color: var(--text-secondary);
-            font-size: 10px;
-            min-width: 28px;
-            text-align: center;
-        }
-
-        .message.own .audio-message .audio-time { color: rgba(255,255,255,0.7); }
 
         /* ===== SYSTEM MESSAGES ===== */
         .system-msg {
@@ -773,6 +840,7 @@
         .system-msg.error { color: var(--error); }
         .system-msg.warning { color: var(--warning); font-weight: 500; }
         .system-msg.success { color: var(--success); font-weight: 500; }
+        .system-msg.topic { color: var(--accent); font-weight: 500; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px) scale(0.98); }
@@ -794,6 +862,7 @@
             flex-direction: column;
             gap: 4px;
             flex-shrink: 0;
+            transition: background-color 0.5s;
         }
 
         .input-area .input-row {
@@ -907,7 +976,6 @@
             padding: 20px;
             backdrop-filter: blur(12px);
         }
-
         .approval-overlay.hidden { display: none; }
 
         .approval-overlay .approval-box {
@@ -922,17 +990,8 @@
         }
 
         .approval-overlay .approval-box .icon { font-size: 44px; margin-bottom: 8px; }
-        .approval-overlay .approval-box h2 {
-            color: var(--text-primary);
-            font-size: 19px;
-            margin-bottom: 6px;
-        }
-        .approval-overlay .approval-box p {
-            color: var(--text-secondary);
-            font-size: 13px;
-            margin-bottom: 14px;
-            line-height: 1.5;
-        }
+        .approval-overlay .approval-box h2 { color: var(--text-primary); font-size: 19px; margin-bottom: 6px; }
+        .approval-overlay .approval-box p { color: var(--text-secondary); font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
 
         .approval-overlay .approval-box .user-info {
             background: var(--bg-primary);
@@ -994,6 +1053,7 @@
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
+            transition: background-color 0.5s;
         }
 
         .status-bar .status-dot {
@@ -1025,7 +1085,6 @@
             padding: 20px;
             backdrop-filter: blur(12px);
         }
-
         .config-modal.hidden { display: none; }
 
         .config-modal .config-box {
@@ -1113,6 +1172,7 @@
             display: flex;
             gap: 8px;
             margin-top: 14px;
+            flex-wrap: wrap;
         }
 
         .config-modal .config-box .btn-group button {
@@ -1124,6 +1184,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
+            min-width: 80px;
         }
 
         .config-modal .config-box .btn-group button:active { transform: scale(0.95); }
@@ -1144,6 +1205,17 @@
         }
 
         .config-modal .config-box .btn-close:hover { background: var(--hover-bg); }
+
+        .config-modal .config-box .btn-logout {
+            background: var(--error);
+            color: white;
+            flex: 0.5;
+        }
+
+        .config-modal .config-box .btn-logout:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
 
         .config-modal .config-box .admin-section {
             background: var(--bg-primary);
@@ -1184,7 +1256,6 @@
             padding: 20px;
             cursor: pointer;
         }
-
         .image-modal.hidden { display: none; }
         .image-modal img { max-width: 100%; max-height: 90vh; border-radius: 12px; object-fit: contain; animation: fadeIn 0.3s ease; }
 
@@ -1207,6 +1278,10 @@
             .profile-photo-preview { width: 72px; height: 72px; }
             .config-modal .config-box .profile-photo-preview { width: 56px; height: 56px; }
             .chat-header .device-badge { font-size: 8px; padding: 1px 5px; }
+            .topics-bar { padding: 4px 10px; gap: 4px; }
+            .topic-btn { font-size: 10px; padding: 3px 10px; }
+            .topic-create-input { width: 80px; font-size: 10px; }
+            .config-modal .config-box .btn-group .btn-logout { flex: 1; }
 
             [data-device="desktop"] .chat-container {
                 max-width: 480px;
@@ -1228,6 +1303,8 @@
             [data-device="desktop"] .message .msg-user { font-size: 12px; }
             [data-device="desktop"] .profile-photo-preview { width: 72px; height: 72px; }
             [data-device="desktop"] .config-modal .config-box .profile-photo-preview { width: 56px; height: 56px; }
+            [data-device="desktop"] .topics-bar { padding: 4px 10px; }
+            [data-device="desktop"] .topic-btn { font-size: 10px; padding: 3px 10px; }
         }
 
         @media (max-width: 380px) {
@@ -1236,6 +1313,7 @@
             .server-btn { font-size: 9px; padding: 3px 6px; min-width: 45px; }
             .config-modal .config-box .color-options .color-btn { width: 26px; height: 26px; }
             .login-screen .login-box .logo h1 { font-size: 24px; }
+            .topic-create-input { width: 60px; }
         }
     </style>
 </head>
@@ -1349,6 +1427,7 @@
             <div class="btn-group">
                 <button class="btn-save" id="configSaveBtn">💾 Salvar</button>
                 <button class="btn-close" id="configCloseBtn">✖ Fechar</button>
+                <button class="btn-logout" id="logoutBtn">🚪 Sair</button>
             </div>
         </div>
     </div>
@@ -1388,6 +1467,19 @@
         <button class="server-btn" data-server="3" id="server3Btn">
             <span class="status-indicator" id="status3"></span> Servidor 3
         </button>
+    </div>
+
+    <!-- TOPICS BAR -->
+    <div class="topics-bar" id="topicsBar">
+        <span class="topics-label">📌 Tópicos:</span>
+        <button class="topic-btn active" data-topic="geral" id="topicGeral">💬 Geral</button>
+        <div id="topicsContainer"></div>
+        <button class="topic-create-btn" id="topicCreateBtn">+ Criar</button>
+        <div id="topicCreateInput" style="display:none; display:flex; gap:4px; align-items:center;">
+            <input type="text" class="topic-create-input" id="topicNewName" placeholder="Nome do tópico..." maxlength="30">
+            <button class="topic-create-confirm" id="topicCreateConfirm">✓</button>
+            <button class="topic-create-cancel" id="topicCreateCancel">✕</button>
+        </div>
     </div>
 
     <!-- MESSAGES -->
@@ -1493,6 +1585,7 @@
                 language: '🌐 Idioma',
                 save: '💾 Salvar',
                 close: '✖ Fechar',
+                logout: '🚪 Sair',
                 adminSection: 'Você é administrador do sistema.',
                 photoRequired: '⚠️ Por favor, adicione uma foto de perfil.',
                 imageTooLarge: '⚠️ A imagem é muito grande. Máximo 5MB.',
@@ -1518,6 +1611,7 @@
                 language: '🌐 Language',
                 save: '💾 Save',
                 close: '✖ Close',
+                logout: '🚪 Logout',
                 adminSection: 'You are the system administrator.',
                 photoRequired: '⚠️ Please add a profile photo.',
                 imageTooLarge: '⚠️ Image is too large. Max 5MB.',
@@ -1543,6 +1637,7 @@
                 language: '🌐 Idioma',
                 save: '💾 Guardar',
                 close: '✖ Cerrar',
+                logout: '🚪 Salir',
                 adminSection: 'Eres el administrador del sistema.',
                 photoRequired: '⚠️ Por favor, agregue una foto de perfil.',
                 imageTooLarge: '⚠️ La imagen es demasiado grande. Máximo 5MB.',
@@ -1568,6 +1663,7 @@
                 language: '🌐 Язык',
                 save: '💾 Сохранить',
                 close: '✖ Закрыть',
+                logout: '🚪 Выйти',
                 adminSection: 'Вы администратор системы.',
                 photoRequired: '⚠️ Пожалуйста, добавьте фото профиля.',
                 imageTooLarge: '⚠️ Изображение слишком большое. Максимум 5МБ.',
@@ -1595,6 +1691,7 @@
         const configBtn = document.getElementById('configBtn');
         const configCloseBtn = document.getElementById('configCloseBtn');
         const configSaveBtn = document.getElementById('configSaveBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const configDisplayName = document.getElementById('configDisplayName');
         const configPassword = document.getElementById('configPassword');
         const configConfirmPassword = document.getElementById('configConfirmPassword');
@@ -1634,6 +1731,15 @@
         const headerDeviceBadge = document.getElementById('headerDeviceBadge');
         const themeBtn = document.getElementById('themeBtn');
 
+        // ===== TOPICS =====
+        const topicsContainer = document.getElementById('topicsContainer');
+        const topicCreateBtn = document.getElementById('topicCreateBtn');
+        const topicCreateInput = document.getElementById('topicCreateInput');
+        const topicNewName = document.getElementById('topicNewName');
+        const topicCreateConfirm = document.getElementById('topicCreateConfirm');
+        const topicCreateCancel = document.getElementById('topicCreateCancel');
+        const topicGeral = document.getElementById('topicGeral');
+
         // ===== ESTADO =====
         let currentLang = 'pt';
         let currentUser = null;
@@ -1654,6 +1760,12 @@
         let isRecording = false;
         let recordingTimerInterval = null;
 
+        // ===== TOPICS STATE =====
+        let topics = JSON.parse(localStorage.getItem('eoros_topics') || '{"geral": { "name": "Geral", "createdBy": "system", "users": [], "messages": [], "active": true, "closed": false }}');
+        let currentTopic = 'geral';
+        let topicUsers = {};
+        let isCreatingTopic = false;
+
         // ===== INICIALIZAR USERS =====
         if (!users['admin']) {
             users['admin'] = {
@@ -1666,7 +1778,7 @@
             localStorage.setItem('chat_users', JSON.stringify(users));
         }
 
-        // ===== DETECTAR DISPOSITIVO - COM FALLBACK =====
+        // ===== DETECTAR DISPOSITIVO =====
         try {
             loginDeviceInfo.textContent = `${deviceInfo.icon} ${deviceInfo.label}`;
             headerDeviceBadge.textContent = deviceInfo.icon;
@@ -1706,8 +1818,180 @@
                 if (loginPassword) loginPassword.placeholder = t('password');
                 if (loginConfirmPassword) loginConfirmPassword.placeholder = t('confirmPassword');
                 if (greeting) greeting.innerHTML = t('greeting');
+                if (logoutBtn) logoutBtn.textContent = t('logout');
             } catch (e) {
                 console.warn('Erro ao atualizar textos:', e);
+            }
+        }
+
+        // ===== FUNÇÕES DE TÓPICOS =====
+        function saveTopics() {
+            localStorage.setItem('eoros_topics', JSON.stringify(topics));
+        }
+
+        function renderTopics() {
+            topicsContainer.innerHTML = '';
+            Object.keys(topics).forEach(key => {
+                const topic = topics[key];
+                const btn = document.createElement('button');
+                btn.className = 'topic-btn' + (key === currentTopic ? ' active' : '');
+                if (topic.closed) btn.classList.add('private');
+                btn.dataset.topic = key;
+                
+                const statusClass = topic.closed ? 'closed' : 'open';
+                const userCount = topic.users ? topic.users.length : 0;
+                
+                btn.innerHTML = `
+                    <span class="topic-status ${statusClass}"></span>
+                    ${topic.name}
+                    ${topic.closed ? '🔒' : ''}
+                    ${userCount > 0 ? `<span class="topic-users ${userCount > 0 ? 'active-users' : ''}">(${userCount})</span>` : ''}
+                `;
+                
+                btn.addEventListener('click', () => {
+                    if (topic.closed && !topic.users.includes(currentUser)) {
+                        // Pedir para entrar no tópico
+                        if (confirm(`O tópico "${topic.name}" é privado. Deseja solicitar entrada?`)) {
+                            requestTopicAccess(key);
+                        }
+                        return;
+                    }
+                    switchTopic(key);
+                });
+                
+                topicsContainer.appendChild(btn);
+            });
+        }
+
+        function switchTopic(topicId) {
+            if (!topics[topicId]) return;
+            
+            // Verifica se o usuário tem acesso ao tópico
+            if (topics[topicId].closed && !topics[topicId].users.includes(currentUser) && topicId !== 'geral') {
+                showSystemMessage('🔒 Este tópico é privado. Solicite entrada.', false, false, true);
+                return;
+            }
+            
+            currentTopic = topicId;
+            renderTopics();
+            
+            // Mostra mensagens do tópico
+            messagesContainer.innerHTML = '';
+            
+            // Mostra mensagens do tópico
+            const topicMsgs = topics[topicId].messages || [];
+            if (topicMsgs.length === 0) {
+                const msg = document.createElement('div');
+                msg.className = 'system-msg';
+                msg.textContent = `📌 Nenhuma mensagem no tópico "${topics[topicId].name}"`;
+                messagesContainer.appendChild(msg);
+            } else {
+                topicMsgs.forEach(msg => {
+                    addMessageToDOM(msg.username, msg.text, false, false, false, false, false, false, msg.audio, msg.image);
+                });
+            }
+            
+            // Atualiza mensagens do servidor
+            if (isConnected) {
+                broadcastMessage({
+                    type: 'topic_switch',
+                    topic: topicId,
+                    username: currentUser
+                });
+            }
+        }
+
+        function requestTopicAccess(topicId) {
+            if (!isConnected) {
+                showSystemMessage('⚠️ Conecte-se a um servidor primeiro', false, true);
+                return;
+            }
+            
+            broadcastMessage({
+                type: 'topic_request',
+                topic: topicId,
+                username: currentUser
+            });
+            
+            showSystemMessage(`📨 Solicitação enviada para o tópico "${topics[topicId].name}"`, false, false, false, true);
+        }
+
+        function createTopic(name) {
+            if (!name || name.trim() === '') return;
+            const id = name.trim().toLowerCase().replace(/\s+/g, '_');
+            
+            if (topics[id]) {
+                showSystemMessage('⚠️ Já existe um tópico com este nome', false, true);
+                return;
+            }
+            
+            topics[id] = {
+                name: name.trim(),
+                createdBy: currentUser,
+                users: [currentUser],
+                messages: [],
+                active: true,
+                closed: false
+            };
+            
+            saveTopics();
+            renderTopics();
+            switchTopic(id);
+            showSystemMessage(`✅ Tópico "${name.trim()}" criado!`, false, false, false, true);
+            
+            // Notificar outros usuários
+            if (isConnected) {
+                broadcastMessage({
+                    type: 'topic_created',
+                    topic: id,
+                    name: name.trim(),
+                    username: currentUser
+                });
+            }
+            
+            isCreatingTopic = false;
+            topicCreateInput.style.display = 'none';
+            topicCreateBtn.style.display = 'inline-block';
+            topicNewName.value = '';
+        }
+
+        function closeTopic(topicId) {
+            if (!topics[topicId]) return;
+            if (topicId === 'geral') {
+                showSystemMessage('⚠️ Não é possível fechar o tópico geral', false, true);
+                return;
+            }
+            
+            topics[topicId].closed = true;
+            saveTopics();
+            renderTopics();
+            showSystemMessage(`🔒 Tópico "${topics[topicId].name}" foi fechado`, false, false, true);
+            
+            if (isConnected) {
+                broadcastMessage({
+                    type: 'topic_closed',
+                    topic: topicId,
+                    username: currentUser
+                });
+            }
+        }
+
+        function joinTopic(topicId) {
+            if (!topics[topicId]) return;
+            if (topics[topicId].users.includes(currentUser)) return;
+            
+            topics[topicId].users.push(currentUser);
+            saveTopics();
+            renderTopics();
+            
+            showSystemMessage(`👤 ${currentUser} entrou no tópico "${topics[topicId].name}"`);
+            
+            if (isConnected) {
+                broadcastMessage({
+                    type: 'topic_join',
+                    topic: topicId,
+                    username: currentUser
+                });
             }
         }
 
@@ -1830,6 +2114,58 @@
             });
         }
 
+        // ===== TOPICS EVENTOS =====
+        topicCreateBtn.addEventListener('click', () => {
+            isCreatingTopic = !isCreatingTopic;
+            if (isCreatingTopic) {
+                topicCreateBtn.style.display = 'none';
+                topicCreateInput.style.display = 'flex';
+                topicNewName.focus();
+            } else {
+                topicCreateBtn.style.display = 'inline-block';
+                topicCreateInput.style.display = 'none';
+                topicNewName.value = '';
+            }
+        });
+
+        topicCreateConfirm.addEventListener('click', () => {
+            createTopic(topicNewName.value);
+        });
+
+        topicNewName.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                createTopic(topicNewName.value);
+            }
+            if (e.key === 'Escape') {
+                topicCreateBtn.style.display = 'inline-block';
+                topicCreateInput.style.display = 'none';
+                topicNewName.value = '';
+                isCreatingTopic = false;
+            }
+        });
+
+        topicCreateCancel.addEventListener('click', () => {
+            topicCreateBtn.style.display = 'inline-block';
+            topicCreateInput.style.display = 'none';
+            topicNewName.value = '';
+            isCreatingTopic = false;
+        });
+
+        // Clique direito no tópico para fechar (admin apenas)
+        topicsContainer.addEventListener('contextmenu', (e) => {
+            const btn = e.target.closest('.topic-btn');
+            if (!btn) return;
+            const topicId = btn.dataset.topic;
+            if (topicId === 'geral') return;
+            if (!isAdmin && users[currentUser]?.isAdmin !== true) {
+                showSystemMessage('⚠️ Apenas administradores podem fechar tópicos', false, true);
+                return;
+            }
+            if (confirm(`Deseja fechar o tópico "${topics[topicId]?.name}"?`)) {
+                closeTopic(topicId);
+            }
+        });
+
         // ===== CONFIGURAÇÕES =====
         if (configBtn) {
             configBtn.addEventListener('click', () => {
@@ -1860,6 +2196,40 @@
         if (configCloseBtn) {
             configCloseBtn.addEventListener('click', () => {
                 if (configModal) configModal.classList.add('hidden');
+            });
+        }
+
+        // ===== LOGOUT =====
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    // Limpar dados da sessão
+                    currentUser = null;
+                    isAdmin = false;
+                    isConnected = false;
+                    isServer = false;
+                    cleanup();
+                    
+                    // Mostrar tela de login
+                    if (loginScreen) loginScreen.classList.remove('hidden');
+                    if (configModal) configModal.classList.add('hidden');
+                    
+                    // Limpar mensagens
+                    if (messagesContainer) {
+                        messagesContainer.innerHTML = '';
+                        const msg = document.createElement('div');
+                        msg.className = 'system-msg';
+                        msg.textContent = '🔌 Você saiu do sistema';
+                        messagesContainer.appendChild(msg);
+                    }
+                    
+                    updateStatus('Desconectado', 'offline');
+                    setInputEnabled(false);
+                    markServerActive(null);
+                    userCountSpan.textContent = '👥 0';
+                    
+                    showSystemMessage('✅ Você saiu com sucesso!', false, false, false, true);
+                }
             });
         }
 
@@ -1967,6 +2337,7 @@
                     setTimeout(() => {
                         if (loginScreen) loginScreen.classList.add('hidden');
                         updateHeaderAvatar(currentUser);
+                        renderTopics();
                         initChat();
                     }, 1000);
                     return;
@@ -2000,6 +2371,7 @@
                     setTimeout(() => {
                         if (loginScreen) loginScreen.classList.add('hidden');
                         updateHeaderAvatar(currentUser);
+                        renderTopics();
                         initChat();
                     }, 1000);
                     return;
@@ -2021,6 +2393,7 @@
                 setTimeout(() => {
                     if (loginScreen) loginScreen.classList.add('hidden');
                     updateHeaderAvatar(currentUser);
+                    renderTopics();
                     initChat();
                 }, 500);
             } catch (e) {
@@ -2326,14 +2699,34 @@
                     return;
                 }
 
+                // Adiciona ao tópico atual
+                if (!topics[currentTopic]) {
+                    showSystemMessage('⚠️ Tópico não encontrado', false, true);
+                    return;
+                }
+
+                // Verifica se o usuário tem acesso ao tópico
+                if (topics[currentTopic].closed && !topics[currentTopic].users.includes(currentUser) && currentTopic !== 'geral') {
+                    showSystemMessage('🔒 Você não tem acesso a este tópico', false, true);
+                    return;
+                }
+
                 addMessageToDOM(currentUser, text, true);
-                messageHistory.push({ username: currentUser, text, time: Date.now() });
+                
+                // Salva no tópico
+                topics[currentTopic].messages.push({
+                    username: currentUser,
+                    text: text,
+                    time: Date.now()
+                });
+                saveTopics();
 
                 broadcastMessage({
                     type: 'message',
                     username: currentUser,
                     text: text,
-                    time: Date.now()
+                    time: Date.now(),
+                    topic: currentTopic
                 });
 
                 if (messageInput) messageInput.value = '';
@@ -2346,9 +2739,27 @@
         function sendImage(imageData) {
             try {
                 if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                
+                if (!topics[currentTopic] || (topics[currentTopic].closed && !topics[currentTopic].users.includes(currentUser) && currentTopic !== 'geral')) {
+                    showSystemMessage('🔒 Você não tem acesso a este tópico', false, true);
+                    return;
+                }
+                
                 addMessageToDOM(currentUser, '', true, false, false, false, false, false, null, imageData);
-                messageHistory.push({ username: currentUser, text: '🖼️ Imagem', time: Date.now(), image: imageData });
-                broadcastMessage({ type: 'image', username: currentUser, image: imageData, time: Date.now() });
+                topics[currentTopic].messages.push({
+                    username: currentUser,
+                    text: '🖼️ Imagem',
+                    time: Date.now(),
+                    image: imageData
+                });
+                saveTopics();
+                broadcastMessage({ 
+                    type: 'image', 
+                    username: currentUser, 
+                    image: imageData, 
+                    time: Date.now(),
+                    topic: currentTopic 
+                });
             } catch (e) {
                 console.error('Erro ao enviar imagem:', e);
             }
@@ -2357,9 +2768,27 @@
         function sendAudio(audioData) {
             try {
                 if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                
+                if (!topics[currentTopic] || (topics[currentTopic].closed && !topics[currentTopic].users.includes(currentUser) && currentTopic !== 'geral')) {
+                    showSystemMessage('🔒 Você não tem acesso a este tópico', false, true);
+                    return;
+                }
+                
                 addMessageToDOM(currentUser, '', true, false, false, false, false, false, audioData);
-                messageHistory.push({ username: currentUser, text: '🎤 Áudio', time: Date.now(), audio: audioData });
-                broadcastMessage({ type: 'audio', username: currentUser, audio: audioData, time: Date.now() });
+                topics[currentTopic].messages.push({
+                    username: currentUser,
+                    text: '🎤 Áudio',
+                    time: Date.now(),
+                    audio: audioData
+                });
+                saveTopics();
+                broadcastMessage({ 
+                    type: 'audio', 
+                    username: currentUser, 
+                    audio: audioData, 
+                    time: Date.now(),
+                    topic: currentTopic 
+                });
             } catch (e) {
                 console.error('Erro ao enviar áudio:', e);
             }
@@ -2490,20 +2919,66 @@
                         else rejectUser(conn.peer);
                     } else if (data.type === 'message') {
                         if (clients[conn.peer]) {
-                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                            addMessageToDOM(data.username, data.text, false);
+                            // Verifica tópico
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
+                                // Usuário não tem acesso
+                                return;
+                            }
+                            if (!topics[topicId]) return;
+                            
+                            topics[topicId].messages.push({
+                                username: data.username,
+                                text: data.text,
+                                time: data.time
+                            });
+                            saveTopics();
+                            
+                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
+                                addMessageToDOM(data.username, data.text, false);
+                            }
                             broadcastMessage(data, conn);
                         }
                     } else if (data.type === 'audio') {
                         if (clients[conn.peer]) {
-                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
-                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
+                                return;
+                            }
+                            if (!topics[topicId]) return;
+                            
+                            topics[topicId].messages.push({
+                                username: data.username,
+                                text: '🎤 Áudio',
+                                time: data.time,
+                                audio: data.audio
+                            });
+                            saveTopics();
+                            
+                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            }
                             broadcastMessage(data, conn);
                         }
                     } else if (data.type === 'image') {
                         if (clients[conn.peer]) {
-                            messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
-                            addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && topics[topicId].closed && !topics[topicId].users.includes(data.username)) {
+                                return;
+                            }
+                            if (!topics[topicId]) return;
+                            
+                            topics[topicId].messages.push({
+                                username: data.username,
+                                text: '🖼️ Imagem',
+                                time: data.time,
+                                image: data.image
+                            });
+                            saveTopics();
+                            
+                            if (topicId === currentTopic || clients[conn.peer]?.currentTopic === topicId) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                            }
                             broadcastMessage(data, conn);
                         }
                     } else if (data.type === 'join') {
@@ -2511,6 +2986,67 @@
                         const displayName = users[data.username]?.displayName || data.username;
                         showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar`, false, false, true);
                         showApprovalButtons(conn.peer, data.username);
+                    } else if (data.type === 'topic_switch') {
+                        if (clients[conn.peer]) {
+                            clients[conn.peer].currentTopic = data.topic;
+                        }
+                    } else if (data.type === 'topic_request') {
+                        // Solicitação para entrar em tópico privado
+                        if (isAdmin || users[currentUser]?.isAdmin) {
+                            const topicId = data.topic;
+                            if (topics[topicId] && topics[topicId].closed) {
+                                showSystemMessage(`📨 ${data.username} solicitou entrada no tópico "${topics[topicId].name}"`);
+                                // Aceitar automaticamente (admin)
+                                if (!topics[topicId].users.includes(data.username)) {
+                                    topics[topicId].users.push(data.username);
+                                    saveTopics();
+                                    renderTopics();
+                                    showSystemMessage(`✅ ${data.username} foi adicionado ao tópico "${topics[topicId].name}"`);
+                                    conn.send({
+                                        type: 'topic_join_accept',
+                                        topic: topicId
+                                    });
+                                }
+                            }
+                        }
+                    } else if (data.type === 'topic_join_accept') {
+                        // Usuário foi aceito no tópico
+                        const topicId = data.topic;
+                        if (topics[topicId] && !topics[topicId].users.includes(currentUser)) {
+                            topics[topicId].users.push(currentUser);
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`✅ Você foi adicionado ao tópico "${topics[topicId].name}"`);
+                        }
+                    } else if (data.type === 'topic_created') {
+                        // Criar tópico localmente
+                        if (!topics[data.topic]) {
+                            topics[data.topic] = {
+                                name: data.name,
+                                createdBy: data.username,
+                                users: [data.username],
+                                messages: [],
+                                active: true,
+                                closed: false
+                            };
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`📌 Novo tópico "${data.name}" criado por ${data.username}`);
+                        }
+                    } else if (data.type === 'topic_closed') {
+                        if (topics[data.topic]) {
+                            topics[data.topic].closed = true;
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`🔒 Tópico "${topics[data.topic].name}" foi fechado`);
+                        }
+                    } else if (data.type === 'topic_join') {
+                        if (topics[data.topic] && !topics[data.topic].users.includes(data.username)) {
+                            topics[data.topic].users.push(data.username);
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`👤 ${data.username} entrou no tópico "${topics[data.topic].name}"`);
+                        }
                     }
                 });
 
@@ -2609,20 +3145,34 @@
                 const displayName = users[username]?.displayName || username;
                 
                 clients[peerId] = conn;
+                clients[peerId].currentTopic = 'geral';
                 showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
                 updateUserCount(Object.keys(clients).length);
                 
                 conn.send({ type: 'approval_result', accepted: true });
                 
-                messageHistory.forEach(msg => {
-                    conn.send({
-                        type: 'history',
-                        username: msg.username,
-                        text: msg.text || '🎤 Áudio',
-                        audio: msg.audio || null,
-                        image: msg.image || null,
-                        time: msg.time
-                    });
+                // Envia tópicos e histórico
+                Object.keys(topics).forEach(topicId => {
+                    const topic = topics[topicId];
+                    if (!topic.closed || topic.users.includes(username)) {
+                        topic.messages.forEach(msg => {
+                            conn.send({
+                                type: 'history',
+                                username: msg.username,
+                                text: msg.text || '🎤 Áudio',
+                                audio: msg.audio || null,
+                                image: msg.image || null,
+                                time: msg.time,
+                                topic: topicId
+                            });
+                        });
+                    }
+                });
+                
+                // Envia lista de tópicos
+                conn.send({
+                    type: 'topic_list',
+                    topics: topics
                 });
                 
                 broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
@@ -2725,31 +3275,176 @@
                         }
                     } else if (data.type === 'message') {
                         if (isConnected) {
-                            addMessageToDOM(data.username, data.text, false);
-                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                                addMessageToDOM(data.username, data.text, false);
+                            }
+                            // Sempre salva no tópico
+                            if (topics[topicId]) {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: data.text,
+                                    time: data.time
+                                });
+                                saveTopics();
+                            }
                         }
                     } else if (data.type === 'audio') {
                         if (isConnected) {
-                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
-                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            }
+                            if (topics[topicId]) {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: '🎤 Áudio',
+                                    time: data.time,
+                                    audio: data.audio
+                                });
+                                saveTopics();
+                            }
                         }
                     } else if (data.type === 'image') {
                         if (isConnected) {
-                            addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
-                            messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
+                            const topicId = data.topic || 'geral';
+                            if (topics[topicId] && (topicId === currentTopic || !topics[topicId].closed || topics[topicId].users.includes(data.username))) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                            }
+                            if (topics[topicId]) {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: '🖼️ Imagem',
+                                    time: data.time,
+                                    image: data.image
+                                });
+                                saveTopics();
+                            }
                         }
                     } else if (data.type === 'history') {
                         if (isConnected) {
-                            if (data.audio) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
-                                messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
-                            } else if (data.image) {
-                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
-                                messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
-                            } else {
-                                addMessageToDOM(data.username, data.text, false);
-                                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            const topicId = data.topic || 'geral';
+                            if (!topics[topicId]) {
+                                topics[topicId] = {
+                                    name: topicId === 'geral' ? 'Geral' : topicId,
+                                    createdBy: 'system',
+                                    users: [currentUser],
+                                    messages: [],
+                                    active: true,
+                                    closed: false
+                                };
                             }
+                            if (data.audio) {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: '🎤 Áudio',
+                                    time: data.time,
+                                    audio: data.audio
+                                });
+                            } else if (data.image) {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: '🖼️ Imagem',
+                                    time: data.time,
+                                    image: data.image
+                                });
+                            } else {
+                                topics[topicId].messages.push({
+                                    username: data.username,
+                                    text: data.text,
+                                    time: data.time
+                                });
+                            }
+                            saveTopics();
+                            renderTopics();
+                            
+                            if (topicId === currentTopic) {
+                                if (data.audio) {
+                                    addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                                } else if (data.image) {
+                                    addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                                } else {
+                                    addMessageToDOM(data.username, data.text, false);
+                                }
+                            }
+                        }
+                    } else if (data.type === 'topic_list') {
+                        if (isConnected) {
+                            // Recebe lista de tópicos do servidor
+                            Object.keys(data.topics).forEach(key => {
+                                if (!topics[key]) {
+                                    topics[key] = data.topics[key];
+                                } else {
+                                    // Atualiza usuários
+                                    if (data.topics[key].users) {
+                                        topics[key].users = data.topics[key].users;
+                                    }
+                                    if (data.topics[key].closed !== undefined) {
+                                        topics[key].closed = data.topics[key].closed;
+                                    }
+                                }
+                            });
+                            saveTopics();
+                            renderTopics();
+                        }
+                    } else if (data.type === 'topic_created') {
+                        if (!topics[data.topic]) {
+                            topics[data.topic] = {
+                                name: data.name,
+                                createdBy: data.username,
+                                users: [data.username],
+                                messages: [],
+                                active: true,
+                                closed: false
+                            };
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`📌 Novo tópico "${data.name}" criado por ${data.username}`);
+                        }
+                    } else if (data.type === 'topic_closed') {
+                        if (topics[data.topic]) {
+                            topics[data.topic].closed = true;
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`🔒 Tópico "${topics[data.topic].name}" foi fechado`);
+                        }
+                    } else if (data.type === 'topic_join') {
+                        if (topics[data.topic] && !topics[data.topic].users.includes(data.username)) {
+                            topics[data.topic].users.push(data.username);
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`👤 ${data.username} entrou no tópico "${topics[data.topic].name}"`);
+                        }
+                    } else if (data.type === 'topic_request') {
+                        // Solicitação para entrar em tópico privado
+                        if (isAdmin || users[currentUser]?.isAdmin) {
+                            const topicId = data.topic;
+                            if (topics[topicId] && topics[topicId].closed) {
+                                showSystemMessage(`📨 ${data.username} solicitou entrada no tópico "${topics[topicId].name}"`);
+                                if (!topics[topicId].users.includes(data.username)) {
+                                    topics[topicId].users.push(data.username);
+                                    saveTopics();
+                                    renderTopics();
+                                    showSystemMessage(`✅ ${data.username} foi adicionado ao tópico "${topics[topicId].name}"`);
+                                    conn.send({
+                                        type: 'topic_join_accept',
+                                        topic: topicId
+                                    });
+                                }
+                            }
+                        }
+                    } else if (data.type === 'topic_join_accept') {
+                        const topicId = data.topic;
+                        if (topics[topicId] && !topics[topicId].users.includes(currentUser)) {
+                            topics[topicId].users.push(currentUser);
+                            saveTopics();
+                            renderTopics();
+                            showSystemMessage(`✅ Você foi adicionado ao tópico "${topics[topicId].name}"`);
+                        }
+                    } else if (data.type === 'topic_switch') {
+                        // Atualiza tópico atual do usuário
+                        if (clients[conn.peer]) {
+                            clients[conn.peer].currentTopic = data.topic;
                         }
                     } else if (data.type === 'system') {
                         if (isConnected) showSystemMessage(data.text);
@@ -2818,6 +3513,9 @@
                 messageHistory = [];
                 if (approvalOverlay) approvalOverlay.classList.add('hidden');
                 
+                // Recarregar tópicos
+                renderTopics();
+                
                 const msg = document.createElement('div');
                 msg.className = 'system-msg';
                 msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
@@ -2843,6 +3541,16 @@
                 showSystemMessage('⚡ Selecione um servidor para entrar');
                 updateStatus('Selecione um servidor', 'offline');
                 setInputEnabled(false);
+                
+                // Carrega tópicos
+                renderTopics();
+                
+                // Carrega mensagens do tópico atual
+                if (topics[currentTopic] && topics[currentTopic].messages) {
+                    topics[currentTopic].messages.forEach(msg => {
+                        addMessageToDOM(msg.username, msg.text, false, false, false, false, false, false, msg.audio, msg.image);
+                    });
+                }
                 
                 const displayName = users[currentUser]?.displayName || currentUser;
                 showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
@@ -2905,10 +3613,11 @@
         }, 5000);
 
         // ===== INICIALIZAR =====
-        console.log('⚡ EOROS Chat System');
+        console.log('⚡ EOROS Chat System - Tópicos');
         console.log('📱 Dispositivo:', deviceInfo);
         console.log('🎨 Tema:', currentTheme);
         console.log('🎨 Cor:', currentColor);
+        console.log('📌 Tópicos:', Object.keys(topics));
 
         if (loginScreen) loginScreen.classList.remove('hidden');
         updateLoginTexts();
