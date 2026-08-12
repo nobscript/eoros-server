@@ -273,11 +273,6 @@
             text-align: center;
         }
 
-        .audio-message .audio-duration {
-            color: #6d6f87;
-            font-size: 11px;
-        }
-
         .system-msg {
             text-align: center;
             font-size: 12px;
@@ -295,6 +290,16 @@
 
         .system-msg.error {
             color: #f44336;
+        }
+
+        .system-msg.warning {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .system-msg.success {
+            color: #4caf50;
+            font-weight: 600;
         }
 
         @keyframes fadeIn {
@@ -406,6 +411,122 @@
             min-height: 20px;
         }
 
+        /* Overlay de Aprovação */
+        .approval-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .approval-overlay.hidden {
+            display: none;
+        }
+
+        .approval-overlay .approval-box {
+            background: #2b2d3e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #3a3c4e;
+        }
+
+        .approval-overlay .approval-box .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .approval-overlay .approval-box h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .approval-overlay .approval-box p {
+            color: #a6a9c2;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .approval-overlay .approval-box .user-info {
+            background: #1e1e2e;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #3a3c4e;
+        }
+
+        .approval-overlay .approval-box .user-info .label {
+            color: #6d6f87;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .approval-overlay .approval-box .user-info .value {
+            color: #e4e6f0;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .approval-overlay .approval-box .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .approval-overlay .approval-box .buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .approval-overlay .approval-box .buttons button:active {
+            transform: scale(0.95);
+        }
+
+        .approval-overlay .approval-box .buttons .btn-accept {
+            background: #4caf50;
+            color: white;
+        }
+
+        .approval-overlay .approval-box .buttons .btn-accept:hover {
+            background: #45a049;
+        }
+
+        .approval-overlay .approval-box .buttons .btn-reject {
+            background: #f44336;
+            color: white;
+        }
+
+        .approval-overlay .approval-box .buttons .btn-reject:hover {
+            background: #da190b;
+        }
+
+        .approval-overlay .approval-box .status-message {
+            color: #ff9800;
+            font-size: 14px;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
         .status-bar {
             background: #1e1e2e;
             padding: 6px 16px;
@@ -437,6 +558,11 @@
             animation: pulse 0.5s infinite;
         }
 
+        .status-bar .status-dot.waiting {
+            background: #ff9800;
+            animation: pulse 1s infinite;
+        }
+
         @media (max-width: 480px) {
             .chat-container {
                 height: 100vh;
@@ -463,6 +589,13 @@
             .audio-message {
                 min-width: 120px;
                 flex-wrap: wrap;
+            }
+            .approval-overlay .approval-box {
+                padding: 20px;
+                margin: 10px;
+            }
+            .approval-overlay .approval-box h2 {
+                font-size: 18px;
             }
         }
 
@@ -504,6 +637,38 @@
 
     <div class="messages" id="messagesContainer">
         <div class="system-msg">🔌 Selecione um servidor para entrar</div>
+    </div>
+
+    <!-- Overlay de Aprovação -->
+    <div class="approval-overlay hidden" id="approvalOverlay">
+        <div class="approval-box">
+            <div class="icon">🔐</div>
+            <h2>Aguardando Aprovação</h2>
+            <p>O administrador do servidor precisa aprovar sua entrada.</p>
+            <div class="user-info">
+                <div class="label">Solicitando entrada em</div>
+                <div class="value" id="approvalServerName">Servidor 1</div>
+            </div>
+            <div class="status-message" id="approvalStatus">⏳ Aguardando resposta...</div>
+            <div class="buttons" style="margin-top: 16px;">
+                <button class="btn-reject" id="cancelApprovalBtn" style="flex: 1;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Rejeitado -->
+    <div class="approval-overlay hidden" id="rejectedOverlay">
+        <div class="approval-box">
+            <div class="icon">⛔</div>
+            <h2 style="color: #f44336;">Entrada Rejeitada</h2>
+            <p>O administrador rejeitou sua solicitação de entrada.</p>
+            <div class="user-info">
+                <div class="label">Servidor</div>
+                <div class="value" id="rejectedServerName">Servidor 1</div>
+            </div>
+            <div class="status-message" style="color: #f44336;">❌ Você foi rejeitado neste servidor</div>
+            <button class="btn-accept" id="rejectedOkBtn" style="margin-top: 16px; width: 100%; padding: 12px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; background: #5865f2; color: white;">OK, entendi</button>
+        </div>
     </div>
 
     <div class="input-area">
@@ -550,6 +715,15 @@
             3: document.getElementById('status3')
         };
 
+        // Overlays
+        const approvalOverlay = document.getElementById('approvalOverlay');
+        const rejectedOverlay = document.getElementById('rejectedOverlay');
+        const approvalServerName = document.getElementById('approvalServerName');
+        const approvalStatus = document.getElementById('approvalStatus');
+        const rejectedServerName = document.getElementById('rejectedServerName');
+        const cancelApprovalBtn = document.getElementById('cancelApprovalBtn');
+        const rejectedOkBtn = document.getElementById('rejectedOkBtn');
+
         // Estado
         let currentUsername = 'User' + Math.floor(Math.random() * 10000);
         let peer = null;
@@ -559,29 +733,31 @@
         let currentServer = null;
         let messageHistory = [];
         let clients = {};
-        let selectedServerId = null;
-        let isCreatingServer = false;
+        let pendingApprovals = {};
+        let isWaitingApproval = false;
+        let approvalRejected = false;
+        let serverCreator = null;
 
         // Áudio
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
-        let recordingStartTime = null;
         let recordingTimerInterval = null;
-        let audioPlayers = {};
 
         // Funções auxiliares
         function getCurrentTime() {
             return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, audioData = null) {
+        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, isWarning = false, isSuccess = false, audioData = null) {
             const msgDiv = document.createElement('div');
             
             if (system) {
                 msgDiv.className = 'system-msg';
                 if (isServerMsg) msgDiv.classList.add('server');
                 if (isError) msgDiv.classList.add('error');
+                if (isWarning) msgDiv.classList.add('warning');
+                if (isSuccess) msgDiv.classList.add('success');
                 msgDiv.textContent = text;
             } else {
                 msgDiv.className = 'message' + (isOwn ? ' own' : '');
@@ -594,7 +770,6 @@
                 contentDiv.className = 'msg-text';
                 
                 if (audioData) {
-                    // Criar player de áudio
                     const audioContainer = document.createElement('div');
                     audioContainer.className = 'audio-message';
                     
@@ -632,7 +807,6 @@
                             isPlaying = false;
                             playBtn.dataset.playing = 'false';
                         } else {
-                            // Pausar outros áudios
                             document.querySelectorAll('.play-btn').forEach(btn => {
                                 if (btn !== playBtn && btn.dataset.playing === 'true') {
                                     btn.click();
@@ -644,7 +818,6 @@
                             isPlaying = true;
                             playBtn.dataset.playing = 'true';
                             
-                            // Atualizar progresso
                             const updateProgress = () => {
                                 if (!isPlaying) return;
                                 const progress = (audio.currentTime / audio.duration) * 100;
@@ -667,7 +840,6 @@
                         timeDisplay.textContent = '0:00';
                     });
                     
-                    // Click no progresso para buscar
                     progressContainer.addEventListener('click', (e) => {
                         const rect = progressContainer.getBoundingClientRect();
                         const x = (e.clientX - rect.left) / rect.width;
@@ -696,8 +868,8 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        function showSystemMessage(text, isServerMsg = false, isError = false) {
-            addMessageToDOM('', text, false, true, isServerMsg, isError);
+        function showSystemMessage(text, isServerMsg = false, isError = false, isWarning = false, isSuccess = false) {
+            addMessageToDOM('', text, false, true, isServerMsg, isError, isWarning, isSuccess);
         }
 
         function updateStatus(text, state = 'online') {
@@ -705,11 +877,14 @@
             statusDot.className = 'status-dot';
             if (state === 'offline') statusDot.classList.add('offline');
             if (state === 'connecting') statusDot.classList.add('connecting');
+            if (state === 'waiting') statusDot.classList.add('waiting');
             
             if (isServer) {
                 connectionStatusSpan.textContent = '👑 Servidor';
             } else if (isConnected) {
                 connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
+            } else if (isWaitingApproval) {
+                connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
             } else {
                 connectionStatusSpan.textContent = '❌ Desconectado';
             }
@@ -753,6 +928,32 @@
             });
         }
 
+        function showApprovalOverlay(serverId) {
+            isWaitingApproval = true;
+            approvalServerName.textContent = SERVERS[serverId].name;
+            approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
+            approvalStatus.style.color = '#ff9800';
+            approvalOverlay.classList.remove('hidden');
+            updateStatus(`Aguardando aprovação em ${SERVERS[serverId].name}`, 'waiting');
+        }
+
+        function hideApprovalOverlay() {
+            isWaitingApproval = false;
+            approvalOverlay.classList.add('hidden');
+        }
+
+        function showRejectedOverlay(serverId) {
+            rejectedServerName.textContent = SERVERS[serverId].name;
+            rejectedOverlay.classList.remove('hidden');
+            approvalRejected = true;
+            updateStatus('Rejeitado', 'offline');
+        }
+
+        function hideRejectedOverlay() {
+            rejectedOverlay.classList.add('hidden');
+            approvalRejected = false;
+        }
+
         // ENVIAR MENSAGEM
         function sendMessage() {
             const text = messageInput.value.trim();
@@ -782,7 +983,7 @@
                 return;
             }
 
-            addMessageToDOM(currentUsername, '', true, false, false, false, audioData);
+            addMessageToDOM(currentUsername, '', true, false, false, false, false, false, audioData);
             messageHistory.push({ username: currentUsername, text: '🎤 Áudio', time: Date.now(), audio: audioData });
 
             broadcastMessage({
@@ -839,7 +1040,6 @@
                     };
                     reader.readAsDataURL(audioBlob);
                     
-                    // Limpar
                     audioChunks = [];
                     stream.getTracks().forEach(track => track.stop());
                     audioBtn.classList.remove('recording');
@@ -850,10 +1050,8 @@
                 
                 mediaRecorder.start();
                 isRecording = true;
-                recordingStartTime = Date.now();
                 audioBtn.classList.add('recording');
                 
-                // Timer
                 let seconds = 0;
                 recordingTimerInterval = setInterval(() => {
                     seconds++;
@@ -865,7 +1063,6 @@
                     recordingTimer.textContent = `⏱️ ${remaining}s`;
                 }, 1000);
                 
-                // Parar automaticamente após 30 segundos
                 setTimeout(() => {
                     if (isRecording) {
                         stopRecording();
@@ -897,10 +1094,11 @@
             isConnected = true;
             currentServer = serverId;
             clients = {};
-            isCreatingServer = false;
+            serverCreator = currentUsername;
             
             updateStatus(`👑 Servidor (${serverInfo.name})`, 'online');
             showSystemMessage(`✅ Você é o servidor do ${serverInfo.name}!`, true);
+            showSystemMessage(`🔐 Você pode aprovar ou rejeitar novas entradas`, true);
             setInputEnabled(true);
             markServerActive(serverId);
             updateServerStatus(serverId, 'online');
@@ -917,58 +1115,68 @@
             });
 
             peer.on('connection', (conn) => {
-                console.log('Nova conexão:', conn.peer);
-                clients[conn.peer] = conn;
+                console.log('Nova conexão recebida:', conn.peer);
+                
+                // Marca como pendente
+                pendingApprovals[conn.peer] = {
+                    conn: conn,
+                    status: 'pending'
+                };
                 
                 conn.on('open', () => {
-                    showSystemMessage(`👤 ${conn.peer} entrou no chat`);
-                    updateUserCount(Object.keys(clients).length);
+                    showSystemMessage(`👤 ${conn.peer} está solicitando entrada no servidor`, false, false, true);
+                    showSystemMessage(`🔐 Clique em "Aceitar" ou "Rejeitar" na mensagem abaixo`, false, false, true);
                     
-                    messageHistory.forEach(msg => {
-                        conn.send({
-                            type: 'history',
-                            username: msg.username,
-                            text: msg.text || '🎤 Áudio',
-                            audio: msg.audio || null,
-                            time: msg.time
-                        });
+                    // Envia solicitação de aprovação
+                    conn.send({
+                        type: 'approval_request',
+                        serverId: serverId,
+                        serverName: serverInfo.name
                     });
-                    
-                    broadcastMessage({
-                        type: 'system',
-                        text: `${conn.peer} entrou no chat`
-                    }, conn);
                 });
 
                 conn.on('data', (data) => {
-                    if (data.type === 'message') {
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                        addMessageToDOM(data.username, data.text, false);
-                        broadcastMessage(data, conn);
+                    if (data.type === 'approval_response') {
+                        // Cliente respondeu à solicitação
+                        if (data.accepted) {
+                            // Aceitou
+                            acceptUser(conn.peer);
+                        } else {
+                            // Rejeitou
+                            rejectUser(conn.peer);
+                        }
+                    } else if (data.type === 'message') {
+                        if (clients[conn.peer]) {
+                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            addMessageToDOM(data.username, data.text, false);
+                            broadcastMessage(data, conn);
+                        }
                     } else if (data.type === 'audio') {
-                        messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
-                        addMessageToDOM(data.username, '', false, false, false, false, data.audio);
-                        broadcastMessage(data, conn);
+                        if (clients[conn.peer]) {
+                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            broadcastMessage(data, conn);
+                        }
                     } else if (data.type === 'join') {
-                        showSystemMessage(`👤 ${data.username} entrou no chat`);
-                        broadcastMessage({ type: 'system', text: `${data.username} entrou no chat` }, conn);
-                    } else if (data.type === 'ping') {
-                        conn.send({ type: 'pong' });
+                        // Armazena username
+                        pendingApprovals[conn.peer].username = data.username;
+                        showSystemMessage(`📝 ${data.username} (${conn.peer}) quer entrar no servidor`, false, false, true);
+                        showApprovalButtons(conn.peer, data.username);
                     }
                 });
 
                 conn.on('close', () => {
-                    delete clients[conn.peer];
-                    showSystemMessage(`👤 ${conn.peer} saiu do chat`);
-                    updateUserCount(Object.keys(clients).length);
-                    broadcastMessage({
-                        type: 'system',
-                        text: `${conn.peer} saiu do chat`
-                    });
+                    delete pendingApprovals[conn.peer];
+                    if (clients[conn.peer]) {
+                        delete clients[conn.peer];
+                        showSystemMessage(`👤 ${conn.peer} saiu do chat`);
+                        updateUserCount(Object.keys(clients).length);
+                    }
                 });
 
                 conn.on('error', (err) => {
                     console.warn('Erro na conexão:', err);
+                    delete pendingApprovals[conn.peer];
                     delete clients[conn.peer];
                     updateUserCount(Object.keys(clients).length);
                 });
@@ -986,11 +1194,139 @@
             });
         }
 
+        // Mostrar botões de aprovação para o servidor
+        function showApprovalButtons(peerId, username) {
+            // Remove botões antigos
+            const oldBtns = document.querySelectorAll('.approval-buttons');
+            oldBtns.forEach(btn => btn.remove());
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'system-msg approval-buttons';
+            msgDiv.style.display = 'flex';
+            msgDiv.style.gap = '10px';
+            msgDiv.style.justifyContent = 'center';
+            msgDiv.style.padding = '10px 0';
+            
+            const acceptBtn = document.createElement('button');
+            acceptBtn.textContent = '✅ Aceitar';
+            acceptBtn.style.cssText = `
+                padding: 8px 20px;
+                border: none;
+                border-radius: 20px;
+                background: #4caf50;
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 14px;
+                transition: 0.2s;
+            `;
+            acceptBtn.onmouseover = () => acceptBtn.style.transform = 'scale(1.05)';
+            acceptBtn.onmouseout = () => acceptBtn.style.transform = 'scale(1)';
+            acceptBtn.onclick = () => acceptUser(peerId);
+            
+            const rejectBtn = document.createElement('button');
+            rejectBtn.textContent = '❌ Rejeitar';
+            rejectBtn.style.cssText = `
+                padding: 8px 20px;
+                border: none;
+                border-radius: 20px;
+                background: #f44336;
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                font-size: 14px;
+                transition: 0.2s;
+            `;
+            rejectBtn.onmouseover = () => rejectBtn.style.transform = 'scale(1.05)';
+            rejectBtn.onmouseout = () => rejectBtn.style.transform = 'scale(1)';
+            rejectBtn.onclick = () => rejectUser(peerId);
+            
+            msgDiv.appendChild(acceptBtn);
+            msgDiv.appendChild(rejectBtn);
+            messagesContainer.appendChild(msgDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function acceptUser(peerId) {
+            if (!pendingApprovals[peerId]) return;
+            
+            const pending = pendingApprovals[peerId];
+            const conn = pending.conn;
+            const username = pending.username || conn.peer;
+            
+            // Adiciona ao chat
+            clients[peerId] = conn;
+            showSystemMessage(`✅ ${username} foi aceito no servidor!`, false, false, false, true);
+            updateUserCount(Object.keys(clients).length);
+            
+            // Notifica o cliente
+            conn.send({
+                type: 'approval_result',
+                accepted: true
+            });
+            
+            // Envia histórico
+            messageHistory.forEach(msg => {
+                conn.send({
+                    type: 'history',
+                    username: msg.username,
+                    text: msg.text || '🎤 Áudio',
+                    audio: msg.audio || null,
+                    time: msg.time
+                });
+            });
+            
+            // Anuncia para todos
+            broadcastMessage({
+                type: 'system',
+                text: `${username} entrou no servidor`
+            }, conn);
+            
+            // Remove pendência
+            delete pendingApprovals[peerId];
+            
+            // Remove botões
+            const btns = document.querySelectorAll('.approval-buttons');
+            btns.forEach(btn => btn.remove());
+        }
+
+        function rejectUser(peerId) {
+            if (!pendingApprovals[peerId]) return;
+            
+            const pending = pendingApprovals[peerId];
+            const conn = pending.conn;
+            const username = pending.username || conn.peer;
+            
+            showSystemMessage(`❌ ${username} foi rejeitado`, false, true);
+            
+            // Notifica o cliente
+            conn.send({
+                type: 'approval_result',
+                accepted: false
+            });
+            
+            // Fecha a conexão
+            setTimeout(() => {
+                try {
+                    conn.close();
+                } catch (e) {}
+            }, 1000);
+            
+            // Remove pendência
+            delete pendingApprovals[peerId];
+            
+            // Remove botões
+            const btns = document.querySelectorAll('.approval-buttons');
+            btns.forEach(btn => btn.remove());
+        }
+
         // CONECTAR COMO CLIENTE
         function connectAsClient(serverId) {
             if (isServer && currentServer === serverId) return;
             
             cleanup();
+            hideApprovalOverlay();
+            hideRejectedOverlay();
             
             const serverInfo = SERVERS[serverId];
             if (!serverInfo) return;
@@ -998,7 +1334,7 @@
             isServer = false;
             isConnected = false;
             currentServer = serverId;
-            isCreatingServer = false;
+            approvalRejected = false;
             
             updateStatus(`Conectando a ${serverInfo.name}...`, 'connecting');
             showSystemMessage(`🔗 Tentando conectar ao ${serverInfo.name}...`);
@@ -1018,12 +1354,9 @@
                 serverConnection = conn;
                 
                 conn.on('open', () => {
-                    isConnected = true;
-                    updateStatus(`Conectado a ${serverInfo.name}`, 'online');
-                    showSystemMessage(`✅ Conectado ao ${serverInfo.name}!`);
-                    setInputEnabled(true);
-                    markServerActive(serverId);
-                    updateServerStatus(serverId, 'online');
+                    // Aguarda aprovação
+                    showApprovalOverlay(serverId);
+                    updateStatus(`Aguardando aprovação em ${serverInfo.name}`, 'waiting');
                     
                     conn.send({
                         type: 'join',
@@ -1032,35 +1365,83 @@
                 });
 
                 conn.on('data', (data) => {
-                    if (data.type === 'message') {
-                        addMessageToDOM(data.username, data.text, false);
-                        messageHistory.push({ username: data.username, text: data.text, time: data.time });
-                    } else if (data.type === 'audio') {
-                        addMessageToDOM(data.username, '', false, false, false, false, data.audio);
-                        messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
-                    } else if (data.type === 'history') {
-                        if (data.audio) {
-                            addMessageToDOM(data.username, '', false, false, false, false, data.audio);
-                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                    if (data.type === 'approval_request') {
+                        // Recebeu solicitação de aprovação - já está na tela de espera
+                        approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
+                        approvalStatus.style.color = '#ff9800';
+                    } else if (data.type === 'approval_result') {
+                        if (data.accepted) {
+                            // Foi aceito!
+                            isConnected = true;
+                            isWaitingApproval = false;
+                            hideApprovalOverlay();
+                            updateStatus(`Conectado a ${serverInfo.name}`, 'online');
+                            showSystemMessage(`✅ Você foi aceito no ${serverInfo.name}!`, false, false, false, true);
+                            setInputEnabled(true);
+                            updateServerStatus(serverId, 'online');
+                            approvalStatus.textContent = '✅ Aceito!';
+                            approvalStatus.style.color = '#4caf50';
+                            
+                            // Fecha overlay após 1 segundo
+                            setTimeout(() => {
+                                hideApprovalOverlay();
+                            }, 1000);
                         } else {
+                            // Foi rejeitado
+                            isWaitingApproval = false;
+                            hideApprovalOverlay();
+                            showRejectedOverlay(serverId);
+                            updateStatus(`Rejeitado em ${serverInfo.name}`, 'offline');
+                            updateServerStatus(serverId, 'offline');
+                            setInputEnabled(false);
+                            markServerActive(null);
+                            
+                            // Fecha conexão
+                            setTimeout(() => {
+                                try {
+                                    conn.close();
+                                } catch (e) {}
+                            }, 500);
+                        }
+                    } else if (data.type === 'message') {
+                        if (isConnected) {
                             addMessageToDOM(data.username, data.text, false);
                             messageHistory.push({ username: data.username, text: data.text, time: data.time });
                         }
+                    } else if (data.type === 'audio') {
+                        if (isConnected) {
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                        }
+                    } else if (data.type === 'history') {
+                        if (isConnected) {
+                            if (data.audio) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                                messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                            } else {
+                                addMessageToDOM(data.username, data.text, false);
+                                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            }
+                        }
                     } else if (data.type === 'system') {
-                        showSystemMessage(data.text);
-                    } else if (data.type === 'pong') {
-                        // Servidor está vivo
+                        if (isConnected) {
+                            showSystemMessage(data.text);
+                        }
+                    } else if (data.type === 'ping') {
+                        conn.send({ type: 'pong' });
                     }
                 });
 
                 conn.on('close', () => {
-                    isConnected = false;
-                    serverConnection = null;
-                    updateStatus(`Desconectado de ${serverInfo.name}`, 'offline');
-                    showSystemMessage(`⚠️ Conexão com ${serverInfo.name} perdida!`, false, true);
-                    setInputEnabled(false);
-                    updateServerStatus(serverId, 'offline');
-                    markServerActive(null);
+                    if (isConnected) {
+                        isConnected = false;
+                        serverConnection = null;
+                        updateStatus(`Desconectado de ${serverInfo.name}`, 'offline');
+                        showSystemMessage(`⚠️ Conexão com ${serverInfo.name} perdida!`, false, true);
+                        setInputEnabled(false);
+                        updateServerStatus(serverId, 'offline');
+                        markServerActive(null);
+                    }
                 });
 
                 conn.on('error', (err) => {
@@ -1068,15 +1449,15 @@
                     if (err.type === 'peer-unavailable') {
                         showSystemMessage(`⚠️ ${serverInfo.name} não encontrado. Iniciando como servidor...`, false, true);
                         updateServerStatus(serverId, 'offline');
+                        hideApprovalOverlay();
                         setTimeout(() => {
                             startAsServer(serverId);
                         }, 1000);
-                    } else {
-                        isConnected = false;
-                        serverConnection = null;
+                    } else if (!isConnected) {
                         updateStatus('Erro', 'offline');
                         setInputEnabled(false);
                         updateServerStatus(serverId, 'offline');
+                        hideApprovalOverlay();
                     }
                 });
             });
@@ -1100,14 +1481,26 @@
             }
             serverConnection = null;
             clients = {};
+            pendingApprovals = {};
             
             if (isRecording) {
                 stopRecording();
             }
+            
+            hideApprovalOverlay();
+            
+            // Remove botões de aprovação
+            const btns = document.querySelectorAll('.approval-buttons');
+            btns.forEach(btn => btn.remove());
         }
 
         // SELECIONAR SERVIDOR
         function selectServer(serverId) {
+            if (approvalRejected) {
+                showSystemMessage(`⚠️ Você foi rejeitado neste servidor. Tente outro.`, false, true);
+                return;
+            }
+            
             if (serverId === currentServer && isConnected) {
                 showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
                 return;
@@ -1116,6 +1509,8 @@
             // Limpa mensagens antigas
             messagesContainer.innerHTML = '';
             messageHistory = [];
+            hideApprovalOverlay();
+            hideRejectedOverlay();
             
             // Mostra mensagem de conexão
             const msg = document.createElement('div');
@@ -1128,7 +1523,7 @@
             
             // Se não conectar em 5 segundos, tenta criar servidor
             setTimeout(() => {
-                if (!isConnected && !isServer) {
+                if (!isConnected && !isServer && !isWaitingApproval) {
                     startAsServer(serverId);
                 }
             }, 5000);
@@ -1158,6 +1553,36 @@
             }
         });
 
+        cancelApprovalBtn.addEventListener('click', () => {
+            if (isWaitingApproval) {
+                hideApprovalOverlay();
+                showSystemMessage('❌ Solicitação de entrada cancelada', false, true);
+                updateStatus('Desconectado', 'offline');
+                setInputEnabled(false);
+                markServerActive(null);
+                cleanup();
+                
+                // Tenta reconectar depois
+                setTimeout(() => {
+                    if (!isConnected && !isServer) {
+                        const serverId = currentServer;
+                        if (serverId) {
+                            selectServer(serverId);
+                        }
+                    }
+                }, 2000);
+            }
+        });
+
+        rejectedOkBtn.addEventListener('click', () => {
+            hideRejectedOverlay();
+            showSystemMessage('👆 Selecione outro servidor para tentar novamente');
+            updateStatus('Selecione um servidor', 'offline');
+            setInputEnabled(false);
+            markServerActive(null);
+            cleanup();
+        });
+
         // INICIALIZAR
         function init() {
             Object.keys(SERVERS).forEach(id => {
@@ -1166,6 +1591,7 @@
             
             showSystemMessage('👆 Selecione um servidor para entrar');
             updateStatus('Selecione um servidor', 'offline');
+            setInputEnabled(false);
         }
 
         // VERIFICAÇÃO DE SAÚDE
@@ -1184,6 +1610,7 @@
 
         console.log('Servidores disponíveis:', SERVERS);
         console.log('Seu nome:', currentUsername);
+        console.log('Sistema de aprovação ativo!');
 
     })();
 </script>
