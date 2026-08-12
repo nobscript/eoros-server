@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat Server - Sistema Completo</title>
+    <title>Eoros Chat - Sistema Completo</title>
     <style>
         * {
             margin: 0;
@@ -72,16 +72,45 @@
             margin-bottom: 20px;
         }
 
-        .login-screen .login-box .logo h1 {
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
+        .login-screen .login-box .logo .logo-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 8px;
+            animation: lightning 2s infinite;
         }
 
-        .login-screen .login-box .logo p {
+        @keyframes lightning {
+            0%, 90%, 100% { opacity: 1; }
+            92% { opacity: 0.3; }
+            94% { opacity: 1; }
+            96% { opacity: 0.5; }
+        }
+
+        .login-screen .login-box .logo h1 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #5865f2, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(88, 101, 242, 0.3);
+        }
+
+        .login-screen .login-box .logo .subtitle {
             color: #6d6f87;
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 4px;
+        }
+
+        .login-screen .login-box .logo .device-info {
+            display: inline-block;
+            background: #1e1e2e;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            color: #a6a9c2;
+            margin-top: 6px;
+            border: 1px solid #3a3c4e;
         }
 
         /* Foto de Perfil no Login */
@@ -108,7 +137,7 @@
         }
 
         .profile-photo-preview:hover {
-            border-color: #4752c4;
+            border-color: #ffd700;
             transform: scale(1.02);
         }
 
@@ -189,7 +218,7 @@
         .login-screen .login-box .btn-login {
             width: 100%;
             padding: 14px;
-            background: #5865f2;
+            background: linear-gradient(135deg, #5865f2, #4752c4);
             border: none;
             border-radius: 12px;
             color: white;
@@ -201,7 +230,8 @@
         }
 
         .login-screen .login-box .btn-login:hover {
-            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
         }
 
         .login-screen .login-box .btn-login:active {
@@ -211,6 +241,7 @@
         .login-screen .login-box .btn-login:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .login-screen .login-box .error-msg {
@@ -257,9 +288,9 @@
         }
 
         .login-screen .login-box .language-selector .lang-btn.active {
-            border-color: #5865f2;
-            background: #5865f2;
-            color: white;
+            border-color: #ffd700;
+            background: #ffd700;
+            color: #1e1e2e;
         }
 
         /* BOTÃO CONFIGURAÇÃO */
@@ -278,152 +309,10 @@
             transform: rotate(60deg);
         }
 
-        /* MODAL CONFIGURAÇÃO */
-        .config-modal {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 1500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(8px);
-        }
-
-        .config-modal.hidden {
-            display: none;
-        }
-
-        .config-modal .config-box {
-            background: #2b2d3e;
-            border-radius: 24px;
-            padding: 30px 25px;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #3a3c4e;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .config-modal .config-box h2 {
-            color: #fff;
-            font-size: 22px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .config-modal .config-box .form-group {
-            margin-bottom: 16px;
-        }
-
-        .config-modal .config-box .form-group label {
-            display: block;
-            color: #a6a9c2;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .config-modal .config-box .form-group input,
-        .config-modal .config-box .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            background: #1e1e2e;
-            border: 1px solid #3a3c4e;
-            border-radius: 12px;
-            color: #e4e6f0;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .config-modal .config-box .form-group input:focus,
-        .config-modal .config-box .form-group select:focus {
-            border-color: #5865f2;
-            background: #232533;
-        }
-
-        .config-modal .config-box .profile-photo-container {
-            margin-bottom: 16px;
-        }
-
-        .config-modal .config-box .profile-photo-preview {
-            width: 80px;
-            height: 80px;
-        }
-
-        .config-modal .config-box .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .config-modal .config-box .btn-group button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .config-modal .config-box .btn-group button:active {
-            transform: scale(0.95);
-        }
-
-        .config-modal .config-box .btn-save {
-            background: #5865f2;
-            color: white;
-        }
-
-        .config-modal .config-box .btn-save:hover {
-            background: #4752c4;
-        }
-
-        .config-modal .config-box .btn-close {
-            background: #2b2d3e;
-            color: #a6a9c2;
-            border: 1px solid #3a3c4e;
-        }
-
-        .config-modal .config-box .btn-close:hover {
-            background: #3a3c4e;
-        }
-
-        .config-modal .config-box .admin-section {
-            background: #1e1e2e;
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-            border: 1px solid #5865f2;
-        }
-
-        .config-modal .config-box .admin-section .admin-badge {
-            display: inline-block;
-            background: #5865f2;
-            color: white;
-            padding: 2px 12px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .config-modal .config-box .admin-section p {
-            color: #a6a9c2;
-            font-size: 13px;
-        }
-
         /* HEADER */
         .chat-header {
             background: #1e1e2e;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-bottom: 1px solid #3a3c4e;
             display: flex;
             justify-content: space-between;
@@ -437,9 +326,29 @@
             gap: 10px;
         }
 
+        .chat-header .header-left .logo-mini {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header .header-left .logo-mini .lightning {
+            font-size: 22px;
+            animation: lightning 2s infinite;
+        }
+
+        .chat-header .header-left .logo-mini .brand {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #5865f2, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .chat-header .header-left .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             border: 2px solid #5865f2;
             overflow: hidden;
@@ -460,40 +369,73 @@
             align-items: center;
             justify-content: center;
             color: #6d6f87;
-            font-size: 18px;
+            font-size: 16px;
         }
 
-        .chat-header h1 {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
+        .chat-header .header-right {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
         }
 
-        .chat-header h1 span {
-            background: #5865f2;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 500;
+        .chat-header .header-right .call-btn {
+            background: none;
+            border: 1px solid #3a3c4e;
+            color: #a6a9c2;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header .header-right .call-btn:hover {
+            border-color: #5865f2;
+            color: #fff;
+        }
+
+        .chat-header .header-right .call-btn.active {
+            border-color: #4caf50;
+            color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
         }
 
         .user-count {
             color: #a6a9c2;
-            font-size: 13px;
+            font-size: 12px;
             background: #2b2d3e;
-            padding: 4px 10px;
+            padding: 3px 10px;
             border-radius: 30px;
             border: 1px solid #3a3c4e;
+        }
+
+        .chat-header .device-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 30px;
+            background: #2b2d3e;
+            border: 1px solid #3a3c4e;
+            color: #a6a9c2;
+        }
+
+        .chat-header .device-badge.mobile {
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+
+        .chat-header .device-badge.desktop {
+            border-color: #4caf50;
+            color: #4caf50;
         }
 
         /* SERVER SELECTOR */
         .server-selector {
             background: #1e1e2e;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-bottom: 1px solid #3a3c4e;
             display: flex;
             gap: 6px;
@@ -522,9 +464,9 @@
         }
 
         .server-btn.active {
-            border-color: #5865f2;
-            background: #5865f2;
-            color: white;
+            border-color: #ffd700;
+            background: #ffd700;
+            color: #1e1e2e;
         }
 
         .server-btn .status-indicator {
@@ -552,7 +494,7 @@
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 12px 6px;
+            padding: 10px 12px 6px;
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -648,7 +590,7 @@
         }
 
         .message .msg-user .admin-badge {
-            background: #ff9800;
+            background: #ffd700;
             color: #1e1e2e;
             font-size: 9px;
             padding: 1px 8px;
@@ -681,6 +623,141 @@
 
         .message.own .msg-time {
             color: #b9bbd4;
+        }
+
+        /* CALL OVERLAY */
+        .call-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            backdrop-filter: blur(12px);
+        }
+
+        .call-overlay.hidden {
+            display: none;
+        }
+
+        .call-overlay .call-box {
+            background: #2b2d3e;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #3a3c4e;
+        }
+
+        .call-overlay .call-box .call-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: pulse 1s infinite;
+        }
+
+        .call-overlay .call-box h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .call-overlay .call-box p {
+            color: #a6a9c2;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .call-overlay .call-box .call-user {
+            background: #1e1e2e;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #3a3c4e;
+        }
+
+        .call-overlay .call-box .call-user .label {
+            color: #6d6f87;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .call-overlay .call-box .call-user .value {
+            color: #e4e6f0;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .call-overlay .call-box .call-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .call-overlay .call-box .call-controls button {
+            width: 56px;
+            height: 56px;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .call-overlay .call-box .call-controls button:active {
+            transform: scale(0.9);
+        }
+
+        .call-overlay .call-box .call-controls .btn-end-call {
+            background: #f44336;
+            color: white;
+        }
+
+        .call-overlay .call-box .call-controls .btn-end-call:hover {
+            background: #da190b;
+        }
+
+        .call-overlay .call-box .call-controls .btn-answer {
+            background: #4caf50;
+            color: white;
+        }
+
+        .call-overlay .call-box .call-controls .btn-answer:hover {
+            background: #45a049;
+        }
+
+        .call-overlay .call-box .call-controls .btn-decline {
+            background: #f44336;
+            color: white;
+        }
+
+        .call-overlay .call-box .call-controls .btn-decline:hover {
+            background: #da190b;
+        }
+
+        .call-overlay .call-box .call-status {
+            color: #ff9800;
+            font-size: 14px;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        .call-overlay .call-box .call-timer {
+            color: #4caf50;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 8px;
         }
 
         /* IMAGEM MENSAGEM */
@@ -882,18 +959,20 @@
         }
 
         .input-area .action-btn.send-btn {
-            background: #5865f2;
+            background: linear-gradient(135deg, #5865f2, #4752c4);
             border: none;
             color: white;
         }
 
         .input-area .action-btn.send-btn:hover {
-            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
         }
 
         .input-area .action-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
         }
 
         .input-area .action-btn .file-input {
@@ -1058,7 +1137,150 @@
             animation: pulse 1s infinite;
         }
 
-        /* MODAL IMAGEM */
+        /* MODAL CONFIGURAÇÃO */
+        .config-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .config-modal.hidden {
+            display: none;
+        }
+
+        .config-modal .config-box {
+            background: #2b2d3e;
+            border-radius: 24px;
+            padding: 30px 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #3a3c4e;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .config-modal .config-box h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .config-modal .config-box .form-group {
+            margin-bottom: 16px;
+        }
+
+        .config-modal .config-box .form-group label {
+            display: block;
+            color: #a6a9c2;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .config-modal .config-box .form-group input,
+        .config-modal .config-box .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1e1e2e;
+            border: 1px solid #3a3c4e;
+            border-radius: 12px;
+            color: #e4e6f0;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .config-modal .config-box .form-group input:focus,
+        .config-modal .config-box .form-group select:focus {
+            border-color: #5865f2;
+            background: #232533;
+        }
+
+        .config-modal .config-box .profile-photo-container {
+            margin-bottom: 16px;
+        }
+
+        .config-modal .config-box .profile-photo-preview {
+            width: 80px;
+            height: 80px;
+        }
+
+        .config-modal .config-box .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .config-modal .config-box .btn-group button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .config-modal .config-box .btn-group button:active {
+            transform: scale(0.95);
+        }
+
+        .config-modal .config-box .btn-save {
+            background: linear-gradient(135deg, #5865f2, #4752c4);
+            color: white;
+        }
+
+        .config-modal .config-box .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+
+        .config-modal .config-box .btn-close {
+            background: #2b2d3e;
+            color: #a6a9c2;
+            border: 1px solid #3a3c4e;
+        }
+
+        .config-modal .config-box .btn-close:hover {
+            background: #3a3c4e;
+        }
+
+        .config-modal .config-box .admin-section {
+            background: #1e1e2e;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid #ffd700;
+        }
+
+        .config-modal .config-box .admin-section .admin-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #1e1e2e;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .config-modal .config-box .admin-section p {
+            color: #a6a9c2;
+            font-size: 13px;
+        }
+
+        /* IMAGE MODAL */
         .image-modal {
             position: absolute;
             top: 0;
@@ -1091,8 +1313,11 @@
                 max-height: none;
                 border-radius: 0;
             }
-            .chat-header h1 {
-                font-size: 14px;
+            .chat-header .header-left .logo-mini .brand {
+                font-size: 15px;
+            }
+            .chat-header .header-left .logo-mini .lightning {
+                font-size: 18px;
             }
             .server-btn {
                 font-size: 11px;
@@ -1132,8 +1357,8 @@
                 height: 24px;
             }
             .chat-header .header-left .user-avatar {
-                width: 30px;
-                height: 30px;
+                width: 28px;
+                height: 28px;
             }
             .profile-photo-preview {
                 width: 80px;
@@ -1142,6 +1367,18 @@
             .config-modal .config-box .profile-photo-preview {
                 width: 60px;
                 height: 60px;
+            }
+            .call-overlay .call-box {
+                padding: 20px;
+            }
+            .call-overlay .call-box .call-controls button {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+            .chat-header .device-badge {
+                font-size: 9px;
+                padding: 1px 6px;
             }
         }
 
@@ -1170,8 +1407,10 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <div class="logo">
-                <h1>💬 Chat</h1>
-                <p>Sistema de Comunicação</p>
+                <span class="logo-icon">⚡</span>
+                <h1>EOROS</h1>
+                <p class="subtitle">Sistema de Comunicação</p>
+                <div class="device-info" id="loginDeviceInfo">📱 Carregando...</div>
             </div>
 
             <!-- Foto de Perfil -->
@@ -1208,7 +1447,25 @@
             <div class="error-msg" id="loginError"></div>
             <div class="success-msg" id="loginSuccess"></div>
 
-            <button class="btn-login" id="loginBtn">🔑 Entrar</button>
+            <button class="btn-login" id="loginBtn">⚡ Entrar</button>
+        </div>
+    </div>
+
+    <!-- CALL OVERLAY -->
+    <div class="call-overlay hidden" id="callOverlay">
+        <div class="call-box">
+            <div class="call-icon" id="callIcon">📞</div>
+            <h2 id="callTitle">Chamada de Voz</h2>
+            <p id="callDescription">Conectando...</p>
+            <div class="call-user">
+                <div class="label">Chamando</div>
+                <div class="value" id="callUserName">Usuário</div>
+            </div>
+            <div class="call-status" id="callStatus">⏳ Aguardando resposta...</div>
+            <div class="call-timer" id="callTimer">00:00</div>
+            <div class="call-controls" id="callControls">
+                <button class="btn-end-call" id="endCallBtn">📞</button>
+            </div>
         </div>
     </div>
 
@@ -1262,7 +1519,7 @@
         </div>
     </div>
 
-    <!-- MODAL IMAGEM -->
+    <!-- IMAGE MODAL -->
     <div class="image-modal hidden" id="imageModal">
         <img id="imageModalContent" src="" alt="Imagem">
     </div>
@@ -1273,9 +1530,14 @@
             <div class="user-avatar" id="headerAvatar">
                 <div class="placeholder" id="headerAvatarPlaceholder">👤</div>
             </div>
-            <h1>💬 Chat <span>Beta</span></h1>
+            <div class="logo-mini">
+                <span class="lightning">⚡</span>
+                <span class="brand">EOROS</span>
+            </div>
         </div>
-        <div style="display:flex; align-items:center; gap:10px;">
+        <div class="header-right">
+            <span class="device-badge" id="headerDeviceBadge">📱</span>
+            <button class="call-btn" id="callBtn" title="Chamada de Voz">📞</button>
             <button class="config-btn" id="configBtn" title="Configurações">⚙️</button>
             <div class="user-count" id="userCount">👥 0</div>
         </div>
@@ -1296,7 +1558,7 @@
 
     <!-- MESSAGES -->
     <div class="messages" id="messagesContainer">
-        <div class="system-msg">🔌 Selecione um servidor para entrar</div>
+        <div class="system-msg">⚡ Selecione um servidor para entrar</div>
     </div>
 
     <!-- APPROVAL OVERLAY -->
@@ -1325,7 +1587,7 @@
                 <input type="file" class="file-input" id="imageInput" accept="image/*">
             </button>
             <button class="action-btn" id="audioBtn" title="Gravar Áudio (30s)" disabled>🎤</button>
-            <button class="action-btn send-btn" id="sendBtn" aria-label="Enviar" disabled>➤</button>
+            <button class="action-btn send-btn" id="sendBtn" aria-label="Enviar" disabled>⚡</button>
         </div>
         <div class="recording-timer" id="recordingTimer"></div>
     </div>
@@ -1342,6 +1604,18 @@
     (function() {
         'use strict';
 
+        // DETECTAR DISPOSITIVO
+        function detectDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768;
+            
+            if (isTablet) return { type: 'tablet', icon: '📱', label: 'Tablet' };
+            if (isMobile) return { type: 'mobile', icon: '📱', label: 'Mobile' };
+            return { type: 'desktop', icon: '💻', label: 'Desktop' };
+        }
+
+        const deviceInfo = detectDevice();
+
         // TRADUÇÕES
         const TRANSLATIONS = {
             pt: {
@@ -1349,7 +1623,7 @@
                 username: '👤 Nome de Usuário',
                 password: '🔒 Senha',
                 confirmPassword: '🔒 Confirmar Senha',
-                loginBtn: '🔑 Entrar',
+                loginBtn: '⚡ Entrar',
                 loginError: 'Erro ao fazer login. Verifique suas credenciais.',
                 loginSuccess: 'Login realizado com sucesso!',
                 firstAccess: 'Primeiro acesso! Defina sua senha.',
@@ -1373,14 +1647,26 @@
                 server: 'Servidor',
                 photoRequired: '⚠️ Por favor, adicione uma foto de perfil.',
                 imageTooLarge: '⚠️ A imagem é muito grande. Máximo 5MB.',
-                invalidImage: '⚠️ Formato de imagem inválido.'
+                invalidImage: '⚠️ Formato de imagem inválido.',
+                callTitle: 'Chamada de Voz',
+                callConnecting: 'Conectando...',
+                callRinging: '🔔 Chamando...',
+                callActive: '📞 Chamada em andamento',
+                callEnded: 'Chamada encerrada',
+                callUser: 'Chamando',
+                callStatusWaiting: '⏳ Aguardando resposta...',
+                callStatusConnected: '✅ Conectado',
+                callStatusEnded: '❌ Chamada encerrada',
+                callBtnAnswer: 'Atender',
+                callBtnDecline: 'Recusar',
+                callBtnEnd: 'Encerrar'
             },
             en: {
                 title: 'Communication System',
                 username: '👤 Username',
                 password: '🔒 Password',
                 confirmPassword: '🔒 Confirm Password',
-                loginBtn: '🔑 Login',
+                loginBtn: '⚡ Login',
                 loginError: 'Login error. Check your credentials.',
                 loginSuccess: 'Login successful!',
                 firstAccess: 'First access! Set your password.',
@@ -1404,14 +1690,26 @@
                 server: 'Server',
                 photoRequired: '⚠️ Please add a profile photo.',
                 imageTooLarge: '⚠️ Image is too large. Max 5MB.',
-                invalidImage: '⚠️ Invalid image format.'
+                invalidImage: '⚠️ Invalid image format.',
+                callTitle: 'Voice Call',
+                callConnecting: 'Connecting...',
+                callRinging: '🔔 Ringing...',
+                callActive: '📞 Call in progress',
+                callEnded: 'Call ended',
+                callUser: 'Calling',
+                callStatusWaiting: '⏳ Waiting for answer...',
+                callStatusConnected: '✅ Connected',
+                callStatusEnded: '❌ Call ended',
+                callBtnAnswer: 'Answer',
+                callBtnDecline: 'Decline',
+                callBtnEnd: 'End Call'
             },
             es: {
                 title: 'Sistema de Comunicación',
                 username: '👤 Nombre de Usuario',
                 password: '🔒 Contraseña',
                 confirmPassword: '🔒 Confirmar Contraseña',
-                loginBtn: '🔑 Entrar',
+                loginBtn: '⚡ Entrar',
                 loginError: 'Error al iniciar sesión. Verifique sus credenciales.',
                 loginSuccess: '¡Inicio de sesión exitoso!',
                 firstAccess: '¡Primer acceso! Establezca su contraseña.',
@@ -1435,14 +1733,26 @@
                 server: 'Servidor',
                 photoRequired: '⚠️ Por favor, agregue una foto de perfil.',
                 imageTooLarge: '⚠️ La imagen es demasiado grande. Máximo 5MB.',
-                invalidImage: '⚠️ Formato de imagen inválido.'
+                invalidImage: '⚠️ Formato de imagen inválido.',
+                callTitle: 'Llamada de Voz',
+                callConnecting: 'Conectando...',
+                callRinging: '🔔 Llamando...',
+                callActive: '📞 Llamada en curso',
+                callEnded: 'Llamada finalizada',
+                callUser: 'Llamando a',
+                callStatusWaiting: '⏳ Esperando respuesta...',
+                callStatusConnected: '✅ Conectado',
+                callStatusEnded: '❌ Llamada finalizada',
+                callBtnAnswer: 'Responder',
+                callBtnDecline: 'Rechazar',
+                callBtnEnd: 'Finalizar'
             },
             ru: {
                 title: 'Система связи',
                 username: '👤 Имя пользователя',
                 password: '🔒 Пароль',
                 confirmPassword: '🔒 Подтвердите пароль',
-                loginBtn: '🔑 Войти',
+                loginBtn: '⚡ Войти',
                 loginError: 'Ошибка входа. Проверьте учетные данные.',
                 loginSuccess: 'Вход выполнен успешно!',
                 firstAccess: 'Первый вход! Установите пароль.',
@@ -1466,7 +1776,19 @@
                 server: 'Сервер',
                 photoRequired: '⚠️ Пожалуйста, добавьте фото профиля.',
                 imageTooLarge: '⚠️ Изображение слишком большое. Максимум 5МБ.',
-                invalidImage: '⚠️ Неверный формат изображения.'
+                invalidImage: '⚠️ Неверный формат изображения.',
+                callTitle: 'Голосовой звонок',
+                callConnecting: 'Подключение...',
+                callRinging: '🔔 Звонок...',
+                callActive: '📞 Звонок в процессе',
+                callEnded: 'Звонок завершен',
+                callUser: 'Звонит',
+                callStatusWaiting: '⏳ Ожидание ответа...',
+                callStatusConnected: '✅ Подключено',
+                callStatusEnded: '❌ Звонок завершен',
+                callBtnAnswer: 'Ответить',
+                callBtnDecline: 'Отклонить',
+                callBtnEnd: 'Завершить'
             }
         };
 
@@ -1483,6 +1805,7 @@
         const loginPhotoPreview = document.getElementById('loginPhotoPreview');
         const loginPhotoInput = document.getElementById('loginPhotoInput');
         const loginPhotoPlaceholder = document.getElementById('loginPhotoPlaceholder');
+        const loginDeviceInfo = document.getElementById('loginDeviceInfo');
 
         const configModal = document.getElementById('configModal');
         const configBtn = document.getElementById('configBtn');
@@ -1523,6 +1846,17 @@
         const cancelApprovalBtn = document.getElementById('cancelApprovalBtn');
         const headerAvatar = document.getElementById('headerAvatar');
         const headerAvatarPlaceholder = document.getElementById('headerAvatarPlaceholder');
+        const headerDeviceBadge = document.getElementById('headerDeviceBadge');
+        const callBtn = document.getElementById('callBtn');
+        const callOverlay = document.getElementById('callOverlay');
+        const callIcon = document.getElementById('callIcon');
+        const callTitle = document.getElementById('callTitle');
+        const callDescription = document.getElementById('callDescription');
+        const callUserName = document.getElementById('callUserName');
+        const callStatus = document.getElementById('callStatus');
+        const callTimer = document.getElementById('callTimer');
+        const callControls = document.getElementById('callControls');
+        const endCallBtn = document.getElementById('endCallBtn');
 
         // ESTADO
         let currentLang = 'pt';
@@ -1545,6 +1879,12 @@
         let isRecording = false;
         let recordingTimerInterval = null;
         let serverCreator = null;
+        
+        // CALL STATE
+        let isCallActive = false;
+        let callTimerInterval = null;
+        let callSeconds = 0;
+        let callStream = null;
 
         // INICIALIZAR USERS
         if (!users['admin']) {
@@ -1558,6 +1898,11 @@
             localStorage.setItem('chat_users', JSON.stringify(users));
         }
 
+        // DETECTAR DISPOSITIVO - TELA LOGIN
+        loginDeviceInfo.textContent = `${deviceInfo.icon} ${deviceInfo.label}`;
+        headerDeviceBadge.textContent = deviceInfo.icon;
+        headerDeviceBadge.className = `device-badge ${deviceInfo.type}`;
+
         // FUNÇÕES DE TRADUÇÃO
         function t(key) {
             return TRANSLATIONS[currentLang][key] || key;
@@ -1567,7 +1912,7 @@
             document.getElementById('loginUsernameLabel').textContent = t('username');
             document.getElementById('loginPasswordLabel').textContent = t('password');
             document.getElementById('loginConfirmLabel').textContent = t('confirmPassword');
-            loginBtn.textContent = t('loginBtn');
+            loginBtn.innerHTML = t('loginBtn');
             loginUsername.placeholder = t('username');
             loginPassword.placeholder = t('password');
             loginConfirmPassword.placeholder = t('confirmPassword');
@@ -1625,15 +1970,6 @@
                 headerAvatar.innerHTML = `<img src="${photo}" alt="Avatar">`;
             } else {
                 headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
-            }
-        }
-
-        function updateMessageAvatar(element, username) {
-            const photo = getProfilePhoto(username);
-            if (photo) {
-                element.innerHTML = `<img src="${photo}" alt="Avatar">`;
-            } else {
-                element.innerHTML = `<div class="placeholder">👤</div>`;
             }
         }
 
@@ -1696,7 +2032,6 @@
             configLanguage.value = currentLang;
             adminSection.style.display = isAdmin ? 'block' : 'none';
             
-            // Carregar foto
             if (user.profilePhoto) {
                 configPhotoPreview.innerHTML = `<img src="${user.profilePhoto}" alt="Foto">`;
                 configPhotoPlaceholder.style.display = 'none';
@@ -1718,7 +2053,6 @@
             const confirmPassword = configConfirmPassword.value;
             let photoChanged = false;
 
-            // Verificar se foto foi alterada
             const configPhotoImg = configPhotoPreview.querySelector('img');
             if (configPhotoImg) {
                 users[currentUser].profilePhoto = configPhotoImg.src;
@@ -1783,13 +2117,11 @@
                 return;
             }
 
-            // Verificar foto de perfil
             if (!tempProfilePhoto && !users[username]?.profilePhoto) {
                 showLoginError(t('photoRequired'));
                 return;
             }
 
-            // Verifica se é primeiro acesso do admin
             if (username === 'admin' && users['admin'].firstAccess) {
                 if (!password || !confirmPassword) {
                     showLoginError(t('firstAccess'));
@@ -1821,9 +2153,7 @@
                 return;
             }
 
-            // Usuário normal ou admin já registrado
             if (!checkUserExists(username)) {
-                // Novo usuário - criar conta
                 if (!password || !confirmPassword) {
                     showLoginError('Digite sua senha para criar a conta.');
                     confirmPasswordGroup.style.display = 'block';
@@ -1837,7 +2167,6 @@
                     showLoginError(t('passwordMismatch'));
                     return;
                 }
-                // Criar novo usuário
                 users[username] = {
                     password: password,
                     displayName: username,
@@ -1857,19 +2186,16 @@
                 return;
             }
 
-            // Usuário existe - verificar senha
             if (users[username].password !== password) {
                 showLoginError(t('loginError'));
                 return;
             }
 
-            // Atualizar foto se nova foi carregada
             if (tempProfilePhoto) {
                 users[username].profilePhoto = tempProfilePhoto;
                 localStorage.setItem('chat_users', JSON.stringify(users));
             }
 
-            // Login bem sucedido
             currentUser = username;
             isAdmin = users[username].isAdmin || false;
             isFirstAccess = false;
@@ -1925,7 +2251,7 @@
             }
         });
 
-        // FUNÇÕES DO CHAT
+        // FUNÇÕES DO CHAT (mantidas do código anterior)
         function getCurrentTime() {
             return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
@@ -1947,7 +2273,6 @@
                 const displayName = userData.displayName || username;
                 const isAdminUser = userData.isAdmin || false;
                 
-                // Header com avatar
                 const headerDiv = document.createElement('div');
                 headerDiv.className = 'msg-header';
                 
@@ -2395,6 +2720,12 @@
                         const displayName = users[data.username]?.displayName || data.username;
                         showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar no servidor`, false, false, true);
                         showApprovalButtons(conn.peer, data.username);
+                    } else if (data.type === 'call_request') {
+                        handleIncomingCall(data, conn);
+                    } else if (data.type === 'call_response') {
+                        handleCallResponse(data, conn);
+                    } else if (data.type === 'call_end') {
+                        handleCallEnd();
                     }
                 });
 
@@ -2544,6 +2875,208 @@
             btns.forEach(btn => btn.remove());
         }
 
+        // ============ SISTEMA DE CHAMADA ============
+        let callPeerConnection = null;
+        let callTarget = null;
+        let isInCall = false;
+        let callTimerInterval2 = null;
+        let callSeconds2 = 0;
+
+        function startCall(targetPeerId) {
+            if (isInCall) return;
+            if (!isConnected) {
+                showSystemMessage('⚠️ Conecte-se a um servidor primeiro', false, true);
+                return;
+            }
+
+            callTarget = targetPeerId;
+            isInCall = true;
+            
+            // Mostra overlay de chamada
+            callOverlay.classList.remove('hidden');
+            callIcon.textContent = '📞';
+            callTitle.textContent = t('callTitle');
+            callDescription.textContent = t('callConnecting');
+            callUserName.textContent = targetPeerId;
+            callStatus.textContent = t('callStatusWaiting');
+            callTimer.textContent = '00:00';
+            
+            // Mostra botão de encerrar
+            callControls.innerHTML = `
+                <button class="btn-end-call" id="endCallBtn">📞</button>
+            `;
+            document.getElementById('endCallBtn').addEventListener('click', endCall);
+
+            // Envia solicitação de chamada
+            broadcastMessage({
+                type: 'call_request',
+                from: currentUser,
+                target: targetPeerId
+            });
+
+            // Inicia timer
+            callSeconds2 = 0;
+            callTimerInterval2 = setInterval(() => {
+                callSeconds2++;
+                const mins = Math.floor(callSeconds2 / 60);
+                const secs = callSeconds2 % 60;
+                callTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function handleIncomingCall(data, conn) {
+            if (isInCall) {
+                conn.send({
+                    type: 'call_response',
+                    accepted: false,
+                    reason: 'busy'
+                });
+                return;
+            }
+
+            callTarget = data.from;
+            isInCall = true;
+            
+            // Mostra overlay com opções
+            callOverlay.classList.remove('hidden');
+            callIcon.textContent = '🔔';
+            callTitle.textContent = 'Chamada Recebida';
+            callDescription.textContent = t('callRinging');
+            callUserName.textContent = data.from;
+            callStatus.textContent = '🔔 Chamando...';
+            callTimer.textContent = '00:00';
+            
+            callControls.innerHTML = `
+                <button class="btn-decline" id="declineCallBtn">❌</button>
+                <button class="btn-answer" id="answerCallBtn">✅</button>
+            `;
+            document.getElementById('declineCallBtn').addEventListener('click', () => {
+                conn.send({
+                    type: 'call_response',
+                    accepted: false
+                });
+                endCall();
+            });
+            document.getElementById('answerCallBtn').addEventListener('click', () => {
+                conn.send({
+                    type: 'call_response',
+                    accepted: true
+                });
+                callStatus.textContent = '✅ ' + t('callStatusConnected');
+                callIcon.textContent = '📞';
+                callTitle.textContent = t('callActive');
+                callDescription.textContent = t('callActive');
+                
+                // Inicia timer
+                callSeconds2 = 0;
+                callTimerInterval2 = setInterval(() => {
+                    callSeconds2++;
+                    const mins = Math.floor(callSeconds2 / 60);
+                    const secs = callSeconds2 % 60;
+                    callTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+                
+                // Muda controles
+                callControls.innerHTML = `
+                    <button class="btn-end-call" id="endCallBtn">📞</button>
+                `;
+                document.getElementById('endCallBtn').addEventListener('click', () => {
+                    conn.send({
+                        type: 'call_end'
+                    });
+                    endCall();
+                });
+            });
+        }
+
+        function handleCallResponse(data, conn) {
+            if (data.accepted) {
+                callStatus.textContent = '✅ ' + t('callStatusConnected');
+                callIcon.textContent = '📞';
+                callTitle.textContent = t('callActive');
+                callDescription.textContent = t('callActive');
+                callStatus.textContent = '✅ Chamada conectada!';
+                
+                // Inicia timer
+                callSeconds2 = 0;
+                callTimerInterval2 = setInterval(() => {
+                    callSeconds2++;
+                    const mins = Math.floor(callSeconds2 / 60);
+                    const secs = callSeconds2 % 60;
+                    callTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+                
+                // Muda controles
+                callControls.innerHTML = `
+                    <button class="btn-end-call" id="endCallBtn">📞</button>
+                `;
+                document.getElementById('endCallBtn').addEventListener('click', () => {
+                    broadcastMessage({
+                        type: 'call_end'
+                    });
+                    endCall();
+                });
+            } else {
+                callStatus.textContent = '❌ ' + t('callStatusEnded');
+                setTimeout(() => {
+                    endCall();
+                }, 2000);
+            }
+        }
+
+        function handleCallEnd() {
+            callStatus.textContent = '❌ ' + t('callStatusEnded');
+            setTimeout(() => {
+                endCall();
+            }, 1500);
+        }
+
+        function endCall() {
+            isInCall = false;
+            callTarget = null;
+            
+            if (callTimerInterval2) {
+                clearInterval(callTimerInterval2);
+                callTimerInterval2 = null;
+            }
+            
+            callOverlay.classList.add('hidden');
+            showSystemMessage('📞 Chamada encerrada', false, false, false, true);
+            
+            // Notifica todos que a chamada terminou
+            broadcastMessage({
+                type: 'call_end'
+            });
+        }
+
+        // BOTÃO DE CHAMADA
+        callBtn.addEventListener('click', () => {
+            if (!isConnected) {
+                showSystemMessage('⚠️ Conecte-se a um servidor primeiro', false, true);
+                return;
+            }
+            
+            if (isInCall) {
+                endCall();
+                return;
+            }
+            
+            // Mostra seletor de usuário para chamar
+            const usersList = Object.keys(clients);
+            if (usersList.length === 0) {
+                showSystemMessage('⚠️ Nenhum usuário disponível para chamar', false, true);
+                return;
+            }
+            
+            // Por simplicidade, chama o primeiro usuário disponível
+            const target = usersList[0];
+            if (target) {
+                startCall(target);
+            }
+        });
+
+        // ============ FIM SISTEMA DE CHAMADA ============
+
         // CONECTAR COMO CLIENTE
         function connectAsClient(serverId) {
             if (isServer && currentServer === serverId) return;
@@ -2603,6 +3136,7 @@
                             updateServerStatus(serverId, 'online');
                             approvalStatus.textContent = '✅ Aceito!';
                             approvalStatus.style.color = '#4caf50';
+                            callBtn.style.display = 'flex';
                             
                             setTimeout(() => {
                                 approvalOverlay.classList.add('hidden');
@@ -2614,6 +3148,7 @@
                             updateServerStatus(serverId, 'offline');
                             setInputEnabled(false);
                             markServerActive(null);
+                            callBtn.style.display = 'none';
                             
                             setTimeout(() => {
                                 try {
@@ -2653,6 +3188,12 @@
                         if (isConnected) {
                             showSystemMessage(data.text);
                         }
+                    } else if (data.type === 'call_request') {
+                        handleIncomingCall(data, conn);
+                    } else if (data.type === 'call_response') {
+                        handleCallResponse(data, conn);
+                    } else if (data.type === 'call_end') {
+                        handleCallEnd();
                     } else if (data.type === 'ping') {
                         conn.send({ type: 'pong' });
                     }
@@ -2667,6 +3208,7 @@
                         setInputEnabled(false);
                         updateServerStatus(serverId, 'offline');
                         markServerActive(null);
+                        callBtn.style.display = 'none';
                     }
                 });
 
@@ -2684,6 +3226,7 @@
                         setInputEnabled(false);
                         updateServerStatus(serverId, 'offline');
                         approvalOverlay.classList.add('hidden');
+                        callBtn.style.display = 'none';
                     }
                 });
             });
@@ -2712,7 +3255,12 @@
                 stopRecording();
             }
             
+            if (isInCall) {
+                endCall();
+            }
+            
             approvalOverlay.classList.add('hidden');
+            callBtn.style.display = 'none';
             
             const btns = document.querySelectorAll('.approval-buttons');
             btns.forEach(btn => btn.remove());
@@ -2730,7 +3278,7 @@
             
             const msg = document.createElement('div');
             msg.className = 'system-msg';
-            msg.textContent = `🔌 Conectando ao ${SERVERS[serverId].name}...`;
+            msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
             messagesContainer.appendChild(msg);
             
             connectAsClient(serverId);
@@ -2748,12 +3296,14 @@
                 updateServerStatus(parseInt(id), 'offline');
             });
             
-            showSystemMessage('👆 Selecione um servidor para entrar');
+            showSystemMessage('⚡ Selecione um servidor para entrar');
             updateStatus('Selecione um servidor', 'offline');
             setInputEnabled(false);
+            callBtn.style.display = 'none';
             
             const displayName = users[currentUser]?.displayName || currentUser;
             showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
+            showSystemMessage(`💻 Dispositivo: ${deviceInfo.icon} ${deviceInfo.label}`, false, false, false, true);
             updateHeaderAvatar(currentUser);
         }
 
@@ -2788,6 +3338,7 @@
                 updateStatus('Desconectado', 'offline');
                 setInputEnabled(false);
                 markServerActive(null);
+                callBtn.style.display = 'none';
                 cleanup();
                 
                 setTimeout(() => {
@@ -2813,8 +3364,9 @@
         }, 5000);
 
         // INICIALIZAR
-        console.log('Sistema completo iniciado!');
-        console.log('Usuários:', users);
+        console.log('⚡ EOROS Chat System iniciado!');
+        console.log('📱 Dispositivo:', deviceInfo);
+        console.log('👤 Usuários:', users);
 
         loginScreen.classList.remove('hidden');
         updateLoginTexts();
