@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chat Server - Discord Mobile</title>
+    <title>Chat Server - Sistema Completo</title>
     <style>
         * {
             margin: 0;
@@ -35,6 +35,318 @@
             position: relative;
         }
 
+        /* TELA DE LOGIN */
+        .login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1e1e2e;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .login-screen .login-box {
+            background: #2b2d3e;
+            border-radius: 24px;
+            padding: 30px 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #3a3c4e;
+        }
+
+        .login-screen .login-box .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .login-screen .login-box .logo h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .login-screen .login-box .logo p {
+            color: #6d6f87;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .login-screen .login-box .form-group {
+            margin-bottom: 16px;
+        }
+
+        .login-screen .login-box .form-group label {
+            display: block;
+            color: #a6a9c2;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .login-screen .login-box .form-group input,
+        .login-screen .login-box .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1e1e2e;
+            border: 1px solid #3a3c4e;
+            border-radius: 12px;
+            color: #e4e6f0;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .login-screen .login-box .form-group input:focus,
+        .login-screen .login-box .form-group select:focus {
+            border-color: #5865f2;
+            background: #232533;
+        }
+
+        .login-screen .login-box .form-group input::placeholder {
+            color: #6d6f87;
+        }
+
+        .login-screen .login-box .form-group select option {
+            background: #2b2d3e;
+            color: #e4e6f0;
+        }
+
+        .login-screen .login-box .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #5865f2;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+
+        .login-screen .login-box .btn-login:hover {
+            background: #4752c4;
+        }
+
+        .login-screen .login-box .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        .login-screen .login-box .btn-login:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .login-screen .login-box .error-msg {
+            color: #f44336;
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .login-screen .login-box .success-msg {
+            color: #4caf50;
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .login-screen .login-box .language-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .login-screen .login-box .language-selector .lang-btn {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #3a3c4e;
+            border-radius: 10px;
+            background: #1e1e2e;
+            color: #a6a9c2;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .login-screen .login-box .language-selector .lang-btn:hover {
+            border-color: #5865f2;
+            color: #fff;
+        }
+
+        .login-screen .login-box .language-selector .lang-btn.active {
+            border-color: #5865f2;
+            background: #5865f2;
+            color: white;
+        }
+
+        /* BOTÃO CONFIGURAÇÃO */
+        .config-btn {
+            background: none;
+            border: none;
+            color: #a6a9c2;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 8px;
+        }
+
+        .config-btn:hover {
+            color: #fff;
+            transform: rotate(60deg);
+        }
+
+        /* MODAL CONFIGURAÇÃO */
+        .config-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .config-modal.hidden {
+            display: none;
+        }
+
+        .config-modal .config-box {
+            background: #2b2d3e;
+            border-radius: 24px;
+            padding: 30px 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #3a3c4e;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .config-modal .config-box h2 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .config-modal .config-box .form-group {
+            margin-bottom: 16px;
+        }
+
+        .config-modal .config-box .form-group label {
+            display: block;
+            color: #a6a9c2;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .config-modal .config-box .form-group input,
+        .config-modal .config-box .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1e1e2e;
+            border: 1px solid #3a3c4e;
+            border-radius: 12px;
+            color: #e4e6f0;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .config-modal .config-box .form-group input:focus,
+        .config-modal .config-box .form-group select:focus {
+            border-color: #5865f2;
+            background: #232533;
+        }
+
+        .config-modal .config-box .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .config-modal .config-box .btn-group button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .config-modal .config-box .btn-group button:active {
+            transform: scale(0.95);
+        }
+
+        .config-modal .config-box .btn-save {
+            background: #5865f2;
+            color: white;
+        }
+
+        .config-modal .config-box .btn-save:hover {
+            background: #4752c4;
+        }
+
+        .config-modal .config-box .btn-close {
+            background: #2b2d3e;
+            color: #a6a9c2;
+            border: 1px solid #3a3c4e;
+        }
+
+        .config-modal .config-box .btn-close:hover {
+            background: #3a3c4e;
+        }
+
+        .config-modal .config-box .admin-section {
+            background: #1e1e2e;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid #5865f2;
+        }
+
+        .config-modal .config-box .admin-section .admin-badge {
+            display: inline-block;
+            background: #5865f2;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .config-modal .config-box .admin-section p {
+            color: #a6a9c2;
+            font-size: 13px;
+        }
+
+        /* HEADER COM CONFIG */
         .chat-header {
             background: #1e1e2e;
             padding: 16px 20px;
@@ -43,6 +355,12 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+        }
+
+        .chat-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .chat-header h1 {
@@ -72,6 +390,7 @@
             border: 1px solid #3a3c4e;
         }
 
+        /* RESTO DO CSS (mantido do anterior) */
         .server-selector {
             background: #1e1e2e;
             padding: 12px 16px;
@@ -194,6 +513,15 @@
             color: #d4d6f0;
         }
 
+        .message .msg-user .admin-badge {
+            background: #ff9800;
+            color: #1e1e2e;
+            font-size: 9px;
+            padding: 1px 8px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
         .message .msg-text {
             color: #e4e6f0;
             font-size: 15px;
@@ -212,7 +540,6 @@
             color: #b9bbd4;
         }
 
-        /* Áudio message */
         .audio-message {
             display: flex;
             align-items: center;
@@ -411,7 +738,6 @@
             min-height: 20px;
         }
 
-        /* Overlay de Aprovação */
         .approval-overlay {
             position: absolute;
             top: 0;
@@ -482,9 +808,17 @@
             margin-top: 4px;
         }
 
+        .approval-overlay .approval-box .status-message {
+            color: #ff9800;
+            font-size: 14px;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
         .approval-overlay .approval-box .buttons {
             display: flex;
             gap: 12px;
+            margin-top: 16px;
         }
 
         .approval-overlay .approval-box .buttons button {
@@ -502,15 +836,6 @@
             transform: scale(0.95);
         }
 
-        .approval-overlay .approval-box .buttons .btn-accept {
-            background: #4caf50;
-            color: white;
-        }
-
-        .approval-overlay .approval-box .buttons .btn-accept:hover {
-            background: #45a049;
-        }
-
         .approval-overlay .approval-box .buttons .btn-reject {
             background: #f44336;
             color: white;
@@ -518,13 +843,6 @@
 
         .approval-overlay .approval-box .buttons .btn-reject:hover {
             background: #da190b;
-        }
-
-        .approval-overlay .approval-box .status-message {
-            color: #ff9800;
-            font-size: 14px;
-            margin-top: 12px;
-            font-weight: 500;
         }
 
         .status-bar {
@@ -590,24 +908,14 @@
                 min-width: 120px;
                 flex-wrap: wrap;
             }
+            .login-screen .login-box {
+                padding: 20px;
+            }
+            .config-modal .config-box {
+                padding: 20px;
+            }
             .approval-overlay .approval-box {
                 padding: 20px;
-                margin: 10px;
-            }
-            .approval-overlay .approval-box h2 {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .input-area .action-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
-            }
-            .input-area input {
-                font-size: 13px;
-                padding: 8px 12px;
             }
         }
     </style>
@@ -615,12 +923,93 @@
 <body>
 
 <div class="chat-container" id="app">
+    <!-- TELA DE LOGIN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="logo">
+                <h1>💬 Chat</h1>
+                <p>Sistema de Comunicação</p>
+            </div>
+
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="pt">🇧🇷 PT</button>
+                <button class="lang-btn" data-lang="en">🇺🇸 EN</button>
+                <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+                <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+            </div>
+
+            <div class="form-group">
+                <label id="loginUsernameLabel">👤 Nome de Usuário</label>
+                <input type="text" id="loginUsername" placeholder="Digite seu nome">
+            </div>
+
+            <div class="form-group">
+                <label id="loginPasswordLabel">🔒 Senha</label>
+                <input type="password" id="loginPassword" placeholder="Digite sua senha">
+            </div>
+
+            <div class="form-group" id="confirmPasswordGroup" style="display:none;">
+                <label id="loginConfirmLabel">🔒 Confirmar Senha</label>
+                <input type="password" id="loginConfirmPassword" placeholder="Confirme sua senha">
+            </div>
+
+            <div class="error-msg" id="loginError"></div>
+            <div class="success-msg" id="loginSuccess"></div>
+
+            <button class="btn-login" id="loginBtn">🔑 Entrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAÇÃO -->
+    <div class="config-modal hidden" id="configModal">
+        <div class="config-box">
+            <h2>⚙️ Configurações</h2>
+            
+            <div class="admin-section" id="adminSection">
+                <div class="admin-badge">👑 ADMIN</div>
+                <p>Você é administrador do sistema.</p>
+            </div>
+
+            <div class="form-group">
+                <label>👤 Nome de Exibição</label>
+                <input type="text" id="configDisplayName" placeholder="Seu nome no chat">
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Nova Senha</label>
+                <input type="password" id="configPassword" placeholder="Nova senha (mínimo 8 caracteres)">
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Confirmar Nova Senha</label>
+                <input type="password" id="configConfirmPassword" placeholder="Confirme a nova senha">
+            </div>
+
+            <div class="form-group">
+                <label>🌐 Idioma</label>
+                <select id="configLanguage">
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-save" id="configSaveBtn">💾 Salvar</button>
+                <button class="btn-close" id="configCloseBtn">✖ Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <div class="chat-header">
-        <h1>
-            💬 Chat
-            <span>Beta</span>
-        </h1>
-        <div class="user-count" id="userCount">👥 0</div>
+        <div class="header-left">
+            <h1>💬 Chat <span>Beta</span></h1>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button class="config-btn" id="configBtn" title="Configurações">⚙️</button>
+            <div class="user-count" id="userCount">👥 0</div>
+        </div>
     </div>
 
     <div class="server-selector" id="serverSelector">
@@ -639,7 +1028,6 @@
         <div class="system-msg">🔌 Selecione um servidor para entrar</div>
     </div>
 
-    <!-- Overlay de Aprovação -->
     <div class="approval-overlay hidden" id="approvalOverlay">
         <div class="approval-box">
             <div class="icon">🔐</div>
@@ -650,24 +1038,9 @@
                 <div class="value" id="approvalServerName">Servidor 1</div>
             </div>
             <div class="status-message" id="approvalStatus">⏳ Aguardando resposta...</div>
-            <div class="buttons" style="margin-top: 16px;">
-                <button class="btn-reject" id="cancelApprovalBtn" style="flex: 1;">Cancelar</button>
+            <div class="buttons">
+                <button class="btn-reject" id="cancelApprovalBtn">Cancelar</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Overlay de Rejeitado -->
-    <div class="approval-overlay hidden" id="rejectedOverlay">
-        <div class="approval-box">
-            <div class="icon">⛔</div>
-            <h2 style="color: #f44336;">Entrada Rejeitada</h2>
-            <p>O administrador rejeitou sua solicitação de entrada.</p>
-            <div class="user-info">
-                <div class="label">Servidor</div>
-                <div class="value" id="rejectedServerName">Servidor 1</div>
-            </div>
-            <div class="status-message" style="color: #f44336;">❌ Você foi rejeitado neste servidor</div>
-            <button class="btn-accept" id="rejectedOkBtn" style="margin-top: 16px; width: 100%; padding: 12px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; background: #5865f2; color: white;">OK, entendi</button>
         </div>
     </div>
 
@@ -691,14 +1064,144 @@
     (function() {
         'use strict';
 
-        // SERVIDORES PRÉ-DEFINIDOS
-        const SERVERS = {
-            1: { id: 'chat-server-1', name: 'Servidor 1' },
-            2: { id: 'chat-server-2', name: 'Servidor 2' },
-            3: { id: 'chat-server-3', name: 'Servidor 3' }
+        // TRADUÇÕES
+        const TRANSLATIONS = {
+            pt: {
+                title: 'Sistema de Comunicação',
+                username: '👤 Nome de Usuário',
+                password: '🔒 Senha',
+                confirmPassword: '🔒 Confirmar Senha',
+                loginBtn: '🔑 Entrar',
+                loginError: 'Erro ao fazer login. Verifique suas credenciais.',
+                loginSuccess: 'Login realizado com sucesso!',
+                firstAccess: 'Primeiro acesso! Defina sua senha.',
+                passwordMismatch: 'As senhas não coincidem.',
+                passwordShort: 'A senha deve ter no mínimo 8 caracteres.',
+                userExists: 'Usuário já existe. Faça login com sua senha.',
+                configTitle: '⚙️ Configurações',
+                displayName: '👤 Nome de Exibição',
+                newPassword: '🔒 Nova Senha',
+                confirmNewPassword: '🔒 Confirmar Nova Senha',
+                language: '🌐 Idioma',
+                save: '💾 Salvar',
+                close: '✖ Fechar',
+                adminSection: 'Você é administrador do sistema.',
+                serverSelector: 'Selecione um servidor para entrar',
+                connecting: 'Conectando ao',
+                connected: 'Conectado ao',
+                disconnected: 'Desconectado',
+                waitingApproval: 'Aguardando aprovação',
+                rejected: 'Rejeitado',
+                server: 'Servidor'
+            },
+            en: {
+                title: 'Communication System',
+                username: '👤 Username',
+                password: '🔒 Password',
+                confirmPassword: '🔒 Confirm Password',
+                loginBtn: '🔑 Login',
+                loginError: 'Login error. Check your credentials.',
+                loginSuccess: 'Login successful!',
+                firstAccess: 'First access! Set your password.',
+                passwordMismatch: 'Passwords do not match.',
+                passwordShort: 'Password must be at least 8 characters.',
+                userExists: 'User already exists. Login with your password.',
+                configTitle: '⚙️ Settings',
+                displayName: '👤 Display Name',
+                newPassword: '🔒 New Password',
+                confirmNewPassword: '🔒 Confirm New Password',
+                language: '🌐 Language',
+                save: '💾 Save',
+                close: '✖ Close',
+                adminSection: 'You are the system administrator.',
+                serverSelector: 'Select a server to join',
+                connecting: 'Connecting to',
+                connected: 'Connected to',
+                disconnected: 'Disconnected',
+                waitingApproval: 'Waiting for approval',
+                rejected: 'Rejected',
+                server: 'Server'
+            },
+            es: {
+                title: 'Sistema de Comunicación',
+                username: '👤 Nombre de Usuario',
+                password: '🔒 Contraseña',
+                confirmPassword: '🔒 Confirmar Contraseña',
+                loginBtn: '🔑 Entrar',
+                loginError: 'Error al iniciar sesión. Verifique sus credenciales.',
+                loginSuccess: '¡Inicio de sesión exitoso!',
+                firstAccess: '¡Primer acceso! Establezca su contraseña.',
+                passwordMismatch: 'Las contraseñas no coinciden.',
+                passwordShort: 'La contraseña debe tener al menos 8 caracteres.',
+                userExists: 'El usuario ya existe. Inicie sesión con su contraseña.',
+                configTitle: '⚙️ Configuración',
+                displayName: '👤 Nombre de Pantalla',
+                newPassword: '🔒 Nueva Contraseña',
+                confirmNewPassword: '🔒 Confirmar Nueva Contraseña',
+                language: '🌐 Idioma',
+                save: '💾 Guardar',
+                close: '✖ Cerrar',
+                adminSection: 'Eres el administrador del sistema.',
+                serverSelector: 'Seleccione un servidor para unirse',
+                connecting: 'Conectando a',
+                connected: 'Conectado a',
+                disconnected: 'Desconectado',
+                waitingApproval: 'Esperando aprobación',
+                rejected: 'Rechazado',
+                server: 'Servidor'
+            },
+            ru: {
+                title: 'Система связи',
+                username: '👤 Имя пользователя',
+                password: '🔒 Пароль',
+                confirmPassword: '🔒 Подтвердите пароль',
+                loginBtn: '🔑 Войти',
+                loginError: 'Ошибка входа. Проверьте учетные данные.',
+                loginSuccess: 'Вход выполнен успешно!',
+                firstAccess: 'Первый вход! Установите пароль.',
+                passwordMismatch: 'Пароли не совпадают.',
+                passwordShort: 'Пароль должен содержать не менее 8 символов.',
+                userExists: 'Пользователь уже существует. Войдите с паролем.',
+                configTitle: '⚙️ Настройки',
+                displayName: '👤 Отображаемое имя',
+                newPassword: '🔒 Новый пароль',
+                confirmNewPassword: '🔒 Подтвердите новый пароль',
+                language: '🌐 Язык',
+                save: '💾 Сохранить',
+                close: '✖ Закрыть',
+                adminSection: 'Вы администратор системы.',
+                serverSelector: 'Выберите сервер для входа',
+                connecting: 'Подключение к',
+                connected: 'Подключено к',
+                disconnected: 'Отключено',
+                waitingApproval: 'Ожидание одобрения',
+                rejected: 'Отклонено',
+                server: 'Сервер'
+            }
         };
 
-        // Elementos
+        // ELEMENTOS
+        const loginScreen = document.getElementById('loginScreen');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginConfirmPassword = document.getElementById('loginConfirmPassword');
+        const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const loginBtn = document.getElementById('loginBtn');
+        const langBtns = document.querySelectorAll('.lang-btn');
+
+        const configModal = document.getElementById('configModal');
+        const configBtn = document.getElementById('configBtn');
+        const configCloseBtn = document.getElementById('configCloseBtn');
+        const configSaveBtn = document.getElementById('configSaveBtn');
+        const configDisplayName = document.getElementById('configDisplayName');
+        const configPassword = document.getElementById('configPassword');
+        const configConfirmPassword = document.getElementById('configConfirmPassword');
+        const configLanguage = document.getElementById('configLanguage');
+        const adminSection = document.getElementById('adminSection');
+
+        // Elementos do chat (mantidos do anterior)
         const messagesContainer = document.getElementById('messagesContainer');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -714,18 +1217,17 @@
             2: document.getElementById('status2'),
             3: document.getElementById('status3')
         };
-
-        // Overlays
         const approvalOverlay = document.getElementById('approvalOverlay');
-        const rejectedOverlay = document.getElementById('rejectedOverlay');
         const approvalServerName = document.getElementById('approvalServerName');
         const approvalStatus = document.getElementById('approvalStatus');
-        const rejectedServerName = document.getElementById('rejectedServerName');
         const cancelApprovalBtn = document.getElementById('cancelApprovalBtn');
-        const rejectedOkBtn = document.getElementById('rejectedOkBtn');
 
-        // Estado
-        let currentUsername = 'User' + Math.floor(Math.random() * 10000);
+        // ESTADO
+        let currentLang = 'pt';
+        let currentUser = null;
+        let isAdmin = false;
+        let isFirstAccess = false;
+        let users = JSON.parse(localStorage.getItem('chat_users') || '{}');
         let peer = null;
         let serverConnection = null;
         let isServer = false;
@@ -735,16 +1237,261 @@
         let clients = {};
         let pendingApprovals = {};
         let isWaitingApproval = false;
-        let approvalRejected = false;
-        let serverCreator = null;
-
-        // Áudio
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
         let recordingTimerInterval = null;
+        let serverCreator = null;
 
-        // Funções auxiliares
+        // INICIALIZAR USERS
+        if (!users['admin']) {
+            users['admin'] = {
+                password: '',
+                displayName: 'Admin',
+                isAdmin: true,
+                firstAccess: true
+            };
+            localStorage.setItem('chat_users', JSON.stringify(users));
+        }
+
+        // FUNÇÕES DE TRADUÇÃO
+        function t(key) {
+            return TRANSLATIONS[currentLang][key] || key;
+        }
+
+        function updateLoginTexts() {
+            document.getElementById('loginUsernameLabel').textContent = t('username');
+            document.getElementById('loginPasswordLabel').textContent = t('password');
+            document.getElementById('loginConfirmLabel').textContent = t('confirmPassword');
+            loginBtn.textContent = t('loginBtn');
+            loginUsername.placeholder = t('username');
+            loginPassword.placeholder = t('password');
+            loginConfirmPassword.placeholder = t('confirmPassword');
+        }
+
+        // SELETOR DE IDIOMA
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+                configLanguage.value = currentLang;
+                updateLoginTexts();
+            });
+        });
+
+        // CONFIGURAÇÕES
+        configBtn.addEventListener('click', () => {
+            if (!currentUser) return;
+            configDisplayName.value = users[currentUser].displayName || currentUser;
+            configPassword.value = '';
+            configConfirmPassword.value = '';
+            configLanguage.value = currentLang;
+            adminSection.style.display = isAdmin ? 'block' : 'none';
+            configModal.classList.remove('hidden');
+        });
+
+        configCloseBtn.addEventListener('click', () => {
+            configModal.classList.add('hidden');
+        });
+
+        configSaveBtn.addEventListener('click', () => {
+            const displayName = configDisplayName.value.trim();
+            const newPassword = configPassword.value;
+            const confirmPassword = configConfirmPassword.value;
+
+            if (displayName) {
+                users[currentUser].displayName = displayName;
+            }
+
+            if (newPassword) {
+                if (newPassword.length < 8) {
+                    showLoginError(t('passwordShort'));
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    showLoginError(t('passwordMismatch'));
+                    return;
+                }
+                users[currentUser].password = newPassword;
+                users[currentUser].firstAccess = false;
+                showLoginSuccess('Senha atualizada com sucesso!');
+            }
+
+            currentLang = configLanguage.value;
+            localStorage.setItem('chat_users', JSON.stringify(users));
+            updateLoginTexts();
+            
+            // Atualiza nome no chat
+            if (isConnected) {
+                // Atualiza nome nas mensagens
+            }
+            
+            configModal.classList.add('hidden');
+            showLoginSuccess('Configurações salvas!');
+        });
+
+        // FUNÇÕES DE LOGIN
+        function showLoginError(msg) {
+            loginError.textContent = msg;
+            loginSuccess.textContent = '';
+        }
+
+        function showLoginSuccess(msg) {
+            loginSuccess.textContent = msg;
+            loginError.textContent = '';
+        }
+
+        function checkUserExists(username) {
+            return users[username] !== undefined;
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function handleLogin() {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value;
+            const confirmPassword = loginConfirmPassword.value;
+
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+
+            if (!username) {
+                showLoginError('Por favor, digite um nome de usuário.');
+                return;
+            }
+
+            // Verifica se é primeiro acesso do admin
+            if (username === 'admin' && users['admin'].firstAccess) {
+                // Primeiro acesso - precisa definir senha
+                if (!password || !confirmPassword) {
+                    showLoginError(t('firstAccess'));
+                    confirmPasswordGroup.style.display = 'block';
+                    return;
+                }
+                if (!validatePassword(password)) {
+                    showLoginError(t('passwordShort'));
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showLoginError(t('passwordMismatch'));
+                    return;
+                }
+                // Define senha do admin
+                users['admin'].password = password;
+                users['admin'].firstAccess = false;
+                users['admin'].displayName = 'Admin';
+                localStorage.setItem('chat_users', JSON.stringify(users));
+                currentUser = 'admin';
+                isAdmin = true;
+                isFirstAccess = false;
+                loginSuccess.textContent = '✅ Senha definida com sucesso!';
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    initChat();
+                }, 1000);
+                return;
+            }
+
+            // Usuário normal ou admin já registrado
+            if (!checkUserExists(username)) {
+                // Novo usuário - criar conta
+                if (!password || !confirmPassword) {
+                    showLoginError('Digite sua senha para criar a conta.');
+                    confirmPasswordGroup.style.display = 'block';
+                    return;
+                }
+                if (!validatePassword(password)) {
+                    showLoginError(t('passwordShort'));
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showLoginError(t('passwordMismatch'));
+                    return;
+                }
+                // Criar novo usuário
+                users[username] = {
+                    password: password,
+                    displayName: username,
+                    isAdmin: false,
+                    firstAccess: false
+                };
+                localStorage.setItem('chat_users', JSON.stringify(users));
+                currentUser = username;
+                isAdmin = false;
+                loginSuccess.textContent = '✅ Conta criada com sucesso!';
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    initChat();
+                }, 1000);
+                return;
+            }
+
+            // Usuário existe - verificar senha
+            if (users[username].password !== password) {
+                showLoginError(t('loginError'));
+                return;
+            }
+
+            // Login bem sucedido
+            currentUser = username;
+            isAdmin = users[username].isAdmin || false;
+            isFirstAccess = false;
+            loginSuccess.textContent = t('loginSuccess');
+            setTimeout(() => {
+                loginScreen.classList.add('hidden');
+                initChat();
+            }, 500);
+        }
+
+        // EVENTOS DE LOGIN
+        loginBtn.addEventListener('click', handleLogin);
+        loginUsername.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                loginPassword.focus();
+            }
+        });
+        loginPassword.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (confirmPasswordGroup.style.display === 'block') {
+                    loginConfirmPassword.focus();
+                } else {
+                    handleLogin();
+                }
+            }
+        });
+        loginConfirmPassword.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+
+        // Mostrar campo de confirmação quando necessário
+        loginPassword.addEventListener('input', () => {
+            const username = loginUsername.value.trim();
+            if (username === 'admin' && users['admin'].firstAccess) {
+                confirmPasswordGroup.style.display = 'block';
+            } else if (!checkUserExists(username)) {
+                confirmPasswordGroup.style.display = 'block';
+            } else {
+                confirmPasswordGroup.style.display = 'none';
+            }
+        });
+
+        loginUsername.addEventListener('input', () => {
+            const username = loginUsername.value.trim();
+            if (username === 'admin' && users['admin'].firstAccess) {
+                confirmPasswordGroup.style.display = 'block';
+            } else if (!checkUserExists(username)) {
+                confirmPasswordGroup.style.display = 'block';
+            } else {
+                confirmPasswordGroup.style.display = 'none';
+            }
+        });
+
+        // FUNÇÕES DO CHAT (mantidas do código anterior com pequenas adaptações)
         function getCurrentTime() {
             return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
@@ -764,7 +1511,9 @@
                 
                 const userDiv = document.createElement('div');
                 userDiv.className = 'msg-user';
-                userDiv.innerHTML = `${username} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>`;
+                const userDisplay = users[username] ? users[username].displayName || username : username;
+                const isAdminUser = users[username] ? users[username].isAdmin : false;
+                userDiv.innerHTML = `${userDisplay} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
                 
                 let contentDiv = document.createElement('div');
                 contentDiv.className = 'msg-text';
@@ -882,11 +1631,11 @@
             if (isServer) {
                 connectionStatusSpan.textContent = '👑 Servidor';
             } else if (isConnected) {
-                connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
+                connectionStatusSpan.textContent = `✅ ${t('connected')} ${currentServer ? SERVERS[currentServer].name : ''}`;
             } else if (isWaitingApproval) {
-                connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
+                connectionStatusSpan.textContent = `⏳ ${t('waitingApproval')}`;
             } else {
-                connectionStatusSpan.textContent = '❌ Desconectado';
+                connectionStatusSpan.textContent = '❌ ' + t('disconnected');
             }
         }
 
@@ -928,33 +1677,14 @@
             });
         }
 
-        function showApprovalOverlay(serverId) {
-            isWaitingApproval = true;
-            approvalServerName.textContent = SERVERS[serverId].name;
-            approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
-            approvalStatus.style.color = '#ff9800';
-            approvalOverlay.classList.remove('hidden');
-            updateStatus(`Aguardando aprovação em ${SERVERS[serverId].name}`, 'waiting');
-        }
+        // SERVIDORES
+        const SERVERS = {
+            1: { id: 'chat-server-1', name: 'Servidor 1' },
+            2: { id: 'chat-server-2', name: 'Servidor 2' },
+            3: { id: 'chat-server-3', name: 'Servidor 3' }
+        };
 
-        function hideApprovalOverlay() {
-            isWaitingApproval = false;
-            approvalOverlay.classList.add('hidden');
-        }
-
-        function showRejectedOverlay(serverId) {
-            rejectedServerName.textContent = SERVERS[serverId].name;
-            rejectedOverlay.classList.remove('hidden');
-            approvalRejected = true;
-            updateStatus('Rejeitado', 'offline');
-        }
-
-        function hideRejectedOverlay() {
-            rejectedOverlay.classList.add('hidden');
-            approvalRejected = false;
-        }
-
-        // ENVIAR MENSAGEM
+        // FUNÇÕES DO CHAT (mantidas)
         function sendMessage() {
             const text = messageInput.value.trim();
             if (!text || !isConnected) {
@@ -962,12 +1692,13 @@
                 return;
             }
 
-            addMessageToDOM(currentUsername, text, true);
-            messageHistory.push({ username: currentUsername, text, time: Date.now() });
+            const displayName = users[currentUser]?.displayName || currentUser;
+            addMessageToDOM(currentUser, text, true);
+            messageHistory.push({ username: currentUser, text, time: Date.now() });
 
             broadcastMessage({
                 type: 'message',
-                username: currentUsername,
+                username: currentUser,
                 text: text,
                 time: Date.now()
             });
@@ -976,19 +1707,18 @@
             messageInput.focus();
         }
 
-        // ENVIAR ÁUDIO
         function sendAudio(audioData) {
             if (!isConnected) {
                 showSystemMessage('⚠️ Aguarde a conexão...', false, true);
                 return;
             }
 
-            addMessageToDOM(currentUsername, '', true, false, false, false, false, false, audioData);
-            messageHistory.push({ username: currentUsername, text: '🎤 Áudio', time: Date.now(), audio: audioData });
+            addMessageToDOM(currentUser, '', true, false, false, false, false, false, audioData);
+            messageHistory.push({ username: currentUser, text: '🎤 Áudio', time: Date.now(), audio: audioData });
 
             broadcastMessage({
                 type: 'audio',
-                username: currentUsername,
+                username: currentUser,
                 audio: audioData,
                 time: Date.now()
             });
@@ -1015,7 +1745,7 @@
             }
         }
 
-        // ÁUDIO - GRAVAÇÃO
+        // ÁUDIO
         async function startRecording() {
             if (isRecording) return;
             
@@ -1094,7 +1824,7 @@
             isConnected = true;
             currentServer = serverId;
             clients = {};
-            serverCreator = currentUsername;
+            serverCreator = currentUser;
             
             updateStatus(`👑 Servidor (${serverInfo.name})`, 'online');
             showSystemMessage(`✅ Você é o servidor do ${serverInfo.name}!`, true);
@@ -1117,7 +1847,6 @@
             peer.on('connection', (conn) => {
                 console.log('Nova conexão recebida:', conn.peer);
                 
-                // Marca como pendente
                 pendingApprovals[conn.peer] = {
                     conn: conn,
                     status: 'pending'
@@ -1127,7 +1856,6 @@
                     showSystemMessage(`👤 ${conn.peer} está solicitando entrada no servidor`, false, false, true);
                     showSystemMessage(`🔐 Clique em "Aceitar" ou "Rejeitar" na mensagem abaixo`, false, false, true);
                     
-                    // Envia solicitação de aprovação
                     conn.send({
                         type: 'approval_request',
                         serverId: serverId,
@@ -1137,12 +1865,9 @@
 
                 conn.on('data', (data) => {
                     if (data.type === 'approval_response') {
-                        // Cliente respondeu à solicitação
                         if (data.accepted) {
-                            // Aceitou
                             acceptUser(conn.peer);
                         } else {
-                            // Rejeitou
                             rejectUser(conn.peer);
                         }
                     } else if (data.type === 'message') {
@@ -1158,9 +1883,9 @@
                             broadcastMessage(data, conn);
                         }
                     } else if (data.type === 'join') {
-                        // Armazena username
                         pendingApprovals[conn.peer].username = data.username;
-                        showSystemMessage(`📝 ${data.username} (${conn.peer}) quer entrar no servidor`, false, false, true);
+                        const displayName = users[data.username]?.displayName || data.username;
+                        showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar no servidor`, false, false, true);
                         showApprovalButtons(conn.peer, data.username);
                     }
                 });
@@ -1194,9 +1919,7 @@
             });
         }
 
-        // Mostrar botões de aprovação para o servidor
         function showApprovalButtons(peerId, username) {
-            // Remove botões antigos
             const oldBtns = document.querySelectorAll('.approval-buttons');
             oldBtns.forEach(btn => btn.remove());
             
@@ -1253,19 +1976,17 @@
             const pending = pendingApprovals[peerId];
             const conn = pending.conn;
             const username = pending.username || conn.peer;
+            const displayName = users[username]?.displayName || username;
             
-            // Adiciona ao chat
             clients[peerId] = conn;
-            showSystemMessage(`✅ ${username} foi aceito no servidor!`, false, false, false, true);
+            showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
             updateUserCount(Object.keys(clients).length);
             
-            // Notifica o cliente
             conn.send({
                 type: 'approval_result',
                 accepted: true
             });
             
-            // Envia histórico
             messageHistory.forEach(msg => {
                 conn.send({
                     type: 'history',
@@ -1276,16 +1997,13 @@
                 });
             });
             
-            // Anuncia para todos
             broadcastMessage({
                 type: 'system',
-                text: `${username} entrou no servidor`
+                text: `${displayName} entrou no servidor`
             }, conn);
             
-            // Remove pendência
             delete pendingApprovals[peerId];
             
-            // Remove botões
             const btns = document.querySelectorAll('.approval-buttons');
             btns.forEach(btn => btn.remove());
         }
@@ -1296,26 +2014,23 @@
             const pending = pendingApprovals[peerId];
             const conn = pending.conn;
             const username = pending.username || conn.peer;
+            const displayName = users[username]?.displayName || username;
             
-            showSystemMessage(`❌ ${username} foi rejeitado`, false, true);
+            showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
             
-            // Notifica o cliente
             conn.send({
                 type: 'approval_result',
                 accepted: false
             });
             
-            // Fecha a conexão
             setTimeout(() => {
                 try {
                     conn.close();
                 } catch (e) {}
             }, 1000);
             
-            // Remove pendência
             delete pendingApprovals[peerId];
             
-            // Remove botões
             const btns = document.querySelectorAll('.approval-buttons');
             btns.forEach(btn => btn.remove());
         }
@@ -1325,8 +2040,6 @@
             if (isServer && currentServer === serverId) return;
             
             cleanup();
-            hideApprovalOverlay();
-            hideRejectedOverlay();
             
             const serverInfo = SERVERS[serverId];
             if (!serverInfo) return;
@@ -1334,7 +2047,6 @@
             isServer = false;
             isConnected = false;
             currentServer = serverId;
-            approvalRejected = false;
             
             updateStatus(`Conectando a ${serverInfo.name}...`, 'connecting');
             showSystemMessage(`🔗 Tentando conectar ao ${serverInfo.name}...`);
@@ -1354,27 +2066,28 @@
                 serverConnection = conn;
                 
                 conn.on('open', () => {
-                    // Aguarda aprovação
-                    showApprovalOverlay(serverId);
+                    isWaitingApproval = true;
+                    approvalServerName.textContent = serverInfo.name;
+                    approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
+                    approvalStatus.style.color = '#ff9800';
+                    approvalOverlay.classList.remove('hidden');
                     updateStatus(`Aguardando aprovação em ${serverInfo.name}`, 'waiting');
                     
                     conn.send({
                         type: 'join',
-                        username: currentUsername
+                        username: currentUser
                     });
                 });
 
                 conn.on('data', (data) => {
                     if (data.type === 'approval_request') {
-                        // Recebeu solicitação de aprovação - já está na tela de espera
                         approvalStatus.textContent = '⏳ Aguardando resposta do administrador...';
                         approvalStatus.style.color = '#ff9800';
                     } else if (data.type === 'approval_result') {
                         if (data.accepted) {
-                            // Foi aceito!
                             isConnected = true;
                             isWaitingApproval = false;
-                            hideApprovalOverlay();
+                            approvalOverlay.classList.add('hidden');
                             updateStatus(`Conectado a ${serverInfo.name}`, 'online');
                             showSystemMessage(`✅ Você foi aceito no ${serverInfo.name}!`, false, false, false, true);
                             setInputEnabled(true);
@@ -1382,21 +2095,17 @@
                             approvalStatus.textContent = '✅ Aceito!';
                             approvalStatus.style.color = '#4caf50';
                             
-                            // Fecha overlay após 1 segundo
                             setTimeout(() => {
-                                hideApprovalOverlay();
+                                approvalOverlay.classList.add('hidden');
                             }, 1000);
                         } else {
-                            // Foi rejeitado
                             isWaitingApproval = false;
-                            hideApprovalOverlay();
-                            showRejectedOverlay(serverId);
+                            approvalOverlay.classList.add('hidden');
                             updateStatus(`Rejeitado em ${serverInfo.name}`, 'offline');
                             updateServerStatus(serverId, 'offline');
                             setInputEnabled(false);
                             markServerActive(null);
                             
-                            // Fecha conexão
                             setTimeout(() => {
                                 try {
                                     conn.close();
@@ -1449,7 +2158,7 @@
                     if (err.type === 'peer-unavailable') {
                         showSystemMessage(`⚠️ ${serverInfo.name} não encontrado. Iniciando como servidor...`, false, true);
                         updateServerStatus(serverId, 'offline');
-                        hideApprovalOverlay();
+                        approvalOverlay.classList.add('hidden');
                         setTimeout(() => {
                             startAsServer(serverId);
                         }, 1000);
@@ -1457,7 +2166,7 @@
                         updateStatus('Erro', 'offline');
                         setInputEnabled(false);
                         updateServerStatus(serverId, 'offline');
-                        hideApprovalOverlay();
+                        approvalOverlay.classList.add('hidden');
                     }
                 });
             });
@@ -1471,7 +2180,6 @@
             });
         }
 
-        // LIMPEZA
         function cleanup() {
             if (peer) {
                 try {
@@ -1487,41 +2195,29 @@
                 stopRecording();
             }
             
-            hideApprovalOverlay();
+            approvalOverlay.classList.add('hidden');
             
-            // Remove botões de aprovação
             const btns = document.querySelectorAll('.approval-buttons');
             btns.forEach(btn => btn.remove());
         }
 
-        // SELECIONAR SERVIDOR
         function selectServer(serverId) {
-            if (approvalRejected) {
-                showSystemMessage(`⚠️ Você foi rejeitado neste servidor. Tente outro.`, false, true);
-                return;
-            }
-            
             if (serverId === currentServer && isConnected) {
                 showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
                 return;
             }
             
-            // Limpa mensagens antigas
             messagesContainer.innerHTML = '';
             messageHistory = [];
-            hideApprovalOverlay();
-            hideRejectedOverlay();
+            approvalOverlay.classList.add('hidden');
             
-            // Mostra mensagem de conexão
             const msg = document.createElement('div');
             msg.className = 'system-msg';
             msg.textContent = `🔌 Conectando ao ${SERVERS[serverId].name}...`;
             messagesContainer.appendChild(msg);
             
-            // Tenta conectar como cliente primeiro
             connectAsClient(serverId);
             
-            // Se não conectar em 5 segundos, tenta criar servidor
             setTimeout(() => {
                 if (!isConnected && !isServer && !isWaitingApproval) {
                     startAsServer(serverId);
@@ -1529,7 +2225,22 @@
             }, 5000);
         }
 
-        // EVENT LISTENERS
+        // INICIALIZAR CHAT
+        function initChat() {
+            Object.keys(SERVERS).forEach(id => {
+                updateServerStatus(parseInt(id), 'offline');
+            });
+            
+            showSystemMessage('👆 Selecione um servidor para entrar');
+            updateStatus('Selecione um servidor', 'offline');
+            setInputEnabled(false);
+            
+            // Mostrar nome do usuário logado
+            const displayName = users[currentUser]?.displayName || currentUser;
+            showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
+        }
+
+        // EVENT LISTENERS DO CHAT
         serverBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const serverId = parseInt(btn.dataset.server);
@@ -1555,14 +2266,13 @@
 
         cancelApprovalBtn.addEventListener('click', () => {
             if (isWaitingApproval) {
-                hideApprovalOverlay();
+                approvalOverlay.classList.add('hidden');
                 showSystemMessage('❌ Solicitação de entrada cancelada', false, true);
                 updateStatus('Desconectado', 'offline');
                 setInputEnabled(false);
                 markServerActive(null);
                 cleanup();
                 
-                // Tenta reconectar depois
                 setTimeout(() => {
                     if (!isConnected && !isServer) {
                         const serverId = currentServer;
@@ -1573,26 +2283,6 @@
                 }, 2000);
             }
         });
-
-        rejectedOkBtn.addEventListener('click', () => {
-            hideRejectedOverlay();
-            showSystemMessage('👆 Selecione outro servidor para tentar novamente');
-            updateStatus('Selecione um servidor', 'offline');
-            setInputEnabled(false);
-            markServerActive(null);
-            cleanup();
-        });
-
-        // INICIALIZAR
-        function init() {
-            Object.keys(SERVERS).forEach(id => {
-                updateServerStatus(parseInt(id), 'offline');
-            });
-            
-            showSystemMessage('👆 Selecione um servidor para entrar');
-            updateStatus('Selecione um servidor', 'offline');
-            setInputEnabled(false);
-        }
 
         // VERIFICAÇÃO DE SAÚDE
         setInterval(() => {
@@ -1605,12 +2295,19 @@
             }
         }, 5000);
 
-        // INICIA
-        init();
+        // INICIALIZAR
+        console.log('Sistema completo iniciado!');
+        console.log('Usuários:', users);
+        console.log('Admin:', users['admin']);
 
-        console.log('Servidores disponíveis:', SERVERS);
-        console.log('Seu nome:', currentUsername);
-        console.log('Sistema de aprovação ativo!');
+        // Mostrar tela de login
+        loginScreen.classList.remove('hidden');
+        updateLoginTexts();
+
+        // Se admin já tem senha, esconder campo de confirmação
+        if (users['admin'].password) {
+            confirmPasswordGroup.style.display = 'none';
+        }
 
     })();
 </script>
