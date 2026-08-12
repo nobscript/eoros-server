@@ -33,6 +33,3018 @@
             --message-own-text: #ffffff;
             --message-other-text: #e8e8f0;
             --glass-bg: rgba(18, 18, 26, 0.85);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        [data-color="blue"] { --accent: #5865f2; --accent-hover: #4752c4; --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6); --message-own: #5865f2; }
+        [data-color="purple"] { --accent: #8b5cf6; --accent-hover: #7c3aed; --accent-gradient: linear-gradient(135deg, #8b5cf6, #a78bfa); --message-own: #8b5cf6; }
+        [data-color="pink"] { --accent: #ec4899; --accent-hover: #db2777; --accent-gradient: linear-gradient(135deg, #ec4899, #f472b6); --message-own: #ec4899; }
+        [data-color="red"] { --accent: #ef4444; --accent-hover: #dc2626; --accent-gradient: linear-gradient(135deg, #ef4444, #f87171); --message-own: #ef4444; }
+        [data-color="orange"] { --accent: #f59e0b; --accent-hover: #d97706; --accent-gradient: linear-gradient(135deg, #f59e0b, #fbbf24); --message-own: #f59e0b; }
+        [data-color="green"] { --accent: #10b981; --accent-hover: #059669; --accent-gradient: linear-gradient(135deg, #10b981, #34d399); --message-own: #10b981; }
+        [data-color="teal"] { --accent: #14b8a6; --accent-hover: #0d9488; --accent-gradient: linear-gradient(135deg, #14b8a6, #5eead4); --message-own: #14b8a6; }
+        [data-color="cyan"] { --accent: #06b6d4; --accent-hover: #0891b2; --accent-gradient: linear-gradient(135deg, #06b6d4, #67e8f9); --message-own: #06b6d4; }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eaed;
+            --bg-input: #f0f2f5;
+            --text-primary: #1a1a2e;
+            --text-secondary: #555577;
+            --text-muted: #8888aa;
+            --border-color: #d0d2d6;
+            --shadow: 0 20px 60px rgba(0,0,0,0.08);
+            --message-other: #e8eaed;
+            --card-bg: #ffffff;
+            --input-bg: #f0f2f5;
+            --hover-bg: #e8eaed;
+            --message-other-text: #1a1a2e;
+            --message-own-text: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        [data-device="desktop"] {
+            --container-width: 820px;
+            --container-height: 88vh;
+            --border-radius: 20px;
+        }
+
+        [data-device="desktop"] .chat-container {
+            max-width: var(--container-width);
+            border-radius: var(--border-radius);
+        }
+        [data-device="desktop"] .messages { padding: 20px 24px 12px; }
+        [data-device="desktop"] .message { max-width: 70%; }
+        [data-device="desktop"] .login-screen .login-box { max-width: 440px; }
+        [data-device="desktop"] .server-selector { padding: 12px 24px; gap: 12px; }
+        [data-device="desktop"] .server-btn { padding: 10px 20px; font-size: 13px; min-width: 110px; }
+        [data-device="desktop"] .input-area { padding: 14px 24px 18px; }
+        [data-device="desktop"] .input-area .action-btn { width: 48px; height: 48px; font-size: 20px; }
+        [data-device="desktop"] .chat-header { padding: 16px 24px; }
+        [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 20px; }
+        [data-device="desktop"] .chat-header .header-left .user-avatar { width: 38px; height: 38px; }
+        [data-device="desktop"] .message .msg-avatar { width: 32px; height: 32px; }
+        [data-device="desktop"] .message .msg-text { font-size: 15px; padding-left: 40px; }
+        [data-device="desktop"] .message .msg-user { font-size: 14px; }
+        [data-device="desktop"] .profile-photo-preview { width: 120px; height: 120px; }
+
+        [data-device="mobile"] .chat-container {
+            max-width: 480px;
+            height: 100vh;
+            max-height: none;
+            border-radius: 0;
+        }
+        [data-device="mobile"] .messages { padding: 12px 14px 8px; }
+        [data-device="mobile"] .message { max-width: 88%; }
+        [data-device="mobile"] .login-screen .login-box { max-width: 400px; }
+
+        /* ===== ESTILOS GERAIS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font);
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(88, 101, 242, 0.06) 0%, transparent 60%);
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: var(--container-width);
+            height: var(--container-height);
+            max-height: 820px;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(2px);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
+
+        /* ===== TELA DE LOGIN ===== */
+        .login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            overflow-y: auto;
+        }
+
+        .login-screen.hidden { display: none; }
+
+        .login-screen .login-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 36px 32px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+        }
+
+        .login-screen .login-box .logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .login-screen .login-box .logo .logo-icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 4px;
+            animation: lightning 2.5s infinite;
+            filter: drop-shadow(0 0 30px rgba(88, 101, 242, 0.3));
+        }
+
+        @keyframes lightning {
+            0%, 90%, 100% { opacity: 1; transform: scale(1); }
+            92% { opacity: 0.3; transform: scale(0.92); }
+            94% { opacity: 1; transform: scale(1.05); }
+            96% { opacity: 0.5; transform: scale(0.96); }
+        }
+
+        .login-screen .login-box .logo h1 {
+            font-size: 30px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            margin-bottom: 2px;
+        }
+
+        .login-screen .login-box .logo .greeting {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            -webkit-text-fill-color: var(--text-secondary);
+        }
+
+        .login-screen .login-box .logo .greeting span {
+            display: inline-block;
+            animation: wave 2.5s infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(16deg); }
+            75% { transform: rotate(-8deg); }
+        }
+
+        .login-screen .login-box .logo .device-info {
+            display: inline-block;
+            background: var(--bg-input);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        /* ===== FOTO PERFIL ===== */
+        .profile-photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-photo-preview {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            overflow: hidden;
+            background: var(--bg-input);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 0 0 rgba(88, 101, 242, 0.2);
+        }
+
+        .profile-photo-preview:hover {
+            border-color: var(--accent-hover);
+            transform: scale(1.04);
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.2);
+        }
+
+        .profile-photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-photo-preview .placeholder {
+            color: var(--text-muted);
+            font-size: 36px;
+            text-align: center;
+        }
+
+        .profile-photo-preview .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            font-size: 10px;
+            padding: 5px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .profile-photo-preview:hover .upload-overlay { opacity: 1; }
+        .profile-photo-input { display: none; }
+
+        /* ===== FORMULÁRIO ===== */
+        .login-screen .login-box .form-group { margin-bottom: 16px; }
+
+        .login-screen .login-box .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .login-screen .login-box .form-group input {
+            width: 100%;
+            padding: 13px 18px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .login-screen .login-box .form-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.12);
+        }
+
+        .login-screen .login-box .form-group input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .login-screen .login-box .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-screen .login-box .btn-login::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg) translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .login-screen .login-box .btn-login:hover::after {
+            transform: rotate(45deg) translateX(100%);
+        }
+
+        .login-screen .login-box .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(88, 101, 242, 0.35);
+        }
+
+        .login-screen .login-box .btn-login:active { transform: scale(0.97); }
+        .login-screen .login-box .btn-login:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .login-screen .login-box .error-msg {
+            color: var(--error);
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 20px;
+            font-weight: 500;
+        }
+
+        .login-screen .login-box .success-msg {
+            color: var(--success);
+            font-size: 13px;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 20px;
+            font-weight: 500;
+        }
+
+        .login-screen .login-box .language-selector {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .login-screen .login-box .language-selector .lang-btn {
+            flex: 1;
+            padding: 7px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-width: 50px;
+        }
+
+        .login-screen .login-box .language-selector .lang-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .login-screen .login-box .language-selector .lang-btn.active {
+            border-color: var(--accent);
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.25);
+        }
+
+        /* ===== HEADER ===== */
+        .chat-header {
+            background: var(--bg-primary);
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .chat-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-header .header-left .logo-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header .header-left .logo-mini .lightning {
+            font-size: 22px;
+            animation: lightning 2.5s infinite;
+        }
+
+        .chat-header .header-left .logo-mini .brand {
+            font-size: 18px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .chat-header .header-left .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2.5px solid var(--accent);
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .chat-header .header-left .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .chat-header .header-left .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-header .header-left .user-avatar .placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .chat-header .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header .header-right .theme-btn,
+        .chat-header .header-right .config-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header .header-right .theme-btn:hover,
+        .chat-header .header-right .config-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.1);
+        }
+
+        .user-count {
+            color: var(--text-secondary);
+            font-size: 11px;
+            background: var(--bg-secondary);
+            padding: 3px 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .chat-header .device-badge {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 30px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .chat-header .device-badge.mobile { border-color: var(--warning); color: var(--warning); }
+        .chat-header .device-badge.desktop { border-color: var(--success); color: var(--success); }
+        .chat-header .device-badge.tablet { border-color: var(--accent); color: var(--accent); }
+
+        /* ===== SERVER SELECTOR ===== */
+        .server-selector {
+            background: var(--bg-primary);
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .server-btn {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 18px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .server-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.1);
+        }
+
+        .server-btn.active {
+            border-color: var(--accent);
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 25px rgba(88, 101, 242, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .server-btn .status-indicator {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .server-btn .status-indicator.online { background: var(--success); box-shadow: 0 0 10px rgba(76, 175, 80, 0.4); }
+        .server-btn .status-indicator.offline { background: var(--error); box-shadow: 0 0 10px rgba(244, 67, 54, 0.3); }
+        .server-btn .status-indicator.creating { background: var(--warning); animation: pulse 0.5s infinite; }
+
+        /* ===== MESSAGES ===== */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 14px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            scroll-behavior: smooth;
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(88, 101, 242, 0.03) 0%, transparent 60%);
+        }
+
+        .message {
+            background: var(--message-other);
+            padding: 10px 14px;
+            border-radius: 16px;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .message.own {
+            align-self: flex-end;
+            background: var(--message-own);
+            border-color: var(--message-own);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.15);
+        }
+
+        .message .msg-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .message .msg-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .message .msg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message .msg-avatar .placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .message.own .msg-avatar { border-color: rgba(255,255,255,0.2); }
+
+        .message .msg-user {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .message.own .msg-user { color: rgba(255,255,255,0.85); }
+
+        .message .msg-user .badge {
+            background: var(--border-color);
+            font-size: 8px;
+            padding: 1px 8px;
+            border-radius: 30px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .message.own .msg-user .badge {
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .message .msg-user .admin-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            font-size: 8px;
+            padding: 1px 8px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        .message .msg-text {
+            color: var(--message-other-text);
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+            padding-left: 34px;
+        }
+
+        .message.own .msg-text { color: var(--message-own-text); }
+
+        .message .msg-text img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .message .msg-time {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            text-align: right;
+            padding-left: 34px;
+            font-weight: 500;
+        }
+
+        .message.own .msg-time { color: rgba(255,255,255,0.6); }
+
+        /* ===== IMAGEM MENSAGEM ===== */
+        .image-message {
+            max-width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .image-message:hover { filter: brightness(0.92); transform: scale(1.005); }
+        .image-message img { max-width: 100%; max-height: 280px; border-radius: 10px; display: block; }
+
+        /* ===== ÁUDIO MESSAGE ===== */
+        .audio-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 12px;
+            margin: 2px 0;
+            min-width: 140px;
+        }
+
+        .message.own .audio-message { background: rgba(255,255,255,0.08); }
+
+        .audio-message .play-btn {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(88, 101, 242, 0.2);
+        }
+
+        .audio-message .play-btn:hover { transform: scale(1.08); box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3); }
+        .audio-message .play-btn:active { transform: scale(0.92); }
+
+        .audio-message .audio-progress {
+            flex: 1;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            min-width: 40px;
+        }
+
+        .audio-message .audio-progress .progress-bar {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .audio-message .audio-time {
+            color: var(--text-secondary);
+            font-size: 10px;
+            min-width: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.own .audio-message .audio-time { color: rgba(255,255,255,0.7); }
+
+        /* ===== SYSTEM MESSAGES ===== */
+        .system-msg {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 4px 0;
+            background: transparent;
+            border: none;
+            align-self: center;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .system-msg.server { color: var(--accent); font-weight: 600; }
+        .system-msg.error { color: var(--error); }
+        .system-msg.warning { color: var(--warning); font-weight: 600; }
+        .system-msg.success { color: var(--success); font-weight: 600; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.3; transform: scale(0.9); }
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-area {
+            background: var(--bg-primary);
+            padding: 10px 14px 14px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .input-area .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 30px;
+            padding: 11px 18px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            min-width: 0;
+            font-weight: 500;
+        }
+
+        .input-area input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.08);
+        }
+
+        .input-area input::placeholder { color: var(--text-muted); font-weight: 400; }
+        .input-area input:disabled { opacity: 0.4; }
+
+        .input-area .action-btn {
+            background: var(--bg-secondary);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 44px;
+            height: 44px;
+            border-radius: 30px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .input-area .action-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: scale(1.05);
+        }
+
+        .input-area .action-btn:active { transform: scale(0.92); }
+
+        .input-area .action-btn.recording {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+            animation: pulse 0.6s infinite;
+            box-shadow: 0 0 30px rgba(244, 67, 54, 0.2);
+        }
+
+        .input-area .action-btn.send-btn {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.2);
+        }
+
+        .input-area .action-btn.send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.35);
+        }
+
+        .input-area .action-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .input-area .action-btn .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            left: 0;
+            top: 0;
+        }
+
+        .input-area .recording-timer {
+            color: var(--error);
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            min-height: 18px;
+        }
+
+        /* ===== APPROVAL OVERLAY ===== */
+        .approval-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(16px);
+        }
+
+        .approval-overlay.hidden { display: none; }
+
+        .approval-overlay .approval-box {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .approval-overlay .approval-box .icon { font-size: 48px; margin-bottom: 10px; }
+        .approval-overlay .approval-box h2 {
+            color: var(--text-primary);
+            font-size: 20px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .approval-overlay .approval-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .approval-overlay .approval-box .user-info {
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .approval-overlay .approval-box .user-info .label {
+            color: var(--text-muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .approval-overlay .approval-box .user-info .value {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .approval-overlay .approval-box .status-message {
+            color: var(--warning);
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .approval-overlay .approval-box .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .approval-overlay .approval-box .buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .approval-overlay .approval-box .buttons button:active { transform: scale(0.95); }
+        .approval-overlay .approval-box .buttons .btn-reject { 
+            background: var(--error); 
+            color: white;
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2);
+        }
+        .approval-overlay .approval-box .buttons .btn-reject:hover { 
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+
+        /* ===== STATUS BAR ===== */
+        .status-bar {
+            background: var(--bg-primary);
+            padding: 4px 14px;
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .status-bar .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-bar .status-dot.offline { background: var(--error); animation: none; }
+        .status-bar .status-dot.connecting { background: var(--warning); animation: pulse 0.5s infinite; }
+        .status-bar .status-dot.waiting { background: var(--warning); animation: pulse 1s infinite; }
+
+        /* ===== MODAL CONFIGURAÇÃO ===== */
+        .config-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(16px);
+        }
+
+        .config-modal.hidden { display: none; }
+
+        .config-modal .config-box {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .config-modal .config-box h2 {
+            color: var(--text-primary);
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .config-modal .config-box .form-group { margin-bottom: 16px; }
+
+        .config-modal .config-box .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .config-modal .config-box .form-group input,
+        .config-modal .config-box .form-group select {
+            width: 100%;
+            padding: 11px 16px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .config-modal .config-box .form-group input:focus,
+        .config-modal .config-box .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.08);
+        }
+
+        .config-modal .config-box .profile-photo-container { margin-bottom: 16px; }
+        .config-modal .config-box .profile-photo-preview { width: 72px; height: 72px; }
+
+        .config-modal .config-box .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .config-modal .config-box .color-options .color-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2.5px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .config-modal .config-box .color-options .color-btn:hover { transform: scale(1.12); }
+        .config-modal .config-box .color-options .color-btn.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.25);
+            transform: scale(1.08);
+        }
+
+        .config-modal .config-box .color-options .color-btn .check { display: none; color: white; font-weight: 700; }
+        .config-modal .config-box .color-options .color-btn.active .check { display: block; }
+
+        .config-modal .config-box .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .config-modal .config-box .btn-group button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .config-modal .config-box .btn-group button:active { transform: scale(0.95); }
+        .config-modal .config-box .btn-save {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.2);
+        }
+
+        .config-modal .config-box .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.35);
+        }
+
+        .config-modal .config-box .btn-close {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .config-modal .config-box .btn-close:hover { 
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .config-modal .config-box .admin-section {
+            background: var(--bg-primary);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid #ffd700;
+        }
+
+        .config-modal .config-box .admin-section .admin-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .config-modal .config-box .admin-section p {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* ===== IMAGE MODAL ===== */
+        .image-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+        }
+
+        .image-modal.hidden { display: none; }
+        .image-modal img { 
+            max-width: 100%; 
+            max-height: 90vh; 
+            border-radius: 16px; 
+            object-fit: contain;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 480px) {
+            .chat-container { height: 100vh; max-height: none; border-radius: 0; }
+            .chat-header .header-left .logo-mini .brand { font-size: 15px; }
+            .chat-header .header-left .logo-mini .lightning { font-size: 18px; }
+            .server-btn { font-size: 10px; padding: 5px 9px; min-width: 55px; }
+            .input-area .action-btn { width: 38px; height: 38px; font-size: 15px; }
+            .input-area input { font-size: 13px; padding: 9px 14px; }
+            .audio-message { min-width: 100px; flex-wrap: wrap; }
+            .login-screen .login-box { padding: 22px 18px; }
+            .config-modal .config-box { padding: 18px; }
+            .approval-overlay .approval-box { padding: 20px; }
+            .message .msg-text { padding-left: 0; }
+            .message .msg-time { padding-left: 0; }
+            .message .msg-avatar { width: 22px; height: 22px; }
+            .chat-header .header-left .user-avatar { width: 28px; height: 28px; }
+            .profile-photo-preview { width: 72px; height: 72px; }
+            .config-modal .config-box .profile-photo-preview { width: 56px; height: 56px; }
+            .chat-header .device-badge { font-size: 8px; padding: 1px 6px; }
+
+            [data-device="desktop"] .chat-container {
+                max-width: 480px;
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+            [data-device="desktop"] .messages { padding: 10px 12px 6px; }
+            [data-device="desktop"] .message { max-width: 88%; }
+            [data-device="desktop"] .server-selector { padding: 8px 12px; }
+            [data-device="desktop"] .server-btn { padding: 5px 9px; font-size: 10px; min-width: 55px; }
+            [data-device="desktop"] .input-area { padding: 8px 12px 12px; }
+            [data-device="desktop"] .input-area .action-btn { width: 38px; height: 38px; font-size: 15px; }
+            [data-device="desktop"] .chat-header { padding: 10px 14px; }
+            [data-device="desktop"] .chat-header .header-left .logo-mini .brand { font-size: 15px; }
+            [data-device="desktop"] .chat-header .header-left .user-avatar { width: 28px; height: 28px; }
+            [data-device="desktop"] .message .msg-avatar { width: 22px; height: 22px; }
+            [data-device="desktop"] .message .msg-text { font-size: 14px; padding-left: 0; }
+            [data-device="desktop"] .message .msg-user { font-size: 12px; }
+            [data-device="desktop"] .profile-photo-preview { width: 72px; height: 72px; }
+            [data-device="desktop"] .config-modal .config-box .profile-photo-preview { width: 56px; height: 56px; }
+        }
+
+        @media (max-width: 380px) {
+            .input-area .action-btn { width: 34px; height: 34px; font-size: 13px; }
+            .input-area input { font-size: 12px; padding: 7px 12px; }
+            .server-btn { font-size: 9px; padding: 4px 7px; min-width: 45px; }
+            .config-modal .config-box .color-options .color-btn { width: 28px; height: 28px; }
+            .login-screen .login-box .logo h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container" id="app">
+    <!-- TELA DE LOGIN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <h1>EOROS</h1>
+                <p class="greeting">👋 <span>Olá</span>, bem-vindo de volta!</p>
+                <div class="device-info" id="loginDeviceInfo">📱 Carregando...</div>
+            </div>
+
+            <div class="profile-photo-container">
+                <div class="profile-photo-preview" id="loginPhotoPreview">
+                    <div class="placeholder" id="loginPhotoPlaceholder">📸</div>
+                    <div class="upload-overlay">Clique para adicionar</div>
+                </div>
+                <input type="file" class="profile-photo-input" id="loginPhotoInput" accept="image/*">
+            </div>
+
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="pt">🇧🇷 PT</button>
+                <button class="lang-btn" data-lang="en">🇺🇸 EN</button>
+                <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+                <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+            </div>
+
+            <div class="form-group">
+                <label id="loginUsernameLabel">Nome de Usuário</label>
+                <input type="text" id="loginUsername" placeholder="Digite seu nome">
+            </div>
+
+            <div class="form-group">
+                <label id="loginPasswordLabel">Senha</label>
+                <input type="password" id="loginPassword" placeholder="Digite sua senha">
+            </div>
+
+            <div class="form-group" id="confirmPasswordGroup" style="display:none;">
+                <label id="loginConfirmLabel">Confirmar Senha</label>
+                <input type="password" id="loginConfirmPassword" placeholder="Confirme sua senha">
+            </div>
+
+            <div class="error-msg" id="loginError"></div>
+            <div class="success-msg" id="loginSuccess"></div>
+
+            <button class="btn-login" id="loginBtn">⚡ Entrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAÇÃO -->
+    <div class="config-modal hidden" id="configModal">
+        <div class="config-box">
+            <h2>⚙️ Configurações</h2>
+            
+            <div class="admin-section" id="adminSection">
+                <div class="admin-badge">👑 ADMIN</div>
+                <p>Você é administrador do sistema.</p>
+            </div>
+
+            <div class="profile-photo-container">
+                <div class="profile-photo-preview" id="configPhotoPreview">
+                    <div class="placeholder" id="configPhotoPlaceholder">📸</div>
+                    <div class="upload-overlay">Alterar foto</div>
+                </div>
+                <input type="file" class="profile-photo-input" id="configPhotoInput" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Nome de Exibição</label>
+                <input type="text" id="configDisplayName" placeholder="Seu nome no chat">
+            </div>
+
+            <div class="form-group">
+                <label>🎨 Cor do Tema</label>
+                <div class="color-options" id="colorOptions">
+                    <button class="color-btn active" data-color="blue" style="background: #5865f2;">✓</button>
+                    <button class="color-btn" data-color="purple" style="background: #8b5cf6;">✓</button>
+                    <button class="color-btn" data-color="pink" style="background: #ec4899;">✓</button>
+                    <button class="color-btn" data-color="red" style="background: #ef4444;">✓</button>
+                    <button class="color-btn" data-color="orange" style="background: #f59e0b;">✓</button>
+                    <button class="color-btn" data-color="green" style="background: #10b981;">✓</button>
+                    <button class="color-btn" data-color="teal" style="background: #14b8a6;">✓</button>
+                    <button class="color-btn" data-color="cyan" style="background: #06b6d4;">✓</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Nova Senha</label>
+                <input type="password" id="configPassword" placeholder="Nova senha (mínimo 8 caracteres)">
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Confirmar Nova Senha</label>
+                <input type="password" id="configConfirmPassword" placeholder="Confirme a nova senha">
+            </div>
+
+            <div class="form-group">
+                <label>🌐 Idioma</label>
+                <select id="configLanguage">
+                    <option value="pt">Português</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-save" id="configSaveBtn">💾 Salvar</button>
+                <button class="btn-close" id="configCloseBtn">✖ Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE MODAL -->
+    <div class="image-modal hidden" id="imageModal">
+        <img id="imageModalContent" src="" alt="Imagem">
+    </div>
+
+    <!-- CHAT HEADER -->
+    <div class="chat-header">
+        <div class="header-left">
+            <div class="user-avatar" id="headerAvatar">
+                <div class="placeholder" id="headerAvatarPlaceholder">👤</div>
+            </div>
+            <div class="logo-mini">
+                <span class="lightning">⚡</span>
+                <span class="brand">EOROS</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="device-badge" id="headerDeviceBadge">📱</span>
+            <button class="theme-btn" id="themeBtn" title="Alternar Tema">🌓</button>
+            <button class="config-btn" id="configBtn" title="Configurações">⚙️</button>
+            <div class="user-count" id="userCount">👥 0</div>
+        </div>
+    </div>
+
+    <!-- SERVER SELECTOR -->
+    <div class="server-selector" id="serverSelector">
+        <button class="server-btn" data-server="1" id="server1Btn">
+            <span class="status-indicator" id="status1"></span> Servidor 1
+        </button>
+        <button class="server-btn" data-server="2" id="server2Btn">
+            <span class="status-indicator" id="status2"></span> Servidor 2
+        </button>
+        <button class="server-btn" data-server="3" id="server3Btn">
+            <span class="status-indicator" id="status3"></span> Servidor 3
+        </button>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="messages" id="messagesContainer">
+        <div class="system-msg">⚡ Selecione um servidor para entrar</div>
+    </div>
+
+    <!-- APPROVAL OVERLAY -->
+    <div class="approval-overlay hidden" id="approvalOverlay">
+        <div class="approval-box">
+            <div class="icon">🔐</div>
+            <h2>Aguardando Aprovação</h2>
+            <p>O administrador do servidor precisa aprovar sua entrada.</p>
+            <div class="user-info">
+                <div class="label">Solicitando entrada em</div>
+                <div class="value" id="approvalServerName">Servidor 1</div>
+            </div>
+            <div class="status-message" id="approvalStatus">⏳ Aguardando resposta...</div>
+            <div class="buttons">
+                <button class="btn-reject" id="cancelApprovalBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT AREA -->
+    <div class="input-area">
+        <div class="input-row">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem..." maxlength="500" autocomplete="off" disabled>
+            <button class="action-btn" id="imageBtn" title="Enviar Imagem (até 5MB)" disabled>
+                🖼️
+                <input type="file" class="file-input" id="imageInput" accept="image/*">
+            </button>
+            <button class="action-btn" id="audioBtn" title="Gravar Áudio (30s)" disabled>🎤</button>
+            <button class="action-btn send-btn" id="sendBtn" aria-label="Enviar" disabled>⚡</button>
+        </div>
+        <div class="recording-timer" id="recordingTimer"></div>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+        <span><span class="status-dot" id="statusDot"></span> <span id="statusText">Desconectado</span></span>
+        <span id="connectionStatus">Selecione um servidor</span>
+    </div>
+</div>
+
+<script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
+<script>
+    (function() {
+        'use strict';
+
+        // ===== DETECTAR DISPOSITIVO =====
+        function detectDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768;
+            
+            if (isTablet) return { type: 'tablet', icon: '📱', label: 'Tablet' };
+            if (isMobile) return { type: 'mobile', icon: '📱', label: 'Mobile' };
+            return { type: 'desktop', icon: '💻', label: 'Desktop' };
+        }
+
+        const deviceInfo = detectDevice();
+        document.documentElement.setAttribute('data-device', deviceInfo.type);
+
+        // ===== TEMA E COR =====
+        let currentTheme = localStorage.getItem('eoros_theme') || 'dark';
+        let currentColor = localStorage.getItem('eoros_color') || 'blue';
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            currentTheme = theme;
+            localStorage.setItem('eoros_theme', theme);
+            const themeBtn = document.getElementById('themeBtn');
+            if (themeBtn) themeBtn.textContent = theme === 'dark' ? '🌓' : '☀️';
+        }
+
+        function applyColor(color) {
+            document.documentElement.setAttribute('data-color', color);
+            currentColor = color;
+            localStorage.setItem('eoros_color', color);
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.color === color);
+            });
+        }
+
+        // ===== TRADUÇÕES =====
+        const TRANSLATIONS = {
+            pt: {
+                greeting: '👋 Olá, bem-vindo de volta!',
+                username: 'Nome de Usuário',
+                password: 'Senha',
+                confirmPassword: 'Confirmar Senha',
+                loginBtn: '⚡ Entrar',
+                loginError: 'Erro ao fazer login. Verifique suas credenciais.',
+                loginSuccess: 'Login realizado com sucesso!',
+                firstAccess: 'Primeiro acesso! Defina sua senha.',
+                passwordMismatch: 'As senhas não coincidem.',
+                passwordShort: 'A senha deve ter no mínimo 8 caracteres.',
+                userExists: 'Usuário já existe. Faça login com sua senha.',
+                configTitle: '⚙️ Configurações',
+                displayName: 'Nome de Exibição',
+                newPassword: '🔒 Nova Senha',
+                confirmNewPassword: '🔒 Confirmar Nova Senha',
+                language: '🌐 Idioma',
+                save: '💾 Salvar',
+                close: '✖ Fechar',
+                adminSection: 'Você é administrador do sistema.',
+                photoRequired: '⚠️ Por favor, adicione uma foto de perfil.',
+                imageTooLarge: '⚠️ A imagem é muito grande. Máximo 5MB.',
+                invalidImage: '⚠️ Formato de imagem inválido.',
+                colorTheme: '🎨 Cor do Tema'
+            },
+            en: {
+                greeting: '👋 Hello, welcome back!',
+                username: 'Username',
+                password: 'Password',
+                confirmPassword: 'Confirm Password',
+                loginBtn: '⚡ Login',
+                loginError: 'Login error. Check your credentials.',
+                loginSuccess: 'Login successful!',
+                firstAccess: 'First access! Set your password.',
+                passwordMismatch: 'Passwords do not match.',
+                passwordShort: 'Password must be at least 8 characters.',
+                userExists: 'User already exists. Login with your password.',
+                configTitle: '⚙️ Settings',
+                displayName: 'Display Name',
+                newPassword: '🔒 New Password',
+                confirmNewPassword: '🔒 Confirm New Password',
+                language: '🌐 Language',
+                save: '💾 Save',
+                close: '✖ Close',
+                adminSection: 'You are the system administrator.',
+                photoRequired: '⚠️ Please add a profile photo.',
+                imageTooLarge: '⚠️ Image is too large. Max 5MB.',
+                invalidImage: '⚠️ Invalid image format.',
+                colorTheme: '🎨 Color Theme'
+            },
+            es: {
+                greeting: '👋 Hola, ¡bienvenido de nuevo!',
+                username: 'Nombre de Usuario',
+                password: 'Contraseña',
+                confirmPassword: 'Confirmar Contraseña',
+                loginBtn: '⚡ Entrar',
+                loginError: 'Error al iniciar sesión. Verifique sus credenciales.',
+                loginSuccess: '¡Inicio de sesión exitoso!',
+                firstAccess: '¡Primer acceso! Establezca su contraseña.',
+                passwordMismatch: 'Las contraseñas no coinciden.',
+                passwordShort: 'La contraseña debe tener al menos 8 caracteres.',
+                userExists: 'El usuario ya existe. Inicie sesión con su contraseña.',
+                configTitle: '⚙️ Configuración',
+                displayName: 'Nombre de Pantalla',
+                newPassword: '🔒 Nueva Contraseña',
+                confirmNewPassword: '🔒 Confirmar Nueva Contraseña',
+                language: '🌐 Idioma',
+                save: '💾 Guardar',
+                close: '✖ Cerrar',
+                adminSection: 'Eres el administrador del sistema.',
+                photoRequired: '⚠️ Por favor, agregue una foto de perfil.',
+                imageTooLarge: '⚠️ La imagen es demasiado grande. Máximo 5MB.',
+                invalidImage: '⚠️ Formato de imagen inválido.',
+                colorTheme: '🎨 Tema de Color'
+            },
+            ru: {
+                greeting: '👋 Привет, добро пожаловать!',
+                username: 'Имя пользователя',
+                password: 'Пароль',
+                confirmPassword: 'Подтвердите пароль',
+                loginBtn: '⚡ Войти',
+                loginError: 'Ошибка входа. Проверьте учетные данные.',
+                loginSuccess: 'Вход выполнен успешно!',
+                firstAccess: 'Первый вход! Установите пароль.',
+                passwordMismatch: 'Пароли не совпадают.',
+                passwordShort: 'Пароль должен содержать не менее 8 символов.',
+                userExists: 'Пользователь уже существует. Войдите с паролем.',
+                configTitle: '⚙️ Настройки',
+                displayName: 'Отображаемое имя',
+                newPassword: '🔒 Новый пароль',
+                confirmNewPassword: '🔒 Подтвердите новый пароль',
+                language: '🌐 Язык',
+                save: '💾 Сохранить',
+                close: '✖ Закрыть',
+                adminSection: 'Вы администратор системы.',
+                photoRequired: '⚠️ Пожалуйста, добавьте фото профиля.',
+                imageTooLarge: '⚠️ Изображение слишком большое. Максимум 5МБ.',
+                invalidImage: '⚠️ Неверный формат изображения.',
+                colorTheme: '🎨 Цветовая тема'
+            }
+        };
+
+        // ===== ELEMENTOS =====
+        const loginScreen = document.getElementById('loginScreen');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginConfirmPassword = document.getElementById('loginConfirmPassword');
+        const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const loginBtn = document.getElementById('loginBtn');
+        const langBtns = document.querySelectorAll('.lang-btn');
+        const loginPhotoPreview = document.getElementById('loginPhotoPreview');
+        const loginPhotoInput = document.getElementById('loginPhotoInput');
+        const loginPhotoPlaceholder = document.getElementById('loginPhotoPlaceholder');
+        const loginDeviceInfo = document.getElementById('loginDeviceInfo');
+
+        const configModal = document.getElementById('configModal');
+        const configBtn = document.getElementById('configBtn');
+        const configCloseBtn = document.getElementById('configCloseBtn');
+        const configSaveBtn = document.getElementById('configSaveBtn');
+        const configDisplayName = document.getElementById('configDisplayName');
+        const configPassword = document.getElementById('configPassword');
+        const configConfirmPassword = document.getElementById('configConfirmPassword');
+        const configLanguage = document.getElementById('configLanguage');
+        const adminSection = document.getElementById('adminSection');
+        const configPhotoPreview = document.getElementById('configPhotoPreview');
+        const configPhotoInput = document.getElementById('configPhotoInput');
+        const configPhotoPlaceholder = document.getElementById('configPhotoPlaceholder');
+        const colorOptions = document.getElementById('colorOptions');
+
+        const imageModal = document.getElementById('imageModal');
+        const imageModalContent = document.getElementById('imageModalContent');
+
+        const messagesContainer = document.getElementById('messagesContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const audioBtn = document.getElementById('audioBtn');
+        const imageBtn = document.getElementById('imageBtn');
+        const imageInput = document.getElementById('imageInput');
+        const recordingTimer = document.getElementById('recordingTimer');
+        const userCountSpan = document.getElementById('userCount');
+        const connectionStatusSpan = document.getElementById('connectionStatus');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const serverBtns = document.querySelectorAll('.server-btn');
+        const statusIndicators = {
+            1: document.getElementById('status1'),
+            2: document.getElementById('status2'),
+            3: document.getElementById('status3')
+        };
+        const approvalOverlay = document.getElementById('approvalOverlay');
+        const approvalServerName = document.getElementById('approvalServerName');
+        const approvalStatus = document.getElementById('approvalStatus');
+        const cancelApprovalBtn = document.getElementById('cancelApprovalBtn');
+        const headerAvatar = document.getElementById('headerAvatar');
+        const headerAvatarPlaceholder = document.getElementById('headerAvatarPlaceholder');
+        const headerDeviceBadge = document.getElementById('headerDeviceBadge');
+        const themeBtn = document.getElementById('themeBtn');
+
+        // ===== ESTADO =====
+        let currentLang = 'pt';
+        let currentUser = null;
+        let isAdmin = false;
+        let users = JSON.parse(localStorage.getItem('chat_users') || '{}');
+        let tempProfilePhoto = null;
+        let peer = null;
+        let serverConnection = null;
+        let isServer = false;
+        let isConnected = false;
+        let currentServer = null;
+        let messageHistory = [];
+        let clients = {};
+        let pendingApprovals = {};
+        let isWaitingApproval = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingTimerInterval = null;
+
+        // ===== INICIALIZAR USERS =====
+        if (!users['admin']) {
+            users['admin'] = {
+                password: '',
+                displayName: 'Admin',
+                isAdmin: true,
+                firstAccess: true,
+                profilePhoto: null
+            };
+            localStorage.setItem('chat_users', JSON.stringify(users));
+        }
+
+        // ===== DETECTAR DISPOSITIVO - COM FALLBACK =====
+        try {
+            loginDeviceInfo.textContent = `${deviceInfo.icon} ${deviceInfo.label}`;
+            headerDeviceBadge.textContent = deviceInfo.icon;
+            headerDeviceBadge.className = `device-badge ${deviceInfo.type}`;
+        } catch (e) {
+            loginDeviceInfo.textContent = '📱 Mobile';
+            headerDeviceBadge.textContent = '📱';
+            headerDeviceBadge.className = 'device-badge mobile';
+        }
+
+        // ===== APLICAR TEMA E COR =====
+        try {
+            applyTheme(currentTheme);
+            applyColor(currentColor);
+        } catch (e) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-color', 'blue');
+        }
+
+        // ===== FUNÇÕES DE TRADUÇÃO =====
+        function t(key) {
+            return TRANSLATIONS[currentLang]?.[key] || key;
+        }
+
+        function updateLoginTexts() {
+            try {
+                const usernameLabel = document.getElementById('loginUsernameLabel');
+                const passwordLabel = document.getElementById('loginPasswordLabel');
+                const confirmLabel = document.getElementById('loginConfirmLabel');
+                const greeting = document.querySelector('.greeting');
+                
+                if (usernameLabel) usernameLabel.textContent = t('username');
+                if (passwordLabel) passwordLabel.textContent = t('password');
+                if (confirmLabel) confirmLabel.textContent = t('confirmPassword');
+                if (loginBtn) loginBtn.innerHTML = t('loginBtn');
+                if (loginUsername) loginUsername.placeholder = t('username');
+                if (loginPassword) loginPassword.placeholder = t('password');
+                if (loginConfirmPassword) loginConfirmPassword.placeholder = t('confirmPassword');
+                if (greeting) greeting.innerHTML = t('greeting');
+            } catch (e) {
+                console.warn('Erro ao atualizar textos:', e);
+            }
+        }
+
+        // ===== FUNÇÕES DE FOTO =====
+        function compressImage(file, maxSize = 5 * 1024 * 1024) {
+            return new Promise((resolve, reject) => {
+                if (file.size > maxSize) {
+                    reject(new Error(t('imageTooLarge')));
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX = 800;
+                        let w = img.width, h = img.height;
+                        if (w > h) { if (w > MAX) { h = h * (MAX / w); w = MAX; } }
+                        else { if (h > MAX) { w = w * (MAX / h); h = MAX; } }
+                        canvas.width = w; canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getProfilePhoto(username) {
+            return users[username]?.profilePhoto || null;
+        }
+
+        function updateHeaderAvatar(username) {
+            try {
+                const photo = getProfilePhoto(username);
+                if (photo && headerAvatar) {
+                    headerAvatar.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                } else if (headerAvatar) {
+                    headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
+                }
+            } catch (e) {
+                if (headerAvatar) headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
+            }
+        }
+
+        // ===== SELETOR DE IDIOMA =====
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+                if (configLanguage) configLanguage.value = currentLang;
+                updateLoginTexts();
+            });
+        });
+
+        // ===== SELETOR DE COR =====
+        if (colorOptions) {
+            colorOptions.addEventListener('click', (e) => {
+                const btn = e.target.closest('.color-btn');
+                if (!btn) return;
+                applyColor(btn.dataset.color);
+            });
+        }
+
+        // ===== TEMA =====
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
+        }
+
+        // ===== FOTO LOGIN =====
+        if (loginPhotoPreview) {
+            loginPhotoPreview.addEventListener('click', () => {
+                if (loginPhotoInput) loginPhotoInput.click();
+            });
+        }
+
+        if (loginPhotoInput) {
+            loginPhotoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    tempProfilePhoto = compressed;
+                    if (loginPhotoPreview) {
+                        loginPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
+                    }
+                    if (loginPhotoPlaceholder) loginPhotoPlaceholder.style.display = 'none';
+                    if (loginError) loginError.textContent = '';
+                } catch (err) {
+                    if (loginError) loginError.textContent = err.message;
+                }
+            });
+        }
+
+        // ===== FOTO CONFIG =====
+        if (configPhotoPreview) {
+            configPhotoPreview.addEventListener('click', () => {
+                if (configPhotoInput) configPhotoInput.click();
+            });
+        }
+
+        if (configPhotoInput) {
+            configPhotoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    if (configPhotoPreview) {
+                        configPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
+                    }
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'none';
+                } catch (err) {
+                    if (loginError) loginError.textContent = err.message;
+                }
+            });
+        }
+
+        // ===== CONFIGURAÇÕES =====
+        if (configBtn) {
+            configBtn.addEventListener('click', () => {
+                if (!currentUser) return;
+                const user = users[currentUser];
+                if (configDisplayName) configDisplayName.value = user.displayName || currentUser;
+                if (configPassword) configPassword.value = '';
+                if (configConfirmPassword) configConfirmPassword.value = '';
+                if (configLanguage) configLanguage.value = currentLang;
+                if (adminSection) adminSection.style.display = isAdmin ? 'block' : 'none';
+                
+                if (user.profilePhoto && configPhotoPreview) {
+                    configPhotoPreview.innerHTML = `<img src="${user.profilePhoto}" alt="Foto">`;
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'none';
+                } else if (configPhotoPreview) {
+                    configPhotoPreview.innerHTML = `<div class="placeholder" id="configPhotoPlaceholder">📸</div>`;
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'flex';
+                }
+                
+                document.querySelectorAll('.color-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.color === currentColor);
+                });
+                
+                if (configModal) configModal.classList.remove('hidden');
+            });
+        }
+
+        if (configCloseBtn) {
+            configCloseBtn.addEventListener('click', () => {
+                if (configModal) configModal.classList.add('hidden');
+            });
+        }
+
+        if (configSaveBtn) {
+            configSaveBtn.addEventListener('click', async () => {
+                const displayName = configDisplayName ? configDisplayName.value.trim() : '';
+                const newPassword = configPassword ? configPassword.value : '';
+                const confirmPassword = configConfirmPassword ? configConfirmPassword.value : '';
+                const selectedColor = document.querySelector('.color-btn.active')?.dataset.color || 'blue';
+
+                const configPhotoImg = configPhotoPreview ? configPhotoPreview.querySelector('img') : null;
+                if (configPhotoImg && currentUser) {
+                    users[currentUser].profilePhoto = configPhotoImg.src;
+                }
+
+                if (displayName && currentUser) {
+                    users[currentUser].displayName = displayName;
+                }
+
+                if (newPassword && currentUser) {
+                    if (newPassword.length < 8) { 
+                        if (loginError) showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (newPassword !== confirmPassword) { 
+                        if (loginError) showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users[currentUser].password = newPassword;
+                    users[currentUser].firstAccess = false;
+                }
+
+                currentLang = configLanguage ? configLanguage.value : 'pt';
+                applyColor(selectedColor);
+                
+                localStorage.setItem('chat_users', JSON.stringify(users));
+                updateLoginTexts();
+                if (currentUser) updateHeaderAvatar(currentUser);
+                
+                if (configModal) configModal.classList.add('hidden');
+                if (loginSuccess) showLoginSuccess('Configurações salvas!');
+            });
+        }
+
+        // ===== FUNÇÕES DE LOGIN =====
+        function showLoginError(msg) {
+            if (loginError) loginError.textContent = msg;
+            if (loginSuccess) loginSuccess.textContent = '';
+        }
+
+        function showLoginSuccess(msg) {
+            if (loginSuccess) loginSuccess.textContent = msg;
+            if (loginError) loginError.textContent = '';
+        }
+
+        function checkUserExists(username) { 
+            return users[username] !== undefined; 
+        }
+
+        function validatePassword(password) { 
+            return password && password.length >= 8; 
+        }
+
+        function handleLogin() {
+            try {
+                const username = loginUsername ? loginUsername.value.trim() : '';
+                const password = loginPassword ? loginPassword.value : '';
+                const confirmPassword = loginConfirmPassword ? loginConfirmPassword.value : '';
+
+                if (loginError) loginError.textContent = '';
+                if (loginSuccess) loginSuccess.textContent = '';
+
+                if (!username) {
+                    showLoginError('Por favor, digite um nome de usuário.');
+                    return;
+                }
+
+                if (!tempProfilePhoto && !users[username]?.profilePhoto) {
+                    showLoginError(t('photoRequired'));
+                    return;
+                }
+
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (!password || !confirmPassword) {
+                        showLoginError(t('firstAccess'));
+                        if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                        return;
+                    }
+                    if (!validatePassword(password)) { 
+                        showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (password !== confirmPassword) { 
+                        showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users['admin'].password = password;
+                    users['admin'].firstAccess = false;
+                    users['admin'].displayName = 'Admin';
+                    users['admin'].profilePhoto = tempProfilePhoto || null;
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                    currentUser = 'admin';
+                    isAdmin = true;
+                    if (loginSuccess) loginSuccess.textContent = '✅ Senha definida com sucesso!';
+                    setTimeout(() => {
+                        if (loginScreen) loginScreen.classList.add('hidden');
+                        updateHeaderAvatar(currentUser);
+                        initChat();
+                    }, 1000);
+                    return;
+                }
+
+                if (!checkUserExists(username)) {
+                    if (!password || !confirmPassword) {
+                        showLoginError('Digite sua senha para criar a conta.');
+                        if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                        return;
+                    }
+                    if (!validatePassword(password)) { 
+                        showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (password !== confirmPassword) { 
+                        showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users[username] = {
+                        password: password,
+                        displayName: username,
+                        isAdmin: false,
+                        firstAccess: false,
+                        profilePhoto: tempProfilePhoto || null
+                    };
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                    currentUser = username;
+                    isAdmin = false;
+                    if (loginSuccess) loginSuccess.textContent = '✅ Conta criada com sucesso!';
+                    setTimeout(() => {
+                        if (loginScreen) loginScreen.classList.add('hidden');
+                        updateHeaderAvatar(currentUser);
+                        initChat();
+                    }, 1000);
+                    return;
+                }
+
+                if (users[username].password !== password) {
+                    showLoginError(t('loginError'));
+                    return;
+                }
+
+                if (tempProfilePhoto) {
+                    users[username].profilePhoto = tempProfilePhoto;
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                }
+
+                currentUser = username;
+                isAdmin = users[username].isAdmin || false;
+                if (loginSuccess) loginSuccess.textContent = t('loginSuccess');
+                setTimeout(() => {
+                    if (loginScreen) loginScreen.classList.add('hidden');
+                    updateHeaderAvatar(currentUser);
+                    initChat();
+                }, 500);
+            } catch (e) {
+                console.error('Erro no login:', e);
+                showLoginError('Erro ao fazer login. Tente novamente.');
+            }
+        }
+
+        // ===== EVENTOS DE LOGIN =====
+        if (loginBtn) loginBtn.addEventListener('click', handleLogin);
+        
+        if (loginUsername) {
+            loginUsername.addEventListener('keydown', (e) => { 
+                if (e.key === 'Enter' && loginPassword) loginPassword.focus(); 
+            });
+        }
+
+        if (loginPassword) {
+            loginPassword.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (confirmPasswordGroup && confirmPasswordGroup.style.display === 'block' && loginConfirmPassword) {
+                        loginConfirmPassword.focus();
+                    } else {
+                        handleLogin();
+                    }
+                }
+            });
+        }
+
+        if (loginConfirmPassword) {
+            loginConfirmPassword.addEventListener('keydown', (e) => { 
+                if (e.key === 'Enter') handleLogin(); 
+            });
+        }
+
+        if (loginPassword) {
+            loginPassword.addEventListener('input', () => {
+                const username = loginUsername ? loginUsername.value.trim() : '';
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else if (!checkUserExists(username)) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                }
+            });
+        }
+
+        if (loginUsername) {
+            loginUsername.addEventListener('input', () => {
+                const username = loginUsername.value.trim();
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else if (!checkUserExists(username)) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                }
+            });
+        }
+
+        // ===== FUNÇÕES DO CHAT =====
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, isWarning = false, isSuccess = false, audioData = null, imageData = null) {
+            try {
+                const msgDiv = document.createElement('div');
+                
+                if (system) {
+                    msgDiv.className = 'system-msg';
+                    if (isServerMsg) msgDiv.classList.add('server');
+                    if (isError) msgDiv.classList.add('error');
+                    if (isWarning) msgDiv.classList.add('warning');
+                    if (isSuccess) msgDiv.classList.add('success');
+                    msgDiv.textContent = text;
+                } else {
+                    msgDiv.className = 'message' + (isOwn ? ' own' : '');
+                    
+                    const userData = users[username] || { displayName: username, isAdmin: false };
+                    const displayName = userData.displayName || username;
+                    const isAdminUser = userData.isAdmin || false;
+                    
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'msg-header';
+                    
+                    const avatarDiv = document.createElement('div');
+                    avatarDiv.className = 'msg-avatar';
+                    const photo = getProfilePhoto(username);
+                    if (photo) {
+                        avatarDiv.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                    } else {
+                        avatarDiv.innerHTML = `<div class="placeholder">👤</div>`;
+                    }
+                    
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'msg-user';
+                    userDiv.innerHTML = `${displayName} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
+                    
+                    headerDiv.appendChild(avatarDiv);
+                    headerDiv.appendChild(userDiv);
+                    
+                    let contentDiv = document.createElement('div');
+                    contentDiv.className = 'msg-text';
+                    
+                    if (audioData) {
+                        const audioContainer = document.createElement('div');
+                        audioContainer.className = 'audio-message';
+                        
+                        const playBtn = document.createElement('button');
+                        playBtn.className = 'play-btn';
+                        playBtn.textContent = '▶';
+                        playBtn.dataset.playing = 'false';
+                        
+                        const progressContainer = document.createElement('div');
+                        progressContainer.className = 'audio-progress';
+                        const progressBar = document.createElement('div');
+                        progressBar.className = 'progress-bar';
+                        progressContainer.appendChild(progressBar);
+                        
+                        const timeDisplay = document.createElement('span');
+                        timeDisplay.className = 'audio-time';
+                        timeDisplay.textContent = '0:00';
+                        
+                        const audio = new Audio(audioData);
+                        audio.preload = 'metadata';
+                        
+                        let isPlaying = false;
+                        
+                        audio.addEventListener('loadedmetadata', () => {
+                            const duration = Math.floor(audio.duration);
+                            const minutes = Math.floor(duration / 60);
+                            const seconds = duration % 60;
+                            timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                        });
+                        
+                        playBtn.addEventListener('click', () => {
+                            if (isPlaying) {
+                                audio.pause();
+                                playBtn.textContent = '▶';
+                                isPlaying = false;
+                                playBtn.dataset.playing = 'false';
+                            } else {
+                                document.querySelectorAll('.play-btn').forEach(btn => {
+                                    if (btn !== playBtn && btn.dataset.playing === 'true') {
+                                        btn.click();
+                                    }
+                                });
+                                
+                                audio.play();
+                                playBtn.textContent = '⏸';
+                                isPlaying = true;
+                                playBtn.dataset.playing = 'true';
+                                
+                                const updateProgress = () => {
+                                    if (!isPlaying) return;
+                                    const progress = (audio.currentTime / audio.duration) * 100;
+                                    progressBar.style.width = progress + '%';
+                                    const current = Math.floor(audio.currentTime);
+                                    const minutes = Math.floor(current / 60);
+                                    const seconds = current % 60;
+                                    timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                    requestAnimationFrame(updateProgress);
+                                };
+                                updateProgress();
+                            }
+                        });
+                        
+                        audio.addEventListener('ended', () => {
+                            playBtn.textContent = '▶';
+                            isPlaying = false;
+                            playBtn.dataset.playing = 'false';
+                            progressBar.style.width = '0%';
+                            timeDisplay.textContent = '0:00';
+                        });
+                        
+                        progressContainer.addEventListener('click', (e) => {
+                            const rect = progressContainer.getBoundingClientRect();
+                            const x = (e.clientX - rect.left) / rect.width;
+                            audio.currentTime = x * audio.duration;
+                        });
+                        
+                        audioContainer.appendChild(playBtn);
+                        audioContainer.appendChild(progressContainer);
+                        audioContainer.appendChild(timeDisplay);
+                        
+                        contentDiv.appendChild(audioContainer);
+                    } else if (imageData) {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'image-message';
+                        const img = document.createElement('img');
+                        img.src = imageData;
+                        img.alt = 'Imagem';
+                        img.loading = 'lazy';
+                        img.addEventListener('click', () => {
+                            if (imageModalContent) {
+                                imageModalContent.src = imageData;
+                                if (imageModal) imageModal.classList.remove('hidden');
+                            }
+                        });
+                        imgContainer.appendChild(img);
+                        contentDiv.appendChild(imgContainer);
+                    } else {
+                        contentDiv.textContent = text;
+                    }
+                    
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = 'msg-time';
+                    timeDiv.textContent = getCurrentTime();
+                    
+                    msgDiv.appendChild(headerDiv);
+                    msgDiv.appendChild(contentDiv);
+                    msgDiv.appendChild(timeDiv);
+                }
+                
+                if (messagesContainer) {
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (e) {
+                console.warn('Erro ao adicionar mensagem:', e);
+            }
+        }
+
+        function showSystemMessage(text, isServerMsg = false, isError = false, isWarning = false, isSuccess = false) {
+            addMessageToDOM('', text, false, true, isServerMsg, isError, isWarning, isSuccess);
+        }
+
+        function updateStatus(text, state = 'online') {
+            try {
+                if (statusText) statusText.textContent = text;
+                if (statusDot) {
+                    statusDot.className = 'status-dot';
+                    if (state === 'offline') statusDot.classList.add('offline');
+                    if (state === 'connecting') statusDot.classList.add('connecting');
+                    if (state === 'waiting') statusDot.classList.add('waiting');
+                }
+                
+                if (connectionStatusSpan) {
+                    if (isServer) {
+                        connectionStatusSpan.textContent = '👑 Servidor';
+                    } else if (isConnected) {
+                        connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
+                    } else if (isWaitingApproval) {
+                        connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
+                    } else {
+                        connectionStatusSpan.textContent = '❌ Desconectado';
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function updateUserCount(count) {
+            try {
+                if (userCountSpan) userCountSpan.textContent = `👥 ${count || 0}`;
+            } catch (e) {}
+        }
+
+        function setInputEnabled(enabled) {
+            try {
+                if (messageInput) messageInput.disabled = !enabled;
+                if (sendBtn) sendBtn.disabled = !enabled;
+                if (audioBtn) audioBtn.disabled = !enabled;
+                if (imageBtn) imageBtn.disabled = !enabled;
+                if (enabled && messageInput) messageInput.focus();
+            } catch (e) {}
+        }
+
+        function updateServerStatus(serverId, status) {
+            try {
+                const indicator = statusIndicators[serverId];
+                if (!indicator) return;
+                indicator.className = 'status-indicator';
+                if (status === 'online') indicator.classList.add('online');
+                else if (status === 'offline') indicator.classList.add('offline');
+                else if (status === 'creating') indicator.classList.add('creating');
+            } catch (e) {}
+        }
+
+        function markServerActive(serverId) {
+            try {
+                serverBtns.forEach(btn => {
+                    const btnServer = parseInt(btn.dataset.server);
+                    btn.classList.toggle('active', btnServer === serverId);
+                });
+            } catch (e) {}
+        }
+
+        // ===== SERVIDORES =====
+        const SERVERS = {
+            1: { id: 'chat-server-1', name: 'Servidor 1' },
+            2: { id: 'chat-server-2', name: 'Servidor 2' },
+            3: { id: 'chat-server-3', name: 'Servidor 3' }
+        };
+
+        // ===== FUNÇÕES DE ENVIO =====
+        function sendMessage() {
+            try {
+                const text = messageInput ? messageInput.value.trim() : '';
+                if (!text || !isConnected) {
+                    if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...', false, true);
+                    return;
+                }
+
+                addMessageToDOM(currentUser, text, true);
+                messageHistory.push({ username: currentUser, text, time: Date.now() });
+
+                broadcastMessage({
+                    type: 'message',
+                    username: currentUser,
+                    text: text,
+                    time: Date.now()
+                });
+
+                if (messageInput) messageInput.value = '';
+                if (messageInput) messageInput.focus();
+            } catch (e) {
+                console.error('Erro ao enviar mensagem:', e);
+            }
+        }
+
+        function sendImage(imageData) {
+            try {
+                if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                addMessageToDOM(currentUser, '', true, false, false, false, false, false, null, imageData);
+                messageHistory.push({ username: currentUser, text: '🖼️ Imagem', time: Date.now(), image: imageData });
+                broadcastMessage({ type: 'image', username: currentUser, image: imageData, time: Date.now() });
+            } catch (e) {
+                console.error('Erro ao enviar imagem:', e);
+            }
+        }
+
+        function sendAudio(audioData) {
+            try {
+                if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                addMessageToDOM(currentUser, '', true, false, false, false, false, false, audioData);
+                messageHistory.push({ username: currentUser, text: '🎤 Áudio', time: Date.now(), audio: audioData });
+                broadcastMessage({ type: 'audio', username: currentUser, audio: audioData, time: Date.now() });
+            } catch (e) {
+                console.error('Erro ao enviar áudio:', e);
+            }
+        }
+
+        function broadcastMessage(data, excludeConn = null) {
+            try {
+                if (isServer) {
+                    Object.keys(clients).forEach(peerId => {
+                        const conn = clients[peerId];
+                        if (conn && conn !== excludeConn && conn.open) {
+                            try { conn.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
+                        }
+                    });
+                } else if (serverConnection && serverConnection.open) {
+                    try { serverConnection.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
+                }
+            } catch (e) {
+                console.error('Erro ao broadcast:', e);
+            }
+        }
+
+        // ===== IMAGEM =====
+        if (imageInput) {
+            imageInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    sendImage(compressed);
+                    imageInput.value = '';
+                } catch (err) { 
+                    showSystemMessage(err.message, false, true); 
+                }
+            });
+        }
+
+        if (imageModal) {
+            imageModal.addEventListener('click', () => {
+                if (imageModal) imageModal.classList.add('hidden');
+            });
+        }
+
+        // ===== ÁUDIO =====
+        async function startRecording() {
+            if (isRecording) return;
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = (event) => { if (event.data.size > 0) audioChunks.push(event.data); };
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onloadend = () => { sendAudio(reader.result); };
+                    reader.readAsDataURL(audioBlob);
+                    audioChunks = [];
+                    stream.getTracks().forEach(track => track.stop());
+                    if (audioBtn) audioBtn.classList.remove('recording');
+                    if (recordingTimer) recordingTimer.textContent = '';
+                    if (recordingTimerInterval) clearInterval(recordingTimerInterval);
+                    isRecording = false;
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                if (audioBtn) audioBtn.classList.add('recording');
+                let seconds = 0;
+                recordingTimerInterval = setInterval(() => {
+                    seconds++;
+                    const remaining = 30 - seconds;
+                    if (remaining <= 0) { stopRecording(); return; }
+                    if (recordingTimer) recordingTimer.textContent = `⏱️ ${remaining}s`;
+                }, 1000);
+                setTimeout(() => { if (isRecording) stopRecording(); }, 30000);
+            } catch (err) {
+                console.error('Erro ao acessar microfone:', err);
+                showSystemMessage('⚠️ Erro ao acessar microfone.', false, true);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) mediaRecorder.stop();
+        }
+
+        // ===== INICIAR COMO SERVIDOR =====
+        function startAsServer(serverId) {
+            if (isServer && currentServer === serverId) return;
+            cleanup();
+            const serverInfo = SERVERS[serverId];
+            if (!serverInfo) return;
+            
+            isServer = true;
+            isConnected = true;
+            currentServer = serverId;
+            clients = {};
+            
+            updateStatus(`👑 Servidor (${serverInfo.name})`, 'online');
+            showSystemMessage(`✅ Você é o servidor do ${serverInfo.name}!`, true);
+            showSystemMessage(`🔐 Você pode aprovar ou rejeitar novas entradas`, true);
+            setInputEnabled(true);
+            markServerActive(serverId);
+            updateServerStatus(serverId, 'online');
+            updateUserCount(0);
+            
+            peer = new Peer(serverInfo.id, {
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('open', (id) => {
+                console.log(`Servidor ${serverInfo.name} iniciado:`, id);
+                showSystemMessage(`🟢 ${serverInfo.name} pronto!`, true);
+            });
+
+            peer.on('connection', (conn) => {
+                console.log('Nova conexão recebida:', conn.peer);
+                pendingApprovals[conn.peer] = { conn: conn, status: 'pending' };
+                
+                conn.on('open', () => {
+                    showSystemMessage(`👤 ${conn.peer} está solicitando entrada`, false, false, true);
+                    showSystemMessage(`🔐 Clique em "Aceitar" ou "Rejeitar"`, false, false, true);
+                    conn.send({ type: 'approval_request', serverId: serverId, serverName: serverInfo.name });
+                });
+
+                conn.on('data', (data) => {
+                    if (data.type === 'approval_response') {
+                        if (data.accepted) acceptUser(conn.peer);
+                        else rejectUser(conn.peer);
+                    } else if (data.type === 'message') {
+                        if (clients[conn.peer]) {
+                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            addMessageToDOM(data.username, data.text, false);
+                            broadcastMessage(data, conn);
+                        }
+                    } else if (data.type === 'audio') {
+                        if (clients[conn.peer]) {
+                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            broadcastMessage(data, conn);
+                        }
+                    } else if (data.type === 'image') {
+                        if (clients[conn.peer]) {
+                            messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                            broadcastMessage(data, conn);
+                        }
+                    } else if (data.type === 'join') {
+                        pendingApprovals[conn.peer].username = data.username;
+                        const displayName = users[data.username]?.displayName || data.username;
+                        showSystemMessage(`📝 ${displayName} (${conn.peer}) quer entrar`, false, false, true);
+                        showApprovalButtons(conn.peer, data.username);
+                    }
+                });
+
+                conn.on('close', () => {
+                    delete pendingApprovals[conn.peer];
+                    if (clients[conn.peer]) {
+                        delete clients[conn.peer];
+                        showSystemMessage(`👤 ${conn.peer} saiu do chat`);
+                        updateUserCount(Object.keys(clients).length);
+                    }
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro na conexão:', err);
+                    delete pendingApprovals[conn.peer];
+                    delete clients[conn.peer];
+                    updateUserCount(Object.keys(clients).length);
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no servidor:', err);
+                if (err.type === 'unavailable-id') {
+                    showSystemMessage(`⚠️ ${serverInfo.name} já está ocupado. Conectando...`, false, true);
+                    isServer = false;
+                    isConnected = false;
+                    cleanup();
+                    setTimeout(() => connectAsClient(serverId), 1000);
+                }
+            });
+        }
+
+        function showApprovalButtons(peerId, username) {
+            try {
+                const oldBtns = document.querySelectorAll('.approval-buttons');
+                oldBtns.forEach(btn => btn.remove());
+                
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'system-msg approval-buttons';
+                msgDiv.style.display = 'flex';
+                msgDiv.style.gap = '10px';
+                msgDiv.style.justifyContent = 'center';
+                msgDiv.style.padding = '8px 0';
+                
+                const acceptBtn = document.createElement('button');
+                acceptBtn.textContent = '✅ Aceitar';
+                acceptBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #4caf50;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.2);
+                `;
+                acceptBtn.onmouseover = () => { acceptBtn.style.transform = 'scale(1.05)'; acceptBtn.style.boxShadow = '0 4px 20px rgba(76, 175, 80, 0.3)'; };
+                acceptBtn.onmouseout = () => { acceptBtn.style.transform = 'scale(1)'; acceptBtn.style.boxShadow = '0 2px 12px rgba(76, 175, 80, 0.2)'; };
+                acceptBtn.onclick = () => acceptUser(peerId);
+                
+                const rejectBtn = document.createElement('button');
+                rejectBtn.textContent = '❌ Rejeitar';
+                rejectBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #f44336;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 12px rgba(244, 67, 54, 0.2);
+                `;
+                rejectBtn.onmouseover = () => { rejectBtn.style.transform = 'scale(1.05)'; rejectBtn.style.boxShadow = '0 4px 20px rgba(244, 67, 54, 0.3)'; };
+                rejectBtn.onmouseout = () => { rejectBtn.style.transform = 'scale(1)'; rejectBtn.style.boxShadow = '0 2px 12px rgba(244, 67, 54, 0.2)'; };
+                rejectBtn.onclick = () => rejectUser(peerId);
+                
+                msgDiv.appendChild(acceptBtn);
+                msgDiv.appendChild(rejectBtn);
+                if (messagesContainer) {
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (e) {
+                console.warn('Erro ao mostrar botões de aprovação:', e);
+            }
+        }
+
+        function acceptUser(peerId) {
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                clients[peerId] = conn;
+                showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
+                updateUserCount(Object.keys(clients).length);
+                
+                conn.send({ type: 'approval_result', accepted: true });
+                
+                messageHistory.forEach(msg => {
+                    conn.send({
+                        type: 'history',
+                        username: msg.username,
+                        text: msg.text || '🎤 Áudio',
+                        audio: msg.audio || null,
+                        image: msg.image || null,
+                        time: msg.time
+                    });
+                });
+                
+                broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao aceitar usuário:', e);
+            }
+        }
+
+        function rejectUser(peerId) {
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
+                conn.send({ type: 'approval_result', accepted: false });
+                
+                setTimeout(() => { try { conn.close(); } catch (e) {} }, 1000);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao rejeitar usuário:', e);
+            }
+        }
+
+        // ===== CONECTAR COMO CLIENTE =====
+        function connectAsClient(serverId) {
+            if (isServer && currentServer === serverId) return;
+            cleanup();
+            
+            const serverInfo = SERVERS[serverId];
+            if (!serverInfo) return;
+            
+            isServer = false;
+            isConnected = false;
+            currentServer = serverId;
+            
+            updateStatus(`Conectando a ${serverInfo.name}...`, 'connecting');
+            showSystemMessage(`🔗 Tentando conectar ao ${serverInfo.name}...`);
+            setInputEnabled(false);
+            markServerActive(serverId);
+            updateServerStatus(serverId, 'creating');
+            
+            peer = new Peer({
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('open', (id) => {
+                console.log('Cliente ID:', id);
+                const conn = peer.connect(serverInfo.id, { reliable: true });
+                serverConnection = conn;
+                
+                conn.on('open', () => {
+                    isWaitingApproval = true;
+                    if (approvalServerName) approvalServerName.textContent = serverInfo.name;
+                    if (approvalStatus) {
+                        approvalStatus.textContent = '⏳ Aguardando resposta...';
+                        approvalStatus.style.color = '#ff9800';
+                    }
+                    if (approvalOverlay) approvalOverlay.classList.remove('hidden');
+                    updateStatus(`Aguardando aprovação em ${serverInfo.name}`, 'waiting');
+                    conn.send({ type: 'join', username: currentUser });
+                });
+
+                conn.on('data', (data) => {
+                    if (data.type === 'approval_request') {
+                        if (approvalStatus) {
+                            approvalStatus.textContent = '⏳ Aguardando resposta...';
+                            approvalStatus.style.color = '#ff9800';
+                        }
+                    } else if (data.type === 'approval_result') {
+                        if (data.accepted) {
+                            isConnected = true;
+                            isWaitingApproval = false;
+                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                            updateStatus(`Conectado a ${serverInfo.name}`, 'online');
+                            showSystemMessage(`✅ Você foi aceito no ${serverInfo.name}!`, false, false, false, true);
+                            setInputEnabled(true);
+                            updateServerStatus(serverId, 'online');
+                            if (approvalStatus) {
+                                approvalStatus.textContent = '✅ Aceito!';
+                                approvalStatus.style.color = '#4caf50';
+                            }
+                            setTimeout(() => {
+                                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                            }, 1000);
+                        } else {
+                            isWaitingApproval = false;
+                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                            updateStatus(`Rejeitado em ${serverInfo.name}`, 'offline');
+                            updateServerStatus(serverId, 'offline');
+                            setInputEnabled(false);
+                            markServerActive(null);
+                            setTimeout(() => { try { conn.close(); } catch (e) {} }, 500);
+                        }
+                    } else if (data.type === 'message') {
+                        if (isConnected) {
+                            addMessageToDOM(data.username, data.text, false);
+                            messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                        }
+                    } else if (data.type === 'audio') {
+                        if (isConnected) {
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                            messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                        }
+                    } else if (data.type === 'image') {
+                        if (isConnected) {
+                            addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                            messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
+                        }
+                    } else if (data.type === 'history') {
+                        if (isConnected) {
+                            if (data.audio) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, data.audio);
+                                messageHistory.push({ username: data.username, text: '🎤 Áudio', time: data.time, audio: data.audio });
+                            } else if (data.image) {
+                                addMessageToDOM(data.username, '', false, false, false, false, false, false, null, data.image);
+                                messageHistory.push({ username: data.username, text: '🖼️ Imagem', time: data.time, image: data.image });
+                            } else {
+                                addMessageToDOM(data.username, data.text, false);
+                                messageHistory.push({ username: data.username, text: data.text, time: data.time });
+                            }
+                        }
+                    } else if (data.type === 'system') {
+                        if (isConnected) showSystemMessage(data.text);
+                    } else if (data.type === 'ping') {
+                        conn.send({ type: 'pong' });
+                    }
+                });
+
+                conn.on('close', () => {
+                    if (isConnected) {
+                        isConnected = false;
+                        serverConnection = null;
+                        updateStatus(`Desconectado de ${serverInfo.name}`, 'offline');
+                        showSystemMessage(`⚠️ Conexão com ${serverInfo.name} perdida!`, false, true);
+                        setInputEnabled(false);
+                        updateServerStatus(serverId, 'offline');
+                        markServerActive(null);
+                    }
+                });
+
+                conn.on('error', (err) => {
+                    console.warn('Erro de conexão:', err);
+                    if (err.type === 'peer-unavailable') {
+                        showSystemMessage(`⚠️ ${serverInfo.name} não encontrado. Iniciando...`, false, true);
+                        updateServerStatus(serverId, 'offline');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                        setTimeout(() => startAsServer(serverId), 1000);
+                    } else if (!isConnected) {
+                        updateStatus('Erro', 'offline');
+                        setInputEnabled(false);
+                        updateServerStatus(serverId, 'offline');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    }
+                });
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no cliente:', err);
+                if (err.type === 'unavailable-id') {
+                    cleanup();
+                    setTimeout(() => connectAsClient(serverId), 1000);
+                }
+            });
+        }
+
+        function cleanup() {
+            try {
+                if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
+                serverConnection = null;
+                clients = {};
+                pendingApprovals = {};
+                if (isRecording) stopRecording();
+                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {}
+        }
+
+        function selectServer(serverId) {
+            try {
+                if (serverId === currentServer && isConnected) {
+                    showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
+                    return;
+                }
+                
+                if (messagesContainer) messagesContainer.innerHTML = '';
+                messageHistory = [];
+                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                
+                const msg = document.createElement('div');
+                msg.className = 'system-msg';
+                msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
+                if (messagesContainer) messagesContainer.appendChild(msg);
+                
+                connectAsClient(serverId);
+                
+                setTimeout(() => {
+                    if (!isConnected && !isServer && !isWaitingApproval) {
+                        startAsServer(serverId);
+                    }
+                }, 5000);
+            } catch (e) {
+                console.error('Erro ao selecionar servidor:', e);
+            }
+        }
+
+        // ===== INICIALIZAR CHAT =====
+        function initChat() {
+            try {
+                Object.keys(SERVERS).forEach(id => updateServerStatus(parseInt(id), 'offline'));
+                
+                showSystemMessage('⚡ Selecione um servidor para entrar');
+                updateStatus('Selecione um servidor', 'offline');
+                setInputEnabled(false);
+                
+                const displayName = users[currentUser]?.displayName || currentUser;
+                showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
+                showSystemMessage(`💻 Dispositivo: ${deviceInfo.icon} ${deviceInfo.label}`, false, false, false, true);
+                updateHeaderAvatar(currentUser);
+            } catch (e) {
+                console.error('Erro ao iniciar chat:', e);
+            }
+        }
+
+        // ===== EVENT LISTENERS DO CHAT =====
+        serverBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const serverId = parseInt(btn.dataset.server);
+                selectServer(serverId);
+            });
+        });
+
+        if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+        
+        if (messageInput) {
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+            });
+        }
+
+        if (audioBtn) {
+            audioBtn.addEventListener('click', () => {
+                if (isRecording) stopRecording();
+                else startRecording();
+            });
+        }
+
+        if (cancelApprovalBtn) {
+            cancelApprovalBtn.addEventListener('click', () => {
+                if (isWaitingApproval) {
+                    if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    showSystemMessage('❌ Solicitação cancelada', false, true);
+                    updateStatus('Desconectado', 'offline');
+                    setInputEnabled(false);
+                    markServerActive(null);
+                    cleanup();
+                    setTimeout(() => {
+                        if (!isConnected && !isServer) {
+                            const serverId = currentServer;
+                            if (serverId) selectServer(serverId);
+                        }
+                    }, 2000);
+                }
+            });
+        }
+
+        // ===== VERIFICAÇÃO DE SAÚDE =====
+        setInterval(() => {
+            try {
+                if (!isServer && isConnected && serverConnection) {
+                    try { serverConnection.send({ type: 'ping' }); } catch (e) {}
+                }
+            } catch (e) {}
+        }, 5000);
+
+        // ===== INICIALIZAR =====
+        console.log('⚡ EOROS Chat System');
+        console.log('📱 Dispositivo:', deviceInfo);
+        console.log('🎨 Tema:', currentTheme);
+        console.log('🎨 Cor:', currentColor);
+
+        if (loginScreen) loginScreen.classList.remove('hidden');
+        updateLoginTexts();
+        if (users['admin']?.password && confirmPasswordGroup) {
+            confirmPasswordGroup.style.display = 'none';
+        }
+
+    })();
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eoros</title>
+    <style>
+        /* ===== VARIÁVEIS ===== */
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --bg-input: #0a0a0f;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888aa;
+            --text-muted: #555577;
+            --border-color: #2a2a3e;
+            --accent: #5865f2;
+            --accent-hover: #4752c4;
+            --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6);
+            --shadow: 0 20px 60px rgba(0,0,0,0.8);
+            --message-own: #5865f2;
+            --message-other: #1a1a2e;
+            --success: #4caf50;
+            --error: #f44336;
+            --warning: #ff9800;
+            --card-bg: #12121a;
+            --input-bg: #0a0a0f;
+            --hover-bg: #2a2a3e;
+            --container-width: 480px;
+            --container-height: 95vh;
+            --border-radius: 24px;
+            --message-own-text: #ffffff;
+            --message-other-text: #e8e8f0;
+            --glass-bg: rgba(18, 18, 26, 0.85);
         }
 
         /* ===== CORES PERSONALIZÁVEIS ===== */
