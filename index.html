@@ -8,33 +8,33 @@
         /* ===== VARIÁVEIS ===== */
         :root {
             --bg-primary: #08080e;
-            --bg-secondary: rgba(18, 18, 26, 0.6);
-            --bg-tertiary: rgba(26, 26, 46, 0.3);
-            --bg-input: rgba(255, 255, 255, 0.04);
+            --bg-secondary: rgba(18, 18, 26, 0.5);
+            --bg-tertiary: rgba(26, 26, 46, 0.2);
+            --bg-input: rgba(255, 255, 255, 0.03);
             --text-primary: #f0f0f5;
-            --text-secondary: rgba(255, 255, 255, 0.5);
-            --text-muted: rgba(255, 255, 255, 0.2);
-            --border-color: rgba(255, 255, 255, 0.04);
+            --text-secondary: rgba(255, 255, 255, 0.45);
+            --text-muted: rgba(255, 255, 255, 0.15);
+            --border-color: rgba(255, 255, 255, 0.03);
             --accent: #5865f2;
             --accent-hover: #4752c4;
             --accent-gradient: linear-gradient(135deg, #5865f2, #8b5cf6);
             --shadow: 0 30px 100px rgba(0,0,0,0.8);
             --glass-blur: blur(60px);
-            --glass-bg: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(255, 255, 255, 0.04);
+            --glass-bg: rgba(255, 255, 255, 0.015);
+            --glass-border: rgba(255, 255, 255, 0.03);
             --message-own: #5865f2;
-            --message-other: rgba(255, 255, 255, 0.04);
+            --message-other: rgba(255, 255, 255, 0.03);
             --success: #4caf50;
             --error: #f44336;
             --warning: #ff9800;
-            --card-bg: rgba(18, 18, 26, 0.6);
-            --hover-bg: rgba(255, 255, 255, 0.04);
+            --card-bg: rgba(18, 18, 26, 0.5);
+            --hover-bg: rgba(255, 255, 255, 0.03);
             --container-width: 480px;
             --container-height: 95vh;
             --border-radius: 32px;
             --message-own-text: #ffffff;
             --message-other-text: #f0f0f5;
-            --glass-bg-login: rgba(255, 255, 255, 0.02);
+            --glass-bg-login: rgba(255, 255, 255, 0.015);
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
             --logo-color: #ffffff;
         }
@@ -50,22 +50,22 @@
 
         [data-theme="light"] {
             --bg-primary: #f5f5f9;
-            --bg-secondary: rgba(255, 255, 255, 0.6);
-            --bg-tertiary: rgba(232, 234, 237, 0.3);
-            --bg-input: rgba(0, 0, 0, 0.02);
+            --bg-secondary: rgba(255, 255, 255, 0.5);
+            --bg-tertiary: rgba(232, 234, 237, 0.2);
+            --bg-input: rgba(0, 0, 0, 0.015);
             --text-primary: #1a1a2e;
             --text-secondary: rgba(0, 0, 0, 0.4);
-            --text-muted: rgba(0, 0, 0, 0.15);
-            --border-color: rgba(0, 0, 0, 0.04);
-            --shadow: 0 30px 100px rgba(0,0,0,0.06);
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(0, 0, 0, 0.04);
-            --message-other: rgba(0, 0, 0, 0.02);
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --hover-bg: rgba(0, 0, 0, 0.02);
+            --text-muted: rgba(0, 0, 0, 0.12);
+            --border-color: rgba(0, 0, 0, 0.03);
+            --shadow: 0 30px 100px rgba(0,0,0,0.04);
+            --glass-bg: rgba(255, 255, 255, 0.3);
+            --glass-border: rgba(0, 0, 0, 0.03);
+            --message-other: rgba(0, 0, 0, 0.015);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --hover-bg: rgba(0, 0, 0, 0.015);
             --message-other-text: #1a1a2e;
             --message-own-text: #ffffff;
-            --glass-bg-login: rgba(255, 255, 255, 0.4);
+            --glass-bg-login: rgba(255, 255, 255, 0.3);
             --logo-color: #5865f2;
         }
 
@@ -80,7 +80,7 @@
             border-radius: var(--border-radius);
         }
         [data-device="desktop"] .messages { padding: 28px 32px 18px; }
-        [data-device="desktop"] .message { max-width: 65%; }
+        [data-device="desktop"] .message { max-width: 60%; }
         [data-device="desktop"] .login-screen .login-box { max-width: 460px; padding: 48px 44px; }
         [data-device="desktop"] .server-selector { padding: 18px 32px; gap: 16px; }
         [data-device="desktop"] .server-btn { padding: 12px 28px; font-size: 14px; min-width: 130px; }
@@ -93,6 +93,7 @@
         [data-device="desktop"] .message .msg-text { font-size: 15px; padding-left: 44px; }
         [data-device="desktop"] .message .msg-user { font-size: 14px; }
         [data-device="desktop"] .profile-photo-preview { width: 120px; height: 120px; }
+        [data-device="desktop"] .chat-container .messages .message-group .message { max-width: 65%; }
 
         [data-device="mobile"] .chat-container {
             max-width: 480px;
@@ -115,8 +116,7 @@
                         border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                         box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                         opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                        backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+                        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         body {
@@ -127,8 +127,8 @@
             min-height: 100vh;
             padding: 12px;
             background-image: 
-                radial-gradient(ellipse at 30% 40%, rgba(88, 101, 242, 0.04) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 60%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+                radial-gradient(ellipse at 30% 40%, rgba(88, 101, 242, 0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(139, 92, 246, 0.02) 0%, transparent 60%);
         }
 
         .chat-container {
@@ -151,8 +151,8 @@
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; opacity: 0.5; }
-        ::-webkit-scrollbar-thumb:hover { opacity: 1; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; opacity: 0.3; }
+        ::-webkit-scrollbar-thumb:hover { opacity: 0.7; }
 
         /* ===== TELA DE LOGIN ===== */
         .login-screen {
@@ -170,8 +170,8 @@
             padding: 30px 20px;
             overflow-y: auto;
             background-image: 
-                radial-gradient(ellipse at 30% 30%, rgba(88, 101, 242, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+                radial-gradient(ellipse at 30% 30%, rgba(88, 101, 242, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
         }
 
         .login-screen.hidden { display: none; }
@@ -189,7 +189,6 @@
             overflow-y: auto;
             box-shadow: 0 40px 120px rgba(0,0,0,0.3);
             position: relative;
-            overflow: hidden;
         }
 
         .login-screen .login-box::before {
@@ -199,7 +198,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 50% 0%, rgba(88, 101, 242, 0.04) 0%, transparent 60%);
+            background: radial-gradient(ellipse at 50% 0%, rgba(88, 101, 242, 0.03) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -213,7 +212,7 @@
             font-size: 44px;
             display: block;
             margin-bottom: 6px;
-            filter: drop-shadow(0 0 40px rgba(88, 101, 242, 0.15));
+            filter: drop-shadow(0 0 40px rgba(88, 101, 242, 0.1));
             animation: float 4s ease-in-out infinite;
         }
 
@@ -222,8 +221,9 @@
             50% { transform: translateY(-6px); }
         }
 
-        /* ===== ANIMAÇÃO DO NOME EOROS ===== */
+        /* ===== ANIMAÇÃO LETRA POR LETRA DO EOROS ===== */
         .login-screen .login-box .logo .logo-text {
+            display: inline-block;
             font-size: 42px;
             font-weight: 800;
             letter-spacing: -2px;
@@ -231,34 +231,45 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200% 200%;
-            animation: gradientShift 4s ease-in-out infinite, glowPulse 3s ease-in-out infinite;
-            display: inline-block;
+            animation: gradientShift 4s ease-in-out infinite;
             position: relative;
-            text-shadow: none;
+            min-height: 52px;
         }
 
-        .login-screen .login-box .logo .logo-text::after {
-            content: 'EOROS';
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: blur(20px);
-            opacity: 0.3;
-            animation: glowPulse 3s ease-in-out infinite;
-            z-index: -1;
+        .login-screen .login-box .logo .logo-text .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            animation: letterAppear 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation-delay: calc(var(--i) * 0.08s);
+        }
+
+        .login-screen .login-box .logo .logo-text .letter:nth-child(1) { --i: 0; }
+        .login-screen .login-box .logo .logo-text .letter:nth-child(2) { --i: 1; }
+        .login-screen .login-box .logo .logo-text .letter:nth-child(3) { --i: 2; }
+        .login-screen .login-box .logo .logo-text .letter:nth-child(4) { --i: 3; }
+        .login-screen .login-box .logo .logo-text .letter:nth-child(5) { --i: 4; }
+
+        @keyframes letterAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8) rotate(-5deg);
+                filter: blur(8px);
+            }
+            60% {
+                transform: translateY(-4px) scale(1.05) rotate(1deg);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+                filter: blur(0);
+            }
         }
 
         @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.02); }
         }
 
         .login-screen .login-box .logo .greeting {
@@ -268,6 +279,13 @@
             margin-top: 4px;
             -webkit-text-fill-color: var(--text-secondary);
             letter-spacing: 0.3px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-screen .login-box .logo .greeting span {
@@ -293,6 +311,8 @@
             font-weight: 500;
             backdrop-filter: blur(10px);
             letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.8s forwards;
         }
 
         /* ===== FOTO PERFIL ===== */
@@ -301,6 +321,8 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.4s forwards;
         }
 
         .profile-photo-preview {
@@ -316,13 +338,12 @@
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
-            box-shadow: 0 0 0 0 rgba(88, 101, 242, 0);
         }
 
         .profile-photo-preview:hover {
             border-color: var(--accent);
             transform: scale(1.04);
-            box-shadow: 0 0 40px rgba(88, 101, 242, 0.1);
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.06);
         }
 
         .profile-photo-preview img {
@@ -342,7 +363,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             color: white;
@@ -359,7 +380,13 @@
         .profile-photo-input { display: none; }
 
         /* ===== FORMULÁRIO ===== */
-        .login-screen .login-box .form-group { margin-bottom: 16px; }
+        .login-screen .login-box .form-group {
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.5s forwards;
+        }
+        .login-screen .login-box .form-group:nth-child(2) { animation-delay: 0.55s; }
+        .login-screen .login-box .form-group:nth-child(3) { animation-delay: 0.6s; }
 
         .login-screen .login-box .form-group label {
             display: block;
@@ -388,8 +415,7 @@
 
         .login-screen .login-box .form-group input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.04);
-            background: var(--bg-input);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.03);
         }
 
         .login-screen .login-box .form-group input::placeholder {
@@ -412,7 +438,9 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.15);
+            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.08);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.7s forwards;
         }
 
         .login-screen .login-box .btn-login::after {
@@ -422,7 +450,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.04), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
             transform: rotate(45deg) translateX(-100%);
             transition: transform 0.8s ease;
         }
@@ -433,7 +461,7 @@
 
         .login-screen .login-box .btn-login:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 50px rgba(88, 101, 242, 0.2);
+            box-shadow: 0 12px 50px rgba(88, 101, 242, 0.12);
         }
 
         .login-screen .login-box .btn-login:active { transform: scale(0.97); }
@@ -446,6 +474,8 @@
             text-align: center;
             min-height: 18px;
             font-weight: 500;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.75s forwards;
         }
 
         .login-screen .login-box .success-msg {
@@ -455,6 +485,8 @@
             text-align: center;
             min-height: 18px;
             font-weight: 500;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.75s forwards;
         }
 
         .login-screen .login-box .language-selector {
@@ -462,6 +494,8 @@
             gap: 8px;
             margin-bottom: 22px;
             flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.3s forwards;
         }
 
         .login-screen .login-box .language-selector .lang-btn {
@@ -492,7 +526,7 @@
             border-color: var(--accent);
             background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 4px 25px rgba(88, 101, 242, 0.15);
+            box-shadow: 0 4px 25px rgba(88, 101, 242, 0.08);
         }
 
         /* ===== HEADER ===== */
@@ -522,7 +556,7 @@
 
         .chat-header .header-left .logo-mini .lightning {
             font-size: 20px;
-            filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.15));
+            filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.08));
             animation: float 4s ease-in-out infinite;
         }
 
@@ -623,9 +657,9 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        .chat-header .device-badge.mobile { border-color: rgba(255, 152, 0, 0.15); color: var(--warning); }
-        .chat-header .device-badge.desktop { border-color: rgba(76, 175, 80, 0.15); color: var(--success); }
-        .chat-header .device-badge.tablet { border-color: rgba(88, 101, 242, 0.15); color: var(--accent); }
+        .chat-header .device-badge.mobile { border-color: rgba(255, 152, 0, 0.1); color: var(--warning); }
+        .chat-header .device-badge.desktop { border-color: rgba(76, 175, 80, 0.1); color: var(--success); }
+        .chat-header .device-badge.tablet { border-color: rgba(88, 101, 242, 0.1); color: var(--accent); }
 
         /* ===== SERVER SELECTOR ===== */
         .server-selector {
@@ -662,14 +696,14 @@
             border-color: var(--accent);
             color: var(--text-primary);
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.04);
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.02);
         }
 
         .server-btn.active {
             border-color: var(--accent);
             background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 8px 35px rgba(88, 101, 242, 0.12);
+            box-shadow: 0 8px 35px rgba(88, 101, 242, 0.08);
             transform: translateY(-3px);
         }
 
@@ -682,56 +716,63 @@
             transition: all 0.4s ease;
         }
 
-        .server-btn .status-indicator.online { background: var(--success); box-shadow: 0 0 16px rgba(76, 175, 80, 0.2); }
-        .server-btn .status-indicator.offline { background: var(--error); box-shadow: 0 0 16px rgba(244, 67, 54, 0.15); }
+        .server-btn .status-indicator.online { background: var(--success); box-shadow: 0 0 16px rgba(76, 175, 80, 0.15); }
+        .server-btn .status-indicator.offline { background: var(--error); box-shadow: 0 0 16px rgba(244, 67, 54, 0.1); }
         .server-btn .status-indicator.creating { background: var(--warning); animation: pulse 0.5s infinite; }
 
         /* ===== MESSAGES ===== */
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 18px 10px;
+            padding: 20px 18px 12px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 2px;
             background: var(--bg-tertiary);
             scroll-behavior: smooth;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             background-image: 
-                radial-gradient(ellipse at 20% 80%, rgba(88, 101, 242, 0.02) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.015) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 80%, rgba(88, 101, 242, 0.015) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.01) 0%, transparent 50%);
         }
 
-        .message {
-            background: var(--message-other);
-            padding: 12px 16px;
-            border-radius: 18px;
-            max-width: 85%;
-            word-wrap: break-word;
+        /* ===== MESSAGE GROUP ===== */
+        .message-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 2px;
             animation: fadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            border: 1px solid var(--glass-border);
-            align-self: flex-start;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
-        .message.own {
-            align-self: flex-end;
-            background: var(--message-own);
-            border-color: var(--message-own);
-            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.08);
+        .message-group .message {
+            max-width: 85%;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
         }
 
-        .message .msg-header {
+        .message-group .message:last-child {
+            border-bottom-left-radius: 16px;
+        }
+
+        .message-group.own .message {
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-group.own .message:last-child {
+            border-bottom-right-radius: 16px;
+        }
+
+        .message-group .msg-header {
+            padding: 0 4px 2px 4px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 4px;
+            gap: 8px;
         }
 
-        .message .msg-avatar {
+        .message-group .msg-header .msg-avatar {
             width: 26px;
             height: 26px;
             border-radius: 50%;
@@ -740,13 +781,13 @@
             border: 1.5px solid var(--glass-border);
         }
 
-        .message .msg-avatar img {
+        .message-group .msg-header .msg-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .message .msg-avatar .placeholder {
+        .message-group .msg-header .msg-avatar .placeholder {
             width: 100%;
             height: 100%;
             background: var(--bg-primary);
@@ -757,9 +798,7 @@
             font-size: 11px;
         }
 
-        .message.own .msg-avatar { border-color: rgba(255,255,255,0.1); }
-
-        .message .msg-user {
+        .message-group .msg-header .msg-user {
             font-size: 12px;
             font-weight: 600;
             color: var(--text-secondary);
@@ -769,9 +808,7 @@
             flex-wrap: wrap;
         }
 
-        .message.own .msg-user { color: rgba(255,255,255,0.8); }
-
-        .message .msg-user .badge {
+        .message-group .msg-header .msg-user .badge {
             background: var(--glass-border);
             font-size: 7px;
             padding: 2px 10px;
@@ -781,12 +818,7 @@
             letter-spacing: 0.3px;
         }
 
-        .message.own .msg-user .badge {
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.5);
-        }
-
-        .message .msg-user .admin-badge {
+        .message-group .msg-header .msg-user .admin-badge {
             background: #ffd700;
             color: #1a1a2e;
             font-size: 7px;
@@ -795,12 +827,40 @@
             font-weight: 700;
         }
 
+        .message-group .msg-header .msg-time {
+            font-size: 8px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-left: auto;
+            padding-right: 4px;
+        }
+
+        .message {
+            background: var(--message-other);
+            padding: 10px 14px;
+            border-radius: 16px;
+            word-wrap: break-word;
+            border: 1px solid var(--glass-border);
+            align-self: flex-start;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.01);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            max-width: 85%;
+        }
+
+        .message.own {
+            align-self: flex-end;
+            background: var(--message-own);
+            border-color: var(--message-own);
+            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.05);
+        }
+
         .message .msg-text {
             color: var(--message-other-text);
             font-size: 14px;
             line-height: 1.5;
             word-break: break-word;
-            padding-left: 36px;
         }
 
         .message.own .msg-text { color: var(--message-own-text); }
@@ -808,21 +868,20 @@
         .message .msg-text img {
             max-width: 100%;
             border-radius: 12px;
-            margin-top: 4px;
+            margin-top: 2px;
             display: block;
         }
 
-        .message .msg-time {
+        .message .msg-time-inline {
             font-size: 8px;
             color: var(--text-muted);
             margin-top: 4px;
             text-align: right;
-            padding-left: 36px;
             font-weight: 500;
             letter-spacing: 0.3px;
         }
 
-        .message.own .msg-time { color: rgba(255,255,255,0.4); }
+        .message.own .msg-time-inline { color: rgba(255,255,255,0.35); }
 
         /* ===== IMAGEM MENSAGEM ===== */
         .image-message {
@@ -851,7 +910,7 @@
             border: 1px solid var(--glass-border);
         }
 
-        .message.own .audio-message { background: rgba(255,255,255,0.04); }
+        .message.own .audio-message { background: rgba(255,255,255,0.03); }
 
         .audio-message .play-btn {
             background: var(--accent-gradient);
@@ -867,10 +926,10 @@
             justify-content: center;
             transition: all 0.4s ease;
             flex-shrink: 0;
-            box-shadow: 0 2px 20px rgba(88, 101, 242, 0.1);
+            box-shadow: 0 2px 20px rgba(88, 101, 242, 0.06);
         }
 
-        .audio-message .play-btn:hover { transform: scale(1.08); box-shadow: 0 4px 30px rgba(88, 101, 242, 0.15); }
+        .audio-message .play-btn:hover { transform: scale(1.08); box-shadow: 0 4px 30px rgba(88, 101, 242, 0.1); }
         .audio-message .play-btn:active { transform: scale(0.92); }
 
         .audio-message .audio-progress {
@@ -899,14 +958,14 @@
             font-weight: 500;
         }
 
-        .message.own .audio-message .audio-time { color: rgba(255,255,255,0.5); }
+        .message.own .audio-message .audio-time { color: rgba(255,255,255,0.4); }
 
         /* ===== SYSTEM MESSAGES ===== */
         .system-msg {
             text-align: center;
             font-size: 11px;
             color: var(--text-muted);
-            padding: 5px 0;
+            padding: 6px 0;
             background: transparent;
             border: none;
             align-self: center;
@@ -968,7 +1027,7 @@
 
         .input-area input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.04);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.02);
         }
 
         .input-area input::placeholder { color: var(--text-muted); font-weight: 400; }
@@ -1006,19 +1065,19 @@
             border-color: var(--error);
             color: white;
             animation: pulse 0.6s infinite;
-            box-shadow: 0 0 40px rgba(244, 67, 54, 0.1);
+            box-shadow: 0 0 40px rgba(244, 67, 54, 0.06);
         }
 
         .input-area .action-btn.send-btn {
             background: var(--accent-gradient);
             border: none;
             color: white;
-            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.1);
+            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.06);
         }
 
         .input-area .action-btn.send-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(88, 101, 242, 0.15);
+            box-shadow: 0 8px 40px rgba(88, 101, 242, 0.1);
         }
 
         .input-area .action-btn:disabled {
@@ -1053,7 +1112,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1076,7 +1135,7 @@
             width: 100%;
             text-align: center;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 120px rgba(0,0,0,0.4);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.3);
             animation: fadeIn 0.5s ease;
         }
 
@@ -1147,12 +1206,12 @@
         .approval-overlay .approval-box .buttons .btn-reject { 
             background: var(--error); 
             color: white;
-            box-shadow: 0 4px 30px rgba(244, 67, 54, 0.1);
+            box-shadow: 0 4px 30px rgba(244, 67, 54, 0.06);
         }
         .approval-overlay .approval-box .buttons .btn-reject:hover { 
             background: #da190b;
             transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(244, 67, 54, 0.15);
+            box-shadow: 0 8px 40px rgba(244, 67, 54, 0.1);
         }
 
         /* ===== STATUS BAR ===== */
@@ -1192,7 +1251,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             z-index: 1500;
             display: flex;
             align-items: center;
@@ -1215,7 +1274,7 @@
             border: 1px solid var(--glass-border);
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 40px 120px rgba(0,0,0,0.4);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.3);
             animation: fadeIn 0.5s ease;
         }
 
@@ -1259,7 +1318,7 @@
         .config-modal .config-box .form-group input:focus,
         .config-modal .config-box .form-group select:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.04);
+            box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.02);
         }
 
         .config-modal .config-box .profile-photo-container { margin-bottom: 18px; }
@@ -1289,7 +1348,7 @@
         .config-modal .config-box .color-options .color-btn:hover { transform: scale(1.12); }
         .config-modal .config-box .color-options .color-btn.active {
             border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.04);
             transform: scale(1.08);
         }
 
@@ -1317,12 +1376,12 @@
         .config-modal .config-box .btn-save {
             background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.1);
+            box-shadow: 0 4px 30px rgba(88, 101, 242, 0.06);
         }
 
         .config-modal .config-box .btn-save:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(88, 101, 242, 0.15);
+            box-shadow: 0 8px 40px rgba(88, 101, 242, 0.1);
         }
 
         .config-modal .config-box .btn-close {
@@ -1336,12 +1395,35 @@
             transform: translateY(-3px);
         }
 
+        /* ===== BOTÃO SAIR ===== */
+        .config-modal .config-box .btn-logout {
+            background: var(--error);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 30px rgba(244, 67, 54, 0.06);
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .config-modal .config-box .btn-logout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(244, 67, 54, 0.12);
+            background: #da190b;
+        }
+
+        .config-modal .config-box .btn-logout:active { transform: scale(0.95); }
+
         .config-modal .config-box .admin-section {
             background: var(--bg-input);
             padding: 16px;
             border-radius: 14px;
             margin: 18px 0;
-            border: 1px solid rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.06);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
@@ -1369,7 +1451,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.75);
             z-index: 3000;
             display: flex;
             align-items: center;
@@ -1386,7 +1468,7 @@
             max-height: 90vh; 
             border-radius: 18px; 
             object-fit: contain;
-            box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.4);
             animation: fadeIn 0.5s ease;
         }
 
@@ -1410,6 +1492,7 @@
             .config-modal .config-box .profile-photo-preview { width: 60px; height: 60px; }
             .chat-header .device-badge { font-size: 8px; padding: 2px 7px; }
             .login-screen .login-box .logo .logo-text { font-size: 32px; }
+            .message-group .message { max-width: 88%; }
 
             [data-device="desktop"] .chat-container {
                 max-width: 480px;
@@ -1418,7 +1501,7 @@
                 border-radius: 0;
             }
             [data-device="desktop"] .messages { padding: 12px 14px 8px; }
-            [data-device="desktop"] .message { max-width: 88%; }
+            [data-device="desktop"] .message-group .message { max-width: 88%; }
             [data-device="desktop"] .server-selector { padding: 10px 14px; }
             [data-device="desktop"] .server-btn { padding: 6px 10px; font-size: 10px; min-width: 55px; }
             [data-device="desktop"] .input-area { padding: 10px 14px 14px; }
@@ -1452,6 +1535,33 @@
         .config-modal .config-box { animation: floatIn 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
         .approval-overlay .approval-box { animation: floatIn 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
         .image-modal img { animation: floatIn 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        /* ===== MESSAGE AVATAR ===== */
+        .msg-avatar-small {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1.5px solid var(--glass-border);
+        }
+
+        .msg-avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .msg-avatar-small .placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -1462,7 +1572,13 @@
         <div class="login-box">
             <div class="logo">
                 <span class="logo-icon">⚡</span>
-                <div class="logo-text">EOROS</div>
+                <div class="logo-text">
+                    <span class="letter">E</span>
+                    <span class="letter">O</span>
+                    <span class="letter">R</span>
+                    <span class="letter">O</span>
+                    <span class="letter">S</span>
+                </div>
                 <p class="greeting">👋 <span>Olá</span>, bem-vindo de volta</p>
                 <div class="device-info" id="loginDeviceInfo">📱 Carregando...</div>
             </div>
@@ -1564,6 +1680,10 @@
             <div class="btn-group">
                 <button class="btn-save" id="configSaveBtn">💾 Salvar</button>
                 <button class="btn-close" id="configCloseBtn">✖ Fechar</button>
+            </div>
+
+            <div style="margin-top: 12px;">
+                <button class="btn-logout" id="logoutBtn">🚪 Sair</button>
             </div>
         </div>
     </div>
@@ -1826,6 +1946,7 @@
         const configPhotoInput = document.getElementById('configPhotoInput');
         const configPhotoPlaceholder = document.getElementById('configPhotoPlaceholder');
         const colorOptions = document.getElementById('colorOptions');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         const imageModal = document.getElementById('imageModal');
         const imageModalContent = document.getElementById('imageModalContent');
@@ -2048,6 +2169,39 @@
                     if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'none';
                 } catch (err) {
                     if (loginError) loginError.textContent = err.message;
+                }
+            });
+        }
+
+        // ===== LOGOUT =====
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    cleanup();
+                    currentUser = null;
+                    isAdmin = false;
+                    isConnected = false;
+                    isServer = false;
+                    currentServer = null;
+                    messageHistory = [];
+                    clients = {};
+                    pendingApprovals = {};
+                    
+                    if (configModal) configModal.classList.add('hidden');
+                    if (loginScreen) loginScreen.classList.remove('hidden');
+                    if (messagesContainer) {
+                        messagesContainer.innerHTML = '<div class="system-msg">⚡ Selecione um servidor para entrar</div>';
+                    }
+                    updateStatus('Desconectado', 'offline');
+                    setInputEnabled(false);
+                    markServerActive(null);
+                    updateUserCount(0);
+                    
+                    document.querySelectorAll('.server-btn .status-indicator').forEach(el => {
+                        el.className = 'status-indicator offline';
+                    });
+                    
+                    showLoginSuccess('Saiu com sucesso!');
                 }
             });
         }
@@ -2311,156 +2465,180 @@
 
         function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, isWarning = false, isSuccess = false, audioData = null, imageData = null) {
             try {
-                const msgDiv = document.createElement('div');
-                
                 if (system) {
+                    const msgDiv = document.createElement('div');
                     msgDiv.className = 'system-msg';
                     if (isServerMsg) msgDiv.classList.add('server');
                     if (isError) msgDiv.classList.add('error');
                     if (isWarning) msgDiv.classList.add('warning');
                     if (isSuccess) msgDiv.classList.add('success');
                     msgDiv.textContent = text;
-                } else {
-                    msgDiv.className = 'message' + (isOwn ? ' own' : '');
-                    
-                    const userData = users[username] || { displayName: username, isAdmin: false };
-                    const displayName = userData.displayName || username;
-                    const isAdminUser = userData.isAdmin || false;
-                    
-                    const headerDiv = document.createElement('div');
-                    headerDiv.className = 'msg-header';
-                    
-                    const avatarDiv = document.createElement('div');
-                    avatarDiv.className = 'msg-avatar';
-                    const photo = getProfilePhoto(username);
-                    if (photo) {
-                        avatarDiv.innerHTML = `<img src="${photo}" alt="Avatar">`;
-                    } else {
-                        avatarDiv.innerHTML = `<div class="placeholder">👤</div>`;
+                    if (messagesContainer) {
+                        messagesContainer.appendChild(msgDiv);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     }
+                    return;
+                }
+
+                const userData = users[username] || { displayName: username, isAdmin: false };
+                const displayName = userData.displayName || username;
+                const isAdminUser = userData.isAdmin || false;
+                const photo = getProfilePhoto(username);
+                const time = getCurrentTime();
+
+                let group = messagesContainer.querySelector(`.message-group[data-user="${username}"]:last-child`);
+                const lastMessage = group ? group.querySelector('.message:last-child') : null;
+                const lastTime = lastMessage ? lastMessage.dataset.time : null;
+
+                if (!group || lastTime !== time || group.querySelectorAll('.message').length >= 3) {
+                    group = document.createElement('div');
+                    group.className = `message-group ${isOwn ? 'own' : ''}`;
+                    group.dataset.user = username;
+
+                    const header = document.createElement('div');
+                    header.className = 'msg-header';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'msg-avatar';
+                    if (photo) {
+                        avatar.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                    } else {
+                        avatar.innerHTML = `<div class="placeholder">👤</div>`;
+                    }
+
+                    const userSpan = document.createElement('span');
+                    userSpan.className = 'msg-user';
+                    userSpan.innerHTML = `${displayName} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
+
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'msg-time';
+                    timeSpan.textContent = time;
+
+                    header.appendChild(avatar);
+                    header.appendChild(userSpan);
+                    header.appendChild(timeSpan);
+                    group.appendChild(header);
+
+                    if (messagesContainer) messagesContainer.appendChild(group);
+                }
+
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${isOwn ? 'own' : ''}`;
+                msgDiv.dataset.time = time;
+
+                let contentDiv = document.createElement('div');
+                contentDiv.className = 'msg-text';
+
+                if (audioData) {
+                    const audioContainer = document.createElement('div');
+                    audioContainer.className = 'audio-message';
                     
-                    const userDiv = document.createElement('div');
-                    userDiv.className = 'msg-user';
-                    userDiv.innerHTML = `${displayName} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
+                    const playBtn = document.createElement('button');
+                    playBtn.className = 'play-btn';
+                    playBtn.textContent = '▶';
+                    playBtn.dataset.playing = 'false';
                     
-                    headerDiv.appendChild(avatarDiv);
-                    headerDiv.appendChild(userDiv);
+                    const progressContainer = document.createElement('div');
+                    progressContainer.className = 'audio-progress';
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    progressContainer.appendChild(progressBar);
                     
-                    let contentDiv = document.createElement('div');
-                    contentDiv.className = 'msg-text';
+                    const timeDisplay = document.createElement('span');
+                    timeDisplay.className = 'audio-time';
+                    timeDisplay.textContent = '0:00';
                     
-                    if (audioData) {
-                        const audioContainer = document.createElement('div');
-                        audioContainer.className = 'audio-message';
-                        
-                        const playBtn = document.createElement('button');
-                        playBtn.className = 'play-btn';
-                        playBtn.textContent = '▶';
-                        playBtn.dataset.playing = 'false';
-                        
-                        const progressContainer = document.createElement('div');
-                        progressContainer.className = 'audio-progress';
-                        const progressBar = document.createElement('div');
-                        progressBar.className = 'progress-bar';
-                        progressContainer.appendChild(progressBar);
-                        
-                        const timeDisplay = document.createElement('span');
-                        timeDisplay.className = 'audio-time';
-                        timeDisplay.textContent = '0:00';
-                        
-                        const audio = new Audio(audioData);
-                        audio.preload = 'metadata';
-                        
-                        let isPlaying = false;
-                        
-                        audio.addEventListener('loadedmetadata', () => {
-                            const duration = Math.floor(audio.duration);
-                            const minutes = Math.floor(duration / 60);
-                            const seconds = duration % 60;
-                            timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                        });
-                        
-                        playBtn.addEventListener('click', () => {
-                            if (isPlaying) {
-                                audio.pause();
-                                playBtn.textContent = '▶';
-                                isPlaying = false;
-                                playBtn.dataset.playing = 'false';
-                            } else {
-                                document.querySelectorAll('.play-btn').forEach(btn => {
-                                    if (btn !== playBtn && btn.dataset.playing === 'true') {
-                                        btn.click();
-                                    }
-                                });
-                                
-                                audio.play();
-                                playBtn.textContent = '⏸';
-                                isPlaying = true;
-                                playBtn.dataset.playing = 'true';
-                                
-                                const updateProgress = () => {
-                                    if (!isPlaying) return;
-                                    const progress = (audio.currentTime / audio.duration) * 100;
-                                    progressBar.style.width = progress + '%';
-                                    const current = Math.floor(audio.currentTime);
-                                    const minutes = Math.floor(current / 60);
-                                    const seconds = current % 60;
-                                    timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                                    requestAnimationFrame(updateProgress);
-                                };
-                                updateProgress();
-                            }
-                        });
-                        
-                        audio.addEventListener('ended', () => {
+                    const audio = new Audio(audioData);
+                    audio.preload = 'metadata';
+                    
+                    let isPlaying = false;
+                    
+                    audio.addEventListener('loadedmetadata', () => {
+                        const duration = Math.floor(audio.duration);
+                        const minutes = Math.floor(duration / 60);
+                        const seconds = duration % 60;
+                        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    });
+                    
+                    playBtn.addEventListener('click', () => {
+                        if (isPlaying) {
+                            audio.pause();
                             playBtn.textContent = '▶';
                             isPlaying = false;
                             playBtn.dataset.playing = 'false';
-                            progressBar.style.width = '0%';
-                            timeDisplay.textContent = '0:00';
-                        });
-                        
-                        progressContainer.addEventListener('click', (e) => {
-                            const rect = progressContainer.getBoundingClientRect();
-                            const x = (e.clientX - rect.left) / rect.width;
-                            audio.currentTime = x * audio.duration;
-                        });
-                        
-                        audioContainer.appendChild(playBtn);
-                        audioContainer.appendChild(progressContainer);
-                        audioContainer.appendChild(timeDisplay);
-                        
-                        contentDiv.appendChild(audioContainer);
-                    } else if (imageData) {
-                        const imgContainer = document.createElement('div');
-                        imgContainer.className = 'image-message';
-                        const img = document.createElement('img');
-                        img.src = imageData;
-                        img.alt = 'Imagem';
-                        img.loading = 'lazy';
-                        img.addEventListener('click', () => {
-                            if (imageModalContent) {
-                                imageModalContent.src = imageData;
-                                if (imageModal) imageModal.classList.remove('hidden');
-                            }
-                        });
-                        imgContainer.appendChild(img);
-                        contentDiv.appendChild(imgContainer);
-                    } else {
-                        contentDiv.textContent = text;
-                    }
+                        } else {
+                            document.querySelectorAll('.play-btn').forEach(btn => {
+                                if (btn !== playBtn && btn.dataset.playing === 'true') {
+                                    btn.click();
+                                }
+                            });
+                            
+                            audio.play();
+                            playBtn.textContent = '⏸';
+                            isPlaying = true;
+                            playBtn.dataset.playing = 'true';
+                            
+                            const updateProgress = () => {
+                                if (!isPlaying) return;
+                                const progress = (audio.currentTime / audio.duration) * 100;
+                                progressBar.style.width = progress + '%';
+                                const current = Math.floor(audio.currentTime);
+                                const minutes = Math.floor(current / 60);
+                                const seconds = current % 60;
+                                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                requestAnimationFrame(updateProgress);
+                            };
+                            updateProgress();
+                        }
+                    });
                     
-                    const timeDiv = document.createElement('div');
-                    timeDiv.className = 'msg-time';
-                    timeDiv.textContent = getCurrentTime();
+                    audio.addEventListener('ended', () => {
+                        playBtn.textContent = '▶';
+                        isPlaying = false;
+                        playBtn.dataset.playing = 'false';
+                        progressBar.style.width = '0%';
+                        timeDisplay.textContent = '0:00';
+                    });
                     
-                    msgDiv.appendChild(headerDiv);
-                    msgDiv.appendChild(contentDiv);
-                    msgDiv.appendChild(timeDiv);
+                    progressContainer.addEventListener('click', (e) => {
+                        const rect = progressContainer.getBoundingClientRect();
+                        const x = (e.clientX - rect.left) / rect.width;
+                        audio.currentTime = x * audio.duration;
+                    });
+                    
+                    audioContainer.appendChild(playBtn);
+                    audioContainer.appendChild(progressContainer);
+                    audioContainer.appendChild(timeDisplay);
+                    contentDiv.appendChild(audioContainer);
+                } else if (imageData) {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'image-message';
+                    const img = document.createElement('img');
+                    img.src = imageData;
+                    img.alt = 'Imagem';
+                    img.loading = 'lazy';
+                    img.addEventListener('click', () => {
+                        if (imageModalContent) {
+                            imageModalContent.src = imageData;
+                            if (imageModal) imageModal.classList.remove('hidden');
+                        }
+                    });
+                    imgContainer.appendChild(img);
+                    contentDiv.appendChild(imgContainer);
+                } else {
+                    contentDiv.textContent = text;
                 }
-                
+
+                msgDiv.appendChild(contentDiv);
+
+                const timeInline = document.createElement('div');
+                timeInline.className = 'msg-time-inline';
+                timeInline.textContent = time;
+                msgDiv.appendChild(timeInline);
+
+                group.appendChild(msgDiv);
+
                 if (messagesContainer) {
-                    messagesContainer.appendChild(msgDiv);
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 }
             } catch (e) {
@@ -2789,10 +2967,10 @@
                     cursor: pointer;
                     font-size: 13px;
                     transition: all 0.4s ease;
-                    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.1);
+                    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.06);
                 `;
-                acceptBtn.onmouseover = () => { acceptBtn.style.transform = 'scale(1.05)'; acceptBtn.style.boxShadow = '0 6px 30px rgba(76, 175, 80, 0.15)'; };
-                acceptBtn.onmouseout = () => { acceptBtn.style.transform = 'scale(1)'; acceptBtn.style.boxShadow = '0 4px 20px rgba(76, 175, 80, 0.1)'; };
+                acceptBtn.onmouseover = () => { acceptBtn.style.transform = 'scale(1.05)'; acceptBtn.style.boxShadow = '0 6px 30px rgba(76, 175, 80, 0.1)'; };
+                acceptBtn.onmouseout = () => { acceptBtn.style.transform = 'scale(1)'; acceptBtn.style.boxShadow = '0 4px 20px rgba(76, 175, 80, 0.06)'; };
                 acceptBtn.onclick = () => acceptUser(peerId);
                 
                 const rejectBtn = document.createElement('button');
@@ -2807,10 +2985,10 @@
                     cursor: pointer;
                     font-size: 13px;
                     transition: all 0.4s ease;
-                    box-shadow: 0 4px 20px rgba(244, 67, 54, 0.1);
+                    box-shadow: 0 4px 20px rgba(244, 67, 54, 0.06);
                 `;
-                rejectBtn.onmouseover = () => { rejectBtn.style.transform = 'scale(1.05)'; rejectBtn.style.boxShadow = '0 6px 30px rgba(244, 67, 54, 0.15)'; };
-                rejectBtn.onmouseout = () => { rejectBtn.style.transform = 'scale(1)'; rejectBtn.style.boxShadow = '0 4px 20px rgba(244, 67, 54, 0.1)'; };
+                rejectBtn.onmouseover = () => { rejectBtn.style.transform = 'scale(1.05)'; rejectBtn.style.boxShadow = '0 6px 30px rgba(244, 67, 54, 0.1)'; };
+                rejectBtn.onmouseout = () => { rejectBtn.style.transform = 'scale(1)'; rejectBtn.style.boxShadow = '0 4px 20px rgba(244, 67, 54, 0.06)'; };
                 rejectBtn.onclick = () => rejectUser(peerId);
                 
                 msgDiv.appendChild(acceptBtn);
