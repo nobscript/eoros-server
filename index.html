@@ -30,6 +30,58 @@
             --container-width: 480px;
             --container-height: 95vh;
             --border-radius: 28px;
+            --message-own-text: #ffffff;
+            --message-other-text: #e4e6f0;
+        }
+
+        /* ===== CORES PERSONALIZÁVEIS ===== */
+        [data-color="blue"] {
+            --accent: #5865f2;
+            --accent-hover: #4752c4;
+            --accent-gradient: linear-gradient(135deg, #5865f2, #7986f5);
+            --message-own: #5865f2;
+        }
+        [data-color="purple"] {
+            --accent: #9b59b6;
+            --accent-hover: #8e44ad;
+            --accent-gradient: linear-gradient(135deg, #9b59b6, #bb8fce);
+            --message-own: #9b59b6;
+        }
+        [data-color="pink"] {
+            --accent: #e91e63;
+            --accent-hover: #c2185b;
+            --accent-gradient: linear-gradient(135deg, #e91e63, #f48fb1);
+            --message-own: #e91e63;
+        }
+        [data-color="red"] {
+            --accent: #e74c3c;
+            --accent-hover: #c0392b;
+            --accent-gradient: linear-gradient(135deg, #e74c3c, #f1948a);
+            --message-own: #e74c3c;
+        }
+        [data-color="orange"] {
+            --accent: #f39c12;
+            --accent-hover: #d68910;
+            --accent-gradient: linear-gradient(135deg, #f39c12, #f7dc6f);
+            --message-own: #f39c12;
+        }
+        [data-color="green"] {
+            --accent: #2ecc71;
+            --accent-hover: #27ae60;
+            --accent-gradient: linear-gradient(135deg, #2ecc71, #82e0aa);
+            --message-own: #2ecc71;
+        }
+        [data-color="teal"] {
+            --accent: #1abc9c;
+            --accent-hover: #16a085;
+            --accent-gradient: linear-gradient(135deg, #1abc9c, #76d7c4);
+            --message-own: #1abc9c;
+        }
+        [data-color="cyan"] {
+            --accent: #00bcd4;
+            --accent-hover: #0097a7;
+            --accent-gradient: linear-gradient(135deg, #00bcd4, #80deea);
+            --message-own: #00bcd4;
         }
 
         /* ===== TEMA CLARO ===== */
@@ -42,14 +94,13 @@
             --text-secondary: #4a4a5a;
             --text-muted: #6d6f87;
             --border-color: #d0d2d6;
-            --accent: #5865f2;
-            --accent-hover: #4752c4;
             --shadow: 0 20px 60px rgba(0,0,0,0.1);
-            --message-own: #5865f2;
             --message-other: #e8eaed;
             --card-bg: #ffffff;
             --input-bg: #f0f2f5;
             --hover-bg: #e8eaed;
+            --message-other-text: #1e1e2e;
+            --message-own-text: #ffffff;
         }
 
         /* ===== LAYOUT DESKTOP ===== */
@@ -134,6 +185,11 @@
             height: 100px;
         }
 
+        [data-device="desktop"] .color-options .color-btn {
+            width: 40px;
+            height: 40px;
+        }
+
         /* ===== LAYOUT MOBILE ===== */
         [data-device="mobile"] .chat-container {
             max-width: 480px;
@@ -152,6 +208,11 @@
 
         [data-device="mobile"] .login-screen .login-box {
             max-width: 400px;
+        }
+
+        [data-device="mobile"] .color-options .color-btn {
+            width: 32px;
+            height: 32px;
         }
 
         /* ===== LAYOUT TABLET ===== */
@@ -180,7 +241,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, max-width 0.3s, height 0.3s, box-shadow 0.3s;
         }
 
         body {
@@ -696,7 +757,7 @@
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
         }
 
         .message .msg-avatar img {
@@ -716,6 +777,10 @@
             font-size: 12px;
         }
 
+        .message.own .msg-avatar {
+            border-color: rgba(255,255,255,0.3);
+        }
+
         .message .msg-user {
             font-size: 13px;
             font-weight: 600;
@@ -727,7 +792,7 @@
         }
 
         .message.own .msg-user {
-            color: #d4d6f0;
+            color: rgba(255,255,255,0.9);
         }
 
         .message .msg-user .badge {
@@ -740,8 +805,8 @@
         }
 
         .message.own .msg-user .badge {
-            background: #4752c4;
-            color: #d4d6f0;
+            background: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.8);
         }
 
         .message .msg-user .admin-badge {
@@ -754,7 +819,7 @@
         }
 
         .message .msg-text {
-            color: var(--text-primary);
+            color: var(--message-other-text);
             font-size: 14px;
             line-height: 1.4;
             word-break: break-word;
@@ -762,7 +827,7 @@
         }
 
         .message.own .msg-text {
-            color: #ffffff;
+            color: var(--message-own-text);
         }
 
         .message .msg-text img {
@@ -781,7 +846,7 @@
         }
 
         .message.own .msg-time {
-            color: #b9bbd4;
+            color: rgba(255,255,255,0.7);
         }
 
         /* ===== IMAGEM MENSAGEM ===== */
@@ -813,6 +878,10 @@
             border-radius: 12px;
             margin: 4px 0;
             min-width: 140px;
+        }
+
+        .message.own .audio-message {
+            background: rgba(255,255,255,0.15);
         }
 
         .audio-message .play-btn {
@@ -862,6 +931,10 @@
             font-size: 11px;
             min-width: 30px;
             text-align: center;
+        }
+
+        .message.own .audio-message .audio-time {
+            color: rgba(255,255,255,0.8);
         }
 
         /* ===== SYSTEM MESSAGES ===== */
@@ -1240,6 +1313,47 @@
             height: 80px;
         }
 
+        .config-modal .config-box .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .config-modal .config-box .color-options .color-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .config-modal .config-box .color-options .color-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .config-modal .config-box .color-options .color-btn.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .config-modal .config-box .color-options .color-btn .check {
+            display: none;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .config-modal .config-box .color-options .color-btn.active .check {
+            display: block;
+        }
+
         .config-modal .config-box .btn-group {
             display: flex;
             gap: 10px;
@@ -1398,7 +1512,6 @@
                 font-size: 9px;
                 padding: 1px 6px;
             }
-            /* Desktop layout força mobile em telas pequenas */
             [data-device="desktop"] .chat-container {
                 max-width: 480px;
                 height: 100vh;
@@ -1472,6 +1585,10 @@
                 font-size: 10px;
                 padding: 4px 6px;
                 min-width: 50px;
+            }
+            .config-modal .config-box .color-options .color-btn {
+                width: 28px;
+                height: 28px;
             }
         }
     </style>
@@ -1548,6 +1665,20 @@
             <div class="form-group">
                 <label>👤 Nome de Exibição</label>
                 <input type="text" id="configDisplayName" placeholder="Seu nome no chat">
+            </div>
+
+            <div class="form-group">
+                <label>🎨 Cor do Tema</label>
+                <div class="color-options" id="colorOptions">
+                    <button class="color-btn active" data-color="blue" style="background: #5865f2;">✓</button>
+                    <button class="color-btn" data-color="purple" style="background: #9b59b6;">✓</button>
+                    <button class="color-btn" data-color="pink" style="background: #e91e63;">✓</button>
+                    <button class="color-btn" data-color="red" style="background: #e74c3c;">✓</button>
+                    <button class="color-btn" data-color="orange" style="background: #f39c12;">✓</button>
+                    <button class="color-btn" data-color="green" style="background: #2ecc71;">✓</button>
+                    <button class="color-btn" data-color="teal" style="background: #1abc9c;">✓</button>
+                    <button class="color-btn" data-color="cyan" style="background: #00bcd4;">✓</button>
+                </div>
             </div>
 
             <div class="form-group">
@@ -1679,12 +1810,24 @@
 
         // ===== TEMA =====
         let currentTheme = localStorage.getItem('eoros_theme') || 'dark';
+        let currentColor = localStorage.getItem('eoros_color') || 'blue';
 
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             currentTheme = theme;
             localStorage.setItem('eoros_theme', theme);
             document.getElementById('themeBtn').textContent = theme === 'dark' ? '🌓' : '☀️';
+        }
+
+        function applyColor(color) {
+            document.documentElement.setAttribute('data-color', color);
+            currentColor = color;
+            localStorage.setItem('eoros_color', color);
+            
+            // Atualiza botões de cor
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.color === color);
+            });
         }
 
         // ===== TRADUÇÕES =====
@@ -1718,7 +1861,8 @@
                 server: 'Servidor',
                 photoRequired: '⚠️ Por favor, adicione uma foto de perfil.',
                 imageTooLarge: '⚠️ A imagem é muito grande. Máximo 5MB.',
-                invalidImage: '⚠️ Formato de imagem inválido.'
+                invalidImage: '⚠️ Formato de imagem inválido.',
+                colorTheme: '🎨 Cor do Tema'
             },
             en: {
                 title: 'Communication System',
@@ -1749,7 +1893,8 @@
                 server: 'Server',
                 photoRequired: '⚠️ Please add a profile photo.',
                 imageTooLarge: '⚠️ Image is too large. Max 5MB.',
-                invalidImage: '⚠️ Invalid image format.'
+                invalidImage: '⚠️ Invalid image format.',
+                colorTheme: '🎨 Color Theme'
             },
             es: {
                 title: 'Sistema de Comunicación',
@@ -1780,7 +1925,8 @@
                 server: 'Servidor',
                 photoRequired: '⚠️ Por favor, agregue una foto de perfil.',
                 imageTooLarge: '⚠️ La imagen es demasiado grande. Máximo 5MB.',
-                invalidImage: '⚠️ Formato de imagen inválido.'
+                invalidImage: '⚠️ Formato de imagen inválido.',
+                colorTheme: '🎨 Tema de Color'
             },
             ru: {
                 title: 'Система связи',
@@ -1811,7 +1957,8 @@
                 server: 'Сервер',
                 photoRequired: '⚠️ Пожалуйста, добавьте фото профиля.',
                 imageTooLarge: '⚠️ Изображение слишком большое. Максимум 5МБ.',
-                invalidImage: '⚠️ Неверный формат изображения.'
+                invalidImage: '⚠️ Неверный формат изображения.',
+                colorTheme: '🎨 Цветовая тема'
             }
         };
 
@@ -1842,6 +1989,7 @@
         const configPhotoPreview = document.getElementById('configPhotoPreview');
         const configPhotoInput = document.getElementById('configPhotoInput');
         const configPhotoPlaceholder = document.getElementById('configPhotoPlaceholder');
+        const colorOptions = document.getElementById('colorOptions');
 
         const imageModal = document.getElementById('imageModal');
         const imageModalContent = document.getElementById('imageModalContent');
@@ -1910,8 +2058,9 @@
         headerDeviceBadge.textContent = deviceInfo.icon;
         headerDeviceBadge.className = `device-badge ${deviceInfo.type}`;
 
-        // ===== APLICAR TEMA =====
+        // ===== APLICAR TEMA E COR =====
         applyTheme(currentTheme);
+        applyColor(currentColor);
 
         // ===== FUNÇÕES DE TRADUÇÃO =====
         function t(key) {
@@ -1994,6 +2143,13 @@
             });
         });
 
+        // ===== SELETOR DE COR =====
+        colorOptions.addEventListener('click', (e) => {
+            const btn = e.target.closest('.color-btn');
+            if (!btn) return;
+            applyColor(btn.dataset.color);
+        });
+
         // ===== TEMA =====
         themeBtn.addEventListener('click', () => {
             applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
@@ -2055,6 +2211,11 @@
                 configPhotoPlaceholder.style.display = 'flex';
             }
             
+            // Marca a cor atual
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.color === currentColor);
+            });
+            
             configModal.classList.remove('hidden');
         });
 
@@ -2066,12 +2227,11 @@
             const displayName = configDisplayName.value.trim();
             const newPassword = configPassword.value;
             const confirmPassword = configConfirmPassword.value;
-            let photoChanged = false;
+            const selectedColor = document.querySelector('.color-btn.active')?.dataset.color || 'blue';
 
             const configPhotoImg = configPhotoPreview.querySelector('img');
             if (configPhotoImg) {
                 users[currentUser].profilePhoto = configPhotoImg.src;
-                photoChanged = true;
             }
 
             if (displayName) {
@@ -2092,6 +2252,8 @@
             }
 
             currentLang = configLanguage.value;
+            applyColor(selectedColor);
+            
             localStorage.setItem('chat_users', JSON.stringify(users));
             updateLoginTexts();
             updateHeaderAvatar(currentUser);
@@ -3157,6 +3319,7 @@
         console.log('📱 Dispositivo:', deviceInfo);
         console.log('👤 Usuários:', users);
         console.log('🎨 Tema:', currentTheme);
+        console.log('🎨 Cor:', currentColor);
 
         loginScreen.classList.remove('hidden');
         updateLoginTexts();
