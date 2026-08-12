@@ -32,7 +32,7 @@
             --border-radius: 24px;
             --message-own-text: #ffffff;
             --message-other-text: #e8e8f0;
-            --glass-bg: rgba(18, 18, 26, 0.8);
+            --glass-bg: rgba(18, 18, 26, 0.85);
         }
 
         /* ===== CORES PERSONALIZÁVEIS ===== */
@@ -1450,7 +1450,8 @@
             document.documentElement.setAttribute('data-theme', theme);
             currentTheme = theme;
             localStorage.setItem('eoros_theme', theme);
-            document.getElementById('themeBtn').textContent = theme === 'dark' ? '🌓' : '☀️';
+            const themeBtn = document.getElementById('themeBtn');
+            if (themeBtn) themeBtn.textContent = theme === 'dark' ? '🌓' : '☀️';
         }
 
         function applyColor(color) {
@@ -1656,29 +1657,50 @@
             localStorage.setItem('chat_users', JSON.stringify(users));
         }
 
-        // ===== DETECTAR DISPOSITIVO =====
-        loginDeviceInfo.textContent = `${deviceInfo.icon} ${deviceInfo.label}`;
-        headerDeviceBadge.textContent = deviceInfo.icon;
-        headerDeviceBadge.className = `device-badge ${deviceInfo.type}`;
+        // ===== DETECTAR DISPOSITIVO - COM FALLBACK =====
+        try {
+            loginDeviceInfo.textContent = `${deviceInfo.icon} ${deviceInfo.label}`;
+            headerDeviceBadge.textContent = deviceInfo.icon;
+            headerDeviceBadge.className = `device-badge ${deviceInfo.type}`;
+        } catch (e) {
+            loginDeviceInfo.textContent = '📱 Mobile';
+            headerDeviceBadge.textContent = '📱';
+            headerDeviceBadge.className = 'device-badge mobile';
+        }
 
         // ===== APLICAR TEMA E COR =====
-        applyTheme(currentTheme);
-        applyColor(currentColor);
+        try {
+            applyTheme(currentTheme);
+            applyColor(currentColor);
+        } catch (e) {
+            // Fallback
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-color', 'blue');
+        }
 
         // ===== FUNÇÕES DE TRADUÇÃO =====
         function t(key) {
-            return TRANSLATIONS[currentLang][key] || key;
+            return TRANSLATIONS[currentLang]?.[key] || key;
         }
 
         function updateLoginTexts() {
-            document.getElementById('loginUsernameLabel').textContent = t('username');
-            document.getElementById('loginPasswordLabel').textContent = t('password');
-            document.getElementById('loginConfirmLabel').textContent = t('confirmPassword');
-            loginBtn.innerHTML = t('loginBtn');
-            loginUsername.placeholder = t('username');
-            loginPassword.placeholder = t('password');
-            loginConfirmPassword.placeholder = t('confirmPassword');
-            document.querySelector('.greeting').innerHTML = t('greeting');
+            try {
+                const usernameLabel = document.getElementById('loginUsernameLabel');
+                const passwordLabel = document.getElementById('loginPasswordLabel');
+                const confirmLabel = document.getElementById('loginConfirmLabel');
+                const greeting = document.querySelector('.greeting');
+                
+                if (usernameLabel) usernameLabel.textContent = t('username');
+                if (passwordLabel) passwordLabel.textContent = t('password');
+                if (confirmLabel) confirmLabel.textContent = t('confirmPassword');
+                if (loginBtn) loginBtn.innerHTML = t('loginBtn');
+                if (loginUsername) loginUsername.placeholder = t('username');
+                if (loginPassword) loginPassword.placeholder = t('password');
+                if (loginConfirmPassword) loginConfirmPassword.placeholder = t('confirmPassword');
+                if (greeting) greeting.innerHTML = t('greeting');
+            } catch (e) {
+                console.warn('Erro ao atualizar textos:', e);
+            }
         }
 
         // ===== FUNÇÕES DE FOTO =====
@@ -1713,11 +1735,16 @@
         }
 
         function updateHeaderAvatar(username) {
-            const photo = getProfilePhoto(username);
-            if (photo) {
-                headerAvatar.innerHTML = `<img src="${photo}" alt="Avatar">`;
-            } else {
-                headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
+            try {
+                const photo = getProfilePhoto(username);
+                if (photo && headerAvatar) {
+                    headerAvatar.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                } else if (headerAvatar) {
+                    headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
+                }
+            } catch (e) {
+                // Fallback
+                if (headerAvatar) headerAvatar.innerHTML = `<div class="placeholder">👤</div>`;
             }
         }
 
@@ -1727,237 +1754,326 @@
                 langBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentLang = btn.dataset.lang;
-                configLanguage.value = currentLang;
+                if (configLanguage) configLanguage.value = currentLang;
                 updateLoginTexts();
             });
         });
 
         // ===== SELETOR DE COR =====
-        colorOptions.addEventListener('click', (e) => {
-            const btn = e.target.closest('.color-btn');
-            if (!btn) return;
-            applyColor(btn.dataset.color);
-        });
+        if (colorOptions) {
+            colorOptions.addEventListener('click', (e) => {
+                const btn = e.target.closest('.color-btn');
+                if (!btn) return;
+                applyColor(btn.dataset.color);
+            });
+        }
 
         // ===== TEMA =====
-        themeBtn.addEventListener('click', () => {
-            applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
-        });
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
+        }
 
         // ===== FOTO LOGIN =====
-        loginPhotoPreview.addEventListener('click', () => loginPhotoInput.click());
-        loginPhotoInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                const compressed = await compressImage(file);
-                tempProfilePhoto = compressed;
-                loginPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
-                loginPhotoPlaceholder.style.display = 'none';
-                loginError.textContent = '';
-            } catch (err) {
-                loginError.textContent = err.message;
-            }
-        });
+        if (loginPhotoPreview) {
+            loginPhotoPreview.addEventListener('click', () => {
+                if (loginPhotoInput) loginPhotoInput.click();
+            });
+        }
+
+        if (loginPhotoInput) {
+            loginPhotoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    tempProfilePhoto = compressed;
+                    if (loginPhotoPreview) {
+                        loginPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
+                    }
+                    if (loginPhotoPlaceholder) loginPhotoPlaceholder.style.display = 'none';
+                    if (loginError) loginError.textContent = '';
+                } catch (err) {
+                    if (loginError) loginError.textContent = err.message;
+                }
+            });
+        }
 
         // ===== FOTO CONFIG =====
-        configPhotoPreview.addEventListener('click', () => configPhotoInput.click());
-        configPhotoInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                const compressed = await compressImage(file);
-                configPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
-                configPhotoPlaceholder.style.display = 'none';
-            } catch (err) {
-                loginError.textContent = err.message;
-            }
-        });
-
-        // ===== CONFIGURAÇÕES =====        configBtn.addEventListener('click', () => {
-            if (!currentUser) return;
-            const user = users[currentUser];
-            configDisplayName.value = user.displayName || currentUser;
-            configPassword.value = '';
-            configConfirmPassword.value = '';
-            configLanguage.value = currentLang;
-            adminSection.style.display = isAdmin ? 'block' : 'none';
-            
-            if (user.profilePhoto) {
-                configPhotoPreview.innerHTML = `<img src="${user.profilePhoto}" alt="Foto">`;
-                configPhotoPlaceholder.style.display = 'none';
-            } else {
-                configPhotoPreview.innerHTML = `<div class="placeholder" id="configPhotoPlaceholder">📸</div>`;
-                configPhotoPlaceholder.style.display = 'flex';
-            }
-            
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.color === currentColor);
+        if (configPhotoPreview) {
+            configPhotoPreview.addEventListener('click', () => {
+                if (configPhotoInput) configPhotoInput.click();
             });
-            
-            configModal.classList.remove('hidden');
-        });
+        }
 
-        configCloseBtn.addEventListener('click', () => configModal.classList.add('hidden'));
+        if (configPhotoInput) {
+            configPhotoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    if (configPhotoPreview) {
+                        configPhotoPreview.innerHTML = `<img src="${compressed}" alt="Foto">`;
+                    }
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'none';
+                } catch (err) {
+                    if (loginError) loginError.textContent = err.message;
+                }
+            });
+        }
 
-        configSaveBtn.addEventListener('click', async () => {
-            const displayName = configDisplayName.value.trim();
-            const newPassword = configPassword.value;
-            const confirmPassword = configConfirmPassword.value;
-            const selectedColor = document.querySelector('.color-btn.active')?.dataset.color || 'blue';
+        // ===== CONFIGURAÇÕES =====
+        if (configBtn) {
+            configBtn.addEventListener('click', () => {
+                if (!currentUser) return;
+                const user = users[currentUser];
+                if (configDisplayName) configDisplayName.value = user.displayName || currentUser;
+                if (configPassword) configPassword.value = '';
+                if (configConfirmPassword) configConfirmPassword.value = '';
+                if (configLanguage) configLanguage.value = currentLang;
+                if (adminSection) adminSection.style.display = isAdmin ? 'block' : 'none';
+                
+                if (user.profilePhoto && configPhotoPreview) {
+                    configPhotoPreview.innerHTML = `<img src="${user.profilePhoto}" alt="Foto">`;
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'none';
+                } else if (configPhotoPreview) {
+                    configPhotoPreview.innerHTML = `<div class="placeholder" id="configPhotoPlaceholder">📸</div>`;
+                    if (configPhotoPlaceholder) configPhotoPlaceholder.style.display = 'flex';
+                }
+                
+                document.querySelectorAll('.color-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.color === currentColor);
+                });
+                
+                if (configModal) configModal.classList.remove('hidden');
+            });
+        }
 
-            const configPhotoImg = configPhotoPreview.querySelector('img');
-            if (configPhotoImg) {
-                users[currentUser].profilePhoto = configPhotoImg.src;
-            }
+        if (configCloseBtn) {
+            configCloseBtn.addEventListener('click', () => {
+                if (configModal) configModal.classList.add('hidden');
+            });
+        }
 
-            if (displayName) users[currentUser].displayName = displayName;
+        if (configSaveBtn) {
+            configSaveBtn.addEventListener('click', async () => {
+                const displayName = configDisplayName ? configDisplayName.value.trim() : '';
+                const newPassword = configPassword ? configPassword.value : '';
+                const confirmPassword = configConfirmPassword ? configConfirmPassword.value : '';
+                const selectedColor = document.querySelector('.color-btn.active')?.dataset.color || 'blue';
 
-            if (newPassword) {
-                if (newPassword.length < 8) { showLoginError(t('passwordShort')); return; }
-                if (newPassword !== confirmPassword) { showLoginError(t('passwordMismatch')); return; }
-                users[currentUser].password = newPassword;
-                users[currentUser].firstAccess = false;
-            }
+                const configPhotoImg = configPhotoPreview ? configPhotoPreview.querySelector('img') : null;
+                if (configPhotoImg && currentUser) {
+                    users[currentUser].profilePhoto = configPhotoImg.src;
+                }
 
-            currentLang = configLanguage.value;
-            applyColor(selectedColor);
-            
-            localStorage.setItem('chat_users', JSON.stringify(users));
-            updateLoginTexts();
-            updateHeaderAvatar(currentUser);
-            
-            configModal.classList.add('hidden');
-            showLoginSuccess('Configurações salvas!');
-        });
+                if (displayName && currentUser) {
+                    users[currentUser].displayName = displayName;
+                }
+
+                if (newPassword && currentUser) {
+                    if (newPassword.length < 8) { 
+                        if (loginError) showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (newPassword !== confirmPassword) { 
+                        if (loginError) showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users[currentUser].password = newPassword;
+                    users[currentUser].firstAccess = false;
+                }
+
+                currentLang = configLanguage ? configLanguage.value : 'pt';
+                applyColor(selectedColor);
+                
+                localStorage.setItem('chat_users', JSON.stringify(users));
+                updateLoginTexts();
+                if (currentUser) updateHeaderAvatar(currentUser);
+                
+                if (configModal) configModal.classList.add('hidden');
+                if (loginSuccess) showLoginSuccess('Configurações salvas!');
+            });
+        }
 
         // ===== FUNÇÕES DE LOGIN =====
         function showLoginError(msg) {
-            loginError.textContent = msg;
-            loginSuccess.textContent = '';
+            if (loginError) loginError.textContent = msg;
+            if (loginSuccess) loginSuccess.textContent = '';
         }
 
         function showLoginSuccess(msg) {
-            loginSuccess.textContent = msg;
-            loginError.textContent = '';
+            if (loginSuccess) loginSuccess.textContent = msg;
+            if (loginError) loginError.textContent = '';
         }
 
-        function checkUserExists(username) { return users[username] !== undefined; }
-        function validatePassword(password) { return password.length >= 8; }
+        function checkUserExists(username) { 
+            return users[username] !== undefined; 
+        }
+
+        function validatePassword(password) { 
+            return password && password.length >= 8; 
+        }
 
         function handleLogin() {
-            const username = loginUsername.value.trim();
-            const password = loginPassword.value;
-            const confirmPassword = loginConfirmPassword.value;
+            try {
+                const username = loginUsername ? loginUsername.value.trim() : '';
+                const password = loginPassword ? loginPassword.value : '';
+                const confirmPassword = loginConfirmPassword ? loginConfirmPassword.value : '';
 
-            loginError.textContent = '';
-            loginSuccess.textContent = '';
+                if (loginError) loginError.textContent = '';
+                if (loginSuccess) loginSuccess.textContent = '';
 
-            if (!username) {
-                showLoginError('Por favor, digite um nome de usuário.');
-                return;
-            }
-
-            if (!tempProfilePhoto && !users[username]?.profilePhoto) {
-                showLoginError(t('photoRequired'));
-                return;
-            }
-
-            if (username === 'admin' && users['admin'].firstAccess) {
-                if (!password || !confirmPassword) {
-                    showLoginError(t('firstAccess'));
-                    confirmPasswordGroup.style.display = 'block';
+                if (!username) {
+                    showLoginError('Por favor, digite um nome de usuário.');
                     return;
                 }
-                if (!validatePassword(password)) { showLoginError(t('passwordShort')); return; }
-                if (password !== confirmPassword) { showLoginError(t('passwordMismatch')); return; }
-                users['admin'].password = password;
-                users['admin'].firstAccess = false;
-                users['admin'].displayName = 'Admin';
-                users['admin'].profilePhoto = tempProfilePhoto || null;
-                localStorage.setItem('chat_users', JSON.stringify(users));
-                currentUser = 'admin';
-                isAdmin = true;
-                loginSuccess.textContent = '✅ Senha definida com sucesso!';
-                setTimeout(() => {
-                    loginScreen.classList.add('hidden');
-                    updateHeaderAvatar(currentUser);
-                    initChat();
-                }, 1000);
-                return;
-            }
 
-            if (!checkUserExists(username)) {
-                if (!password || !confirmPassword) {
-                    showLoginError('Digite sua senha para criar a conta.');
-                    confirmPasswordGroup.style.display = 'block';
+                if (!tempProfilePhoto && !users[username]?.profilePhoto) {
+                    showLoginError(t('photoRequired'));
                     return;
                 }
-                if (!validatePassword(password)) { showLoginError(t('passwordShort')); return; }
-                if (password !== confirmPassword) { showLoginError(t('passwordMismatch')); return; }
-                users[username] = {
-                    password: password,
-                    displayName: username,
-                    isAdmin: false,
-                    firstAccess: false,
-                    profilePhoto: tempProfilePhoto || null
-                };
-                localStorage.setItem('chat_users', JSON.stringify(users));
+
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (!password || !confirmPassword) {
+                        showLoginError(t('firstAccess'));
+                        if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                        return;
+                    }
+                    if (!validatePassword(password)) { 
+                        showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (password !== confirmPassword) { 
+                        showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users['admin'].password = password;
+                    users['admin'].firstAccess = false;
+                    users['admin'].displayName = 'Admin';
+                    users['admin'].profilePhoto = tempProfilePhoto || null;
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                    currentUser = 'admin';
+                    isAdmin = true;
+                    if (loginSuccess) loginSuccess.textContent = '✅ Senha definida com sucesso!';
+                    setTimeout(() => {
+                        if (loginScreen) loginScreen.classList.add('hidden');
+                        updateHeaderAvatar(currentUser);
+                        initChat();
+                    }, 1000);
+                    return;
+                }
+
+                if (!checkUserExists(username)) {
+                    if (!password || !confirmPassword) {
+                        showLoginError('Digite sua senha para criar a conta.');
+                        if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                        return;
+                    }
+                    if (!validatePassword(password)) { 
+                        showLoginError(t('passwordShort')); 
+                        return; 
+                    }
+                    if (password !== confirmPassword) { 
+                        showLoginError(t('passwordMismatch')); 
+                        return; 
+                    }
+                    users[username] = {
+                        password: password,
+                        displayName: username,
+                        isAdmin: false,
+                        firstAccess: false,
+                        profilePhoto: tempProfilePhoto || null
+                    };
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                    currentUser = username;
+                    isAdmin = false;
+                    if (loginSuccess) loginSuccess.textContent = '✅ Conta criada com sucesso!';
+                    setTimeout(() => {
+                        if (loginScreen) loginScreen.classList.add('hidden');
+                        updateHeaderAvatar(currentUser);
+                        initChat();
+                    }, 1000);
+                    return;
+                }
+
+                if (users[username].password !== password) {
+                    showLoginError(t('loginError'));
+                    return;
+                }
+
+                if (tempProfilePhoto) {
+                    users[username].profilePhoto = tempProfilePhoto;
+                    localStorage.setItem('chat_users', JSON.stringify(users));
+                }
+
                 currentUser = username;
-                isAdmin = false;
-                loginSuccess.textContent = '✅ Conta criada com sucesso!';
+                isAdmin = users[username].isAdmin || false;
+                if (loginSuccess) loginSuccess.textContent = t('loginSuccess');
                 setTimeout(() => {
-                    loginScreen.classList.add('hidden');
+                    if (loginScreen) loginScreen.classList.add('hidden');
                     updateHeaderAvatar(currentUser);
                     initChat();
-                }, 1000);
-                return;
+                }, 500);
+            } catch (e) {
+                console.error('Erro no login:', e);
+                showLoginError('Erro ao fazer login. Tente novamente.');
             }
-
-            if (users[username].password !== password) {
-                showLoginError(t('loginError'));
-                return;
-            }
-
-            if (tempProfilePhoto) {
-                users[username].profilePhoto = tempProfilePhoto;
-                localStorage.setItem('chat_users', JSON.stringify(users));
-            }
-
-            currentUser = username;
-            isAdmin = users[username].isAdmin || false;
-            loginSuccess.textContent = t('loginSuccess');
-            setTimeout(() => {
-                loginScreen.classList.add('hidden');
-                updateHeaderAvatar(currentUser);
-                initChat();
-            }, 500);
         }
 
         // ===== EVENTOS DE LOGIN =====
-        loginBtn.addEventListener('click', handleLogin);
-        loginUsername.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginPassword.focus(); });
-        loginPassword.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                if (confirmPasswordGroup.style.display === 'block') loginConfirmPassword.focus();
-                else handleLogin();
-            }
-        });
-        loginConfirmPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+        if (loginBtn) loginBtn.addEventListener('click', handleLogin);
+        
+        if (loginUsername) {
+            loginUsername.addEventListener('keydown', (e) => { 
+                if (e.key === 'Enter' && loginPassword) loginPassword.focus(); 
+            });
+        }
 
-        loginPassword.addEventListener('input', () => {
-            const username = loginUsername.value.trim();
-            if (username === 'admin' && users['admin'].firstAccess) confirmPasswordGroup.style.display = 'block';
-            else if (!checkUserExists(username)) confirmPasswordGroup.style.display = 'block';
-            else confirmPasswordGroup.style.display = 'none';
-        });
+        if (loginPassword) {
+            loginPassword.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (confirmPasswordGroup && confirmPasswordGroup.style.display === 'block' && loginConfirmPassword) {
+                        loginConfirmPassword.focus();
+                    } else {
+                        handleLogin();
+                    }
+                }
+            });
+        }
 
-        loginUsername.addEventListener('input', () => {
-            const username = loginUsername.value.trim();
-            if (username === 'admin' && users['admin'].firstAccess) confirmPasswordGroup.style.display = 'block';
-            else if (!checkUserExists(username)) confirmPasswordGroup.style.display = 'block';
-            else confirmPasswordGroup.style.display = 'none';
-        });
+        if (loginConfirmPassword) {
+            loginConfirmPassword.addEventListener('keydown', (e) => { 
+                if (e.key === 'Enter') handleLogin(); 
+            });
+        }
+
+        if (loginPassword) {
+            loginPassword.addEventListener('input', () => {
+                const username = loginUsername ? loginUsername.value.trim() : '';
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else if (!checkUserExists(username)) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                }
+            });
+        }
+
+        if (loginUsername) {
+            loginUsername.addEventListener('input', () => {
+                const username = loginUsername.value.trim();
+                if (username === 'admin' && users['admin']?.firstAccess) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else if (!checkUserExists(username)) {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                } else {
+                    if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                }
+            });
+        }
 
         // ===== FUNÇÕES DO CHAT =====
         function getCurrentTime() {
@@ -1965,154 +2081,162 @@
         }
 
         function addMessageToDOM(username, text, isOwn = false, system = false, isServerMsg = false, isError = false, isWarning = false, isSuccess = false, audioData = null, imageData = null) {
-            const msgDiv = document.createElement('div');
-            
-            if (system) {
-                msgDiv.className = 'system-msg';
-                if (isServerMsg) msgDiv.classList.add('server');
-                if (isError) msgDiv.classList.add('error');
-                if (isWarning) msgDiv.classList.add('warning');
-                if (isSuccess) msgDiv.classList.add('success');
-                msgDiv.textContent = text;
-            } else {
-                msgDiv.className = 'message' + (isOwn ? ' own' : '');
+            try {
+                const msgDiv = document.createElement('div');
                 
-                const userData = users[username] || { displayName: username, isAdmin: false };
-                const displayName = userData.displayName || username;
-                const isAdminUser = userData.isAdmin || false;
-                
-                const headerDiv = document.createElement('div');
-                headerDiv.className = 'msg-header';
-                
-                const avatarDiv = document.createElement('div');
-                avatarDiv.className = 'msg-avatar';
-                const photo = getProfilePhoto(username);
-                if (photo) {
-                    avatarDiv.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                if (system) {
+                    msgDiv.className = 'system-msg';
+                    if (isServerMsg) msgDiv.classList.add('server');
+                    if (isError) msgDiv.classList.add('error');
+                    if (isWarning) msgDiv.classList.add('warning');
+                    if (isSuccess) msgDiv.classList.add('success');
+                    msgDiv.textContent = text;
                 } else {
-                    avatarDiv.innerHTML = `<div class="placeholder">👤</div>`;
-                }
-                
-                const userDiv = document.createElement('div');
-                userDiv.className = 'msg-user';
-                userDiv.innerHTML = `${displayName} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
-                
-                headerDiv.appendChild(avatarDiv);
-                headerDiv.appendChild(userDiv);
-                
-                let contentDiv = document.createElement('div');
-                contentDiv.className = 'msg-text';
-                
-                if (audioData) {
-                    const audioContainer = document.createElement('div');
-                    audioContainer.className = 'audio-message';
+                    msgDiv.className = 'message' + (isOwn ? ' own' : '');
                     
-                    const playBtn = document.createElement('button');
-                    playBtn.className = 'play-btn';
-                    playBtn.textContent = '▶';
-                    playBtn.dataset.playing = 'false';
+                    const userData = users[username] || { displayName: username, isAdmin: false };
+                    const displayName = userData.displayName || username;
+                    const isAdminUser = userData.isAdmin || false;
                     
-                    const progressContainer = document.createElement('div');
-                    progressContainer.className = 'audio-progress';
-                    const progressBar = document.createElement('div');
-                    progressBar.className = 'progress-bar';
-                    progressContainer.appendChild(progressBar);
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'msg-header';
                     
-                    const timeDisplay = document.createElement('span');
-                    timeDisplay.className = 'audio-time';
-                    timeDisplay.textContent = '0:00';
+                    const avatarDiv = document.createElement('div');
+                    avatarDiv.className = 'msg-avatar';
+                    const photo = getProfilePhoto(username);
+                    if (photo) {
+                        avatarDiv.innerHTML = `<img src="${photo}" alt="Avatar">`;
+                    } else {
+                        avatarDiv.innerHTML = `<div class="placeholder">👤</div>`;
+                    }
                     
-                    const audio = new Audio(audioData);
-                    audio.preload = 'metadata';
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'msg-user';
+                    userDiv.innerHTML = `${displayName} <span class="badge">${isOwn ? 'Você' : 'Online'}</span>${isAdminUser ? ' <span class="admin-badge">👑</span>' : ''}`;
                     
-                    let isPlaying = false;
+                    headerDiv.appendChild(avatarDiv);
+                    headerDiv.appendChild(userDiv);
                     
-                    audio.addEventListener('loadedmetadata', () => {
-                        const duration = Math.floor(audio.duration);
-                        const minutes = Math.floor(duration / 60);
-                        const seconds = duration % 60;
-                        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                    });
+                    let contentDiv = document.createElement('div');
+                    contentDiv.className = 'msg-text';
                     
-                    playBtn.addEventListener('click', () => {
-                        if (isPlaying) {
-                            audio.pause();
+                    if (audioData) {
+                        const audioContainer = document.createElement('div');
+                        audioContainer.className = 'audio-message';
+                        
+                        const playBtn = document.createElement('button');
+                        playBtn.className = 'play-btn';
+                        playBtn.textContent = '▶';
+                        playBtn.dataset.playing = 'false';
+                        
+                        const progressContainer = document.createElement('div');
+                        progressContainer.className = 'audio-progress';
+                        const progressBar = document.createElement('div');
+                        progressBar.className = 'progress-bar';
+                        progressContainer.appendChild(progressBar);
+                        
+                        const timeDisplay = document.createElement('span');
+                        timeDisplay.className = 'audio-time';
+                        timeDisplay.textContent = '0:00';
+                        
+                        const audio = new Audio(audioData);
+                        audio.preload = 'metadata';
+                        
+                        let isPlaying = false;
+                        
+                        audio.addEventListener('loadedmetadata', () => {
+                            const duration = Math.floor(audio.duration);
+                            const minutes = Math.floor(duration / 60);
+                            const seconds = duration % 60;
+                            timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                        });
+                        
+                        playBtn.addEventListener('click', () => {
+                            if (isPlaying) {
+                                audio.pause();
+                                playBtn.textContent = '▶';
+                                isPlaying = false;
+                                playBtn.dataset.playing = 'false';
+                            } else {
+                                document.querySelectorAll('.play-btn').forEach(btn => {
+                                    if (btn !== playBtn && btn.dataset.playing === 'true') {
+                                        btn.click();
+                                    }
+                                });
+                                
+                                audio.play();
+                                playBtn.textContent = '⏸';
+                                isPlaying = true;
+                                playBtn.dataset.playing = 'true';
+                                
+                                const updateProgress = () => {
+                                    if (!isPlaying) return;
+                                    const progress = (audio.currentTime / audio.duration) * 100;
+                                    progressBar.style.width = progress + '%';
+                                    const current = Math.floor(audio.currentTime);
+                                    const minutes = Math.floor(current / 60);
+                                    const seconds = current % 60;
+                                    timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                    requestAnimationFrame(updateProgress);
+                                };
+                                updateProgress();
+                            }
+                        });
+                        
+                        audio.addEventListener('ended', () => {
                             playBtn.textContent = '▶';
                             isPlaying = false;
                             playBtn.dataset.playing = 'false';
-                        } else {
-                            document.querySelectorAll('.play-btn').forEach(btn => {
-                                if (btn !== playBtn && btn.dataset.playing === 'true') {
-                                    btn.click();
-                                }
-                            });
-                            
-                            audio.play();
-                            playBtn.textContent = '⏸';
-                            isPlaying = true;
-                            playBtn.dataset.playing = 'true';
-                            
-                            const updateProgress = () => {
-                                if (!isPlaying) return;
-                                const progress = (audio.currentTime / audio.duration) * 100;
-                                progressBar.style.width = progress + '%';
-                                const current = Math.floor(audio.currentTime);
-                                const minutes = Math.floor(current / 60);
-                                const seconds = current % 60;
-                                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                                requestAnimationFrame(updateProgress);
-                            };
-                            updateProgress();
-                        }
-                    });
+                            progressBar.style.width = '0%';
+                            timeDisplay.textContent = '0:00';
+                        });
+                        
+                        progressContainer.addEventListener('click', (e) => {
+                            const rect = progressContainer.getBoundingClientRect();
+                            const x = (e.clientX - rect.left) / rect.width;
+                            audio.currentTime = x * audio.duration;
+                        });
+                        
+                        audioContainer.appendChild(playBtn);
+                        audioContainer.appendChild(progressContainer);
+                        audioContainer.appendChild(timeDisplay);
+                        
+                        contentDiv.appendChild(audioContainer);
+                    } else if (imageData) {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'image-message';
+                        const img = document.createElement('img');
+                        img.src = imageData;
+                        img.alt = 'Imagem';
+                        img.loading = 'lazy';
+                        img.addEventListener('click', () => {
+                            if (imageModalContent) {
+                                imageModalContent.src = imageData;
+                                if (imageModal) imageModal.classList.remove('hidden');
+                            }
+                        });
+                        imgContainer.appendChild(img);
+                        contentDiv.appendChild(imgContainer);
+                    } else {
+                        contentDiv.textContent = text;
+                    }
                     
-                    audio.addEventListener('ended', () => {
-                        playBtn.textContent = '▶';
-                        isPlaying = false;
-                        playBtn.dataset.playing = 'false';
-                        progressBar.style.width = '0%';
-                        timeDisplay.textContent = '0:00';
-                    });
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = 'msg-time';
+                    timeDiv.textContent = getCurrentTime();
                     
-                    progressContainer.addEventListener('click', (e) => {
-                        const rect = progressContainer.getBoundingClientRect();
-                        const x = (e.clientX - rect.left) / rect.width;
-                        audio.currentTime = x * audio.duration;
-                    });
-                    
-                    audioContainer.appendChild(playBtn);
-                    audioContainer.appendChild(progressContainer);
-                    audioContainer.appendChild(timeDisplay);
-                    
-                    contentDiv.appendChild(audioContainer);
-                } else if (imageData) {
-                    const imgContainer = document.createElement('div');
-                    imgContainer.className = 'image-message';
-                    const img = document.createElement('img');
-                    img.src = imageData;
-                    img.alt = 'Imagem';
-                    img.loading = 'lazy';
-                    img.addEventListener('click', () => {
-                        imageModalContent.src = imageData;
-                        imageModal.classList.remove('hidden');
-                    });
-                    imgContainer.appendChild(img);
-                    contentDiv.appendChild(imgContainer);
-                } else {
-                    contentDiv.textContent = text;
+                    msgDiv.appendChild(headerDiv);
+                    msgDiv.appendChild(contentDiv);
+                    msgDiv.appendChild(timeDiv);
                 }
                 
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'msg-time';
-                timeDiv.textContent = getCurrentTime();
-                
-                msgDiv.appendChild(headerDiv);
-                msgDiv.appendChild(contentDiv);
-                msgDiv.appendChild(timeDiv);
+                if (messagesContainer) {
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (e) {
+                console.warn('Erro ao adicionar mensagem:', e);
             }
-            
-            messagesContainer.appendChild(msgDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         function showSystemMessage(text, isServerMsg = false, isError = false, isWarning = false, isSuccess = false) {
@@ -2120,49 +2244,65 @@
         }
 
         function updateStatus(text, state = 'online') {
-            statusText.textContent = text;
-            statusDot.className = 'status-dot';
-            if (state === 'offline') statusDot.classList.add('offline');
-            if (state === 'connecting') statusDot.classList.add('connecting');
-            if (state === 'waiting') statusDot.classList.add('waiting');
-            
-            if (isServer) {
-                connectionStatusSpan.textContent = '👑 Servidor';
-            } else if (isConnected) {
-                connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
-            } else if (isWaitingApproval) {
-                connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
-            } else {
-                connectionStatusSpan.textContent = '❌ Desconectado';
+            try {
+                if (statusText) statusText.textContent = text;
+                if (statusDot) {
+                    statusDot.className = 'status-dot';
+                    if (state === 'offline') statusDot.classList.add('offline');
+                    if (state === 'connecting') statusDot.classList.add('connecting');
+                    if (state === 'waiting') statusDot.classList.add('waiting');
+                }
+                
+                if (connectionStatusSpan) {
+                    if (isServer) {
+                        connectionStatusSpan.textContent = '👑 Servidor';
+                    } else if (isConnected) {
+                        connectionStatusSpan.textContent = `✅ Conectado ao ${currentServer ? SERVERS[currentServer].name : ''}`;
+                    } else if (isWaitingApproval) {
+                        connectionStatusSpan.textContent = `⏳ Aguardando aprovação`;
+                    } else {
+                        connectionStatusSpan.textContent = '❌ Desconectado';
+                    }
+                }
+            } catch (e) {
+                // Ignora erros de status
             }
         }
 
         function updateUserCount(count) {
-            userCountSpan.textContent = `👥 ${count || 0}`;
+            try {
+                if (userCountSpan) userCountSpan.textContent = `👥 ${count || 0}`;
+            } catch (e) {}
         }
 
         function setInputEnabled(enabled) {
-            messageInput.disabled = !enabled;
-            sendBtn.disabled = !enabled;
-            audioBtn.disabled = !enabled;
-            imageBtn.disabled = !enabled;
-            if (enabled) messageInput.focus();
+            try {
+                if (messageInput) messageInput.disabled = !enabled;
+                if (sendBtn) sendBtn.disabled = !enabled;
+                if (audioBtn) audioBtn.disabled = !enabled;
+                if (imageBtn) imageBtn.disabled = !enabled;
+                if (enabled && messageInput) messageInput.focus();
+            } catch (e) {}
         }
 
         function updateServerStatus(serverId, status) {
-            const indicator = statusIndicators[serverId];
-            if (!indicator) return;
-            indicator.className = 'status-indicator';
-            if (status === 'online') indicator.classList.add('online');
-            else if (status === 'offline') indicator.classList.add('offline');
-            else if (status === 'creating') indicator.classList.add('creating');
+            try {
+                const indicator = statusIndicators[serverId];
+                if (!indicator) return;
+                indicator.className = 'status-indicator';
+                if (status === 'online') indicator.classList.add('online');
+                else if (status === 'offline') indicator.classList.add('offline');
+                else if (status === 'creating') indicator.classList.add('creating');
+            } catch (e) {}
         }
 
         function markServerActive(serverId) {
-            serverBtns.forEach(btn => {
-                const btnServer = parseInt(btn.dataset.server);
-                btn.classList.toggle('active', btnServer === serverId);
-            });
+            try {
+                serverBtns.forEach(btn => {
+                    const btnServer = parseInt(btn.dataset.server);
+                    btn.classList.toggle('active', btnServer === serverId);
+                });
+            } catch (e) {}
         }
 
         // ===== SERVIDORES =====
@@ -2174,65 +2314,89 @@
 
         // ===== FUNÇÕES DE ENVIO =====
         function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text || !isConnected) {
-                if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...', false, true);
-                return;
+            try {
+                const text = messageInput ? messageInput.value.trim() : '';
+                if (!text || !isConnected) {
+                    if (!isConnected) showSystemMessage('⚠️ Aguarde a conexão...', false, true);
+                    return;
+                }
+
+                addMessageToDOM(currentUser, text, true);
+                messageHistory.push({ username: currentUser, text, time: Date.now() });
+
+                broadcastMessage({
+                    type: 'message',
+                    username: currentUser,
+                    text: text,
+                    time: Date.now()
+                });
+
+                if (messageInput) messageInput.value = '';
+                if (messageInput) messageInput.focus();
+            } catch (e) {
+                console.error('Erro ao enviar mensagem:', e);
             }
-
-            addMessageToDOM(currentUser, text, true);
-            messageHistory.push({ username: currentUser, text, time: Date.now() });
-
-            broadcastMessage({
-                type: 'message',
-                username: currentUser,
-                text: text,
-                time: Date.now()
-            });
-
-            messageInput.value = '';
-            messageInput.focus();
         }
 
         function sendImage(imageData) {
-            if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
-            addMessageToDOM(currentUser, '', true, false, false, false, false, false, null, imageData);
-            messageHistory.push({ username: currentUser, text: '🖼️ Imagem', time: Date.now(), image: imageData });
-            broadcastMessage({ type: 'image', username: currentUser, image: imageData, time: Date.now() });
+            try {
+                if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                addMessageToDOM(currentUser, '', true, false, false, false, false, false, null, imageData);
+                messageHistory.push({ username: currentUser, text: '🖼️ Imagem', time: Date.now(), image: imageData });
+                broadcastMessage({ type: 'image', username: currentUser, image: imageData, time: Date.now() });
+            } catch (e) {
+                console.error('Erro ao enviar imagem:', e);
+            }
         }
 
         function sendAudio(audioData) {
-            if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
-            addMessageToDOM(currentUser, '', true, false, false, false, false, false, audioData);
-            messageHistory.push({ username: currentUser, text: '🎤 Áudio', time: Date.now(), audio: audioData });
-            broadcastMessage({ type: 'audio', username: currentUser, audio: audioData, time: Date.now() });
+            try {
+                if (!isConnected) { showSystemMessage('⚠️ Aguarde a conexão...', false, true); return; }
+                addMessageToDOM(currentUser, '', true, false, false, false, false, false, audioData);
+                messageHistory.push({ username: currentUser, text: '🎤 Áudio', time: Date.now(), audio: audioData });
+                broadcastMessage({ type: 'audio', username: currentUser, audio: audioData, time: Date.now() });
+            } catch (e) {
+                console.error('Erro ao enviar áudio:', e);
+            }
         }
 
         function broadcastMessage(data, excludeConn = null) {
-            if (isServer) {
-                Object.keys(clients).forEach(peerId => {
-                    const conn = clients[peerId];
-                    if (conn && conn !== excludeConn && conn.open) {
-                        try { conn.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
-                    }
-                });
-            } else if (serverConnection && serverConnection.open) {
-                try { serverConnection.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
+            try {
+                if (isServer) {
+                    Object.keys(clients).forEach(peerId => {
+                        const conn = clients[peerId];
+                        if (conn && conn !== excludeConn && conn.open) {
+                            try { conn.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
+                        }
+                    });
+                } else if (serverConnection && serverConnection.open) {
+                    try { serverConnection.send(data); } catch (e) { console.warn('Erro ao enviar', e); }
+                }
+            } catch (e) {
+                console.error('Erro ao broadcast:', e);
             }
         }
 
         // ===== IMAGEM =====
-        imageInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                const compressed = await compressImage(file);
-                sendImage(compressed);
-                imageInput.value = '';
-            } catch (err) { showSystemMessage(err.message, false, true); }
-        });
+        if (imageInput) {
+            imageInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                try {
+                    const compressed = await compressImage(file);
+                    sendImage(compressed);
+                    imageInput.value = '';
+                } catch (err) { 
+                    showSystemMessage(err.message, false, true); 
+                }
+            });
+        }
 
-        imageModal.addEventListener('click', () => imageModal.classList.add('hidden'));
+        if (imageModal) {
+            imageModal.addEventListener('click', () => {
+                if (imageModal) imageModal.classList.add('hidden');
+            });
+        }
 
         // ===== ÁUDIO =====
         async function startRecording() {
@@ -2249,20 +2413,20 @@
                     reader.readAsDataURL(audioBlob);
                     audioChunks = [];
                     stream.getTracks().forEach(track => track.stop());
-                    audioBtn.classList.remove('recording');
-                    recordingTimer.textContent = '';
-                    clearInterval(recordingTimerInterval);
+                    if (audioBtn) audioBtn.classList.remove('recording');
+                    if (recordingTimer) recordingTimer.textContent = '';
+                    if (recordingTimerInterval) clearInterval(recordingTimerInterval);
                     isRecording = false;
                 };
                 mediaRecorder.start();
                 isRecording = true;
-                audioBtn.classList.add('recording');
+                if (audioBtn) audioBtn.classList.add('recording');
                 let seconds = 0;
                 recordingTimerInterval = setInterval(() => {
                     seconds++;
                     const remaining = 30 - seconds;
                     if (remaining <= 0) { stopRecording(); return; }
-                    recordingTimer.textContent = `⏱️ ${remaining}s`;
+                    if (recordingTimer) recordingTimer.textContent = `⏱️ ${remaining}s`;
                 }, 1000);
                 setTimeout(() => { if (isRecording) stopRecording(); }, 30000);
             } catch (err) {
@@ -2375,98 +2539,112 @@
         }
 
         function showApprovalButtons(peerId, username) {
-            const oldBtns = document.querySelectorAll('.approval-buttons');
-            oldBtns.forEach(btn => btn.remove());
-            
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'system-msg approval-buttons';
-            msgDiv.style.display = 'flex';
-            msgDiv.style.gap = '10px';
-            msgDiv.style.justifyContent = 'center';
-            msgDiv.style.padding = '8px 0';
-            
-            const acceptBtn = document.createElement('button');
-            acceptBtn.textContent = '✅ Aceitar';
-            acceptBtn.style.cssText = `
-                padding: 6px 16px;
-                border: none;
-                border-radius: 16px;
-                background: #4caf50;
-                color: white;
-                font-weight: 600;
-                cursor: pointer;
-                font-size: 13px;
-                transition: 0.2s;
-            `;
-            acceptBtn.onmouseover = () => acceptBtn.style.transform = 'scale(1.05)';
-            acceptBtn.onmouseout = () => acceptBtn.style.transform = 'scale(1)';
-            acceptBtn.onclick = () => acceptUser(peerId);
-            
-            const rejectBtn = document.createElement('button');
-            rejectBtn.textContent = '❌ Rejeitar';
-            rejectBtn.style.cssText = `
-                padding: 6px 16px;
-                border: none;
-                border-radius: 16px;
-                background: #f44336;
-                color: white;
-                font-weight: 600;
-                cursor: pointer;
-                font-size: 13px;
-                transition: 0.2s;
-            `;
-            rejectBtn.onmouseover = () => rejectBtn.style.transform = 'scale(1.05)';
-            rejectBtn.onmouseout = () => rejectBtn.style.transform = 'scale(1)';
-            rejectBtn.onclick = () => rejectUser(peerId);
-            
-            msgDiv.appendChild(acceptBtn);
-            msgDiv.appendChild(rejectBtn);
-            messagesContainer.appendChild(msgDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            try {
+                const oldBtns = document.querySelectorAll('.approval-buttons');
+                oldBtns.forEach(btn => btn.remove());
+                
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'system-msg approval-buttons';
+                msgDiv.style.display = 'flex';
+                msgDiv.style.gap = '10px';
+                msgDiv.style.justifyContent = 'center';
+                msgDiv.style.padding = '8px 0';
+                
+                const acceptBtn = document.createElement('button');
+                acceptBtn.textContent = '✅ Aceitar';
+                acceptBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #4caf50;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: 0.2s;
+                `;
+                acceptBtn.onmouseover = () => acceptBtn.style.transform = 'scale(1.05)';
+                acceptBtn.onmouseout = () => acceptBtn.style.transform = 'scale(1)';
+                acceptBtn.onclick = () => acceptUser(peerId);
+                
+                const rejectBtn = document.createElement('button');
+                rejectBtn.textContent = '❌ Rejeitar';
+                rejectBtn.style.cssText = `
+                    padding: 6px 16px;
+                    border: none;
+                    border-radius: 16px;
+                    background: #f44336;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 13px;
+                    transition: 0.2s;
+                `;
+                rejectBtn.onmouseover = () => rejectBtn.style.transform = 'scale(1.05)';
+                rejectBtn.onmouseout = () => rejectBtn.style.transform = 'scale(1)';
+                rejectBtn.onclick = () => rejectUser(peerId);
+                
+                msgDiv.appendChild(acceptBtn);
+                msgDiv.appendChild(rejectBtn);
+                if (messagesContainer) {
+                    messagesContainer.appendChild(msgDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (e) {
+                console.warn('Erro ao mostrar botões de aprovação:', e);
+            }
         }
 
         function acceptUser(peerId) {
-            if (!pendingApprovals[peerId]) return;
-            const pending = pendingApprovals[peerId];
-            const conn = pending.conn;
-            const username = pending.username || conn.peer;
-            const displayName = users[username]?.displayName || username;
-            
-            clients[peerId] = conn;
-            showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
-            updateUserCount(Object.keys(clients).length);
-            
-            conn.send({ type: 'approval_result', accepted: true });
-            
-            messageHistory.forEach(msg => {
-                conn.send({
-                    type: 'history',
-                    username: msg.username,
-                    text: msg.text || '🎤 Áudio',
-                    audio: msg.audio || null,
-                    image: msg.image || null,
-                    time: msg.time
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                clients[peerId] = conn;
+                showSystemMessage(`✅ ${displayName} foi aceito no servidor!`, false, false, false, true);
+                updateUserCount(Object.keys(clients).length);
+                
+                conn.send({ type: 'approval_result', accepted: true });
+                
+                messageHistory.forEach(msg => {
+                    conn.send({
+                        type: 'history',
+                        username: msg.username,
+                        text: msg.text || '🎤 Áudio',
+                        audio: msg.audio || null,
+                        image: msg.image || null,
+                        time: msg.time
+                    });
                 });
-            });
-            
-            broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
-            delete pendingApprovals[peerId];
-            document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+                
+                broadcastMessage({ type: 'system', text: `${displayName} entrou no servidor` }, conn);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao aceitar usuário:', e);
+            }
         }
 
         function rejectUser(peerId) {
-            if (!pendingApprovals[peerId]) return;
-            const pending = pendingApprovals[peerId];
-            const conn = pending.conn;
-            const username = pending.username || conn.peer;
-            const displayName = users[username]?.displayName || username;
-            
-            showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
-            conn.send({ type: 'approval_result', accepted: false });
-            
-            setTimeout(() => { try { conn.close(); } catch (e) {} }, 1000);
-            delete pendingApprovals[peerId];
-            document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            try {
+                if (!pendingApprovals[peerId]) return;
+                const pending = pendingApprovals[peerId];
+                const conn = pending.conn;
+                const username = pending.username || conn.peer;
+                const displayName = users[username]?.displayName || username;
+                
+                showSystemMessage(`❌ ${displayName} foi rejeitado`, false, true);
+                conn.send({ type: 'approval_result', accepted: false });
+                
+                setTimeout(() => { try { conn.close(); } catch (e) {} }, 1000);
+                delete pendingApprovals[peerId];
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {
+                console.warn('Erro ao rejeitar usuário:', e);
+            }
         }
 
         // ===== CONECTAR COMO CLIENTE =====
@@ -2499,33 +2677,41 @@
                 
                 conn.on('open', () => {
                     isWaitingApproval = true;
-                    approvalServerName.textContent = serverInfo.name;
-                    approvalStatus.textContent = '⏳ Aguardando resposta...';
-                    approvalStatus.style.color = '#ff9800';
-                    approvalOverlay.classList.remove('hidden');
+                    if (approvalServerName) approvalServerName.textContent = serverInfo.name;
+                    if (approvalStatus) {
+                        approvalStatus.textContent = '⏳ Aguardando resposta...';
+                        approvalStatus.style.color = '#ff9800';
+                    }
+                    if (approvalOverlay) approvalOverlay.classList.remove('hidden');
                     updateStatus(`Aguardando aprovação em ${serverInfo.name}`, 'waiting');
                     conn.send({ type: 'join', username: currentUser });
                 });
 
                 conn.on('data', (data) => {
                     if (data.type === 'approval_request') {
-                        approvalStatus.textContent = '⏳ Aguardando resposta...';
-                        approvalStatus.style.color = '#ff9800';
+                        if (approvalStatus) {
+                            approvalStatus.textContent = '⏳ Aguardando resposta...';
+                            approvalStatus.style.color = '#ff9800';
+                        }
                     } else if (data.type === 'approval_result') {
                         if (data.accepted) {
                             isConnected = true;
                             isWaitingApproval = false;
-                            approvalOverlay.classList.add('hidden');
+                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
                             updateStatus(`Conectado a ${serverInfo.name}`, 'online');
                             showSystemMessage(`✅ Você foi aceito no ${serverInfo.name}!`, false, false, false, true);
                             setInputEnabled(true);
                             updateServerStatus(serverId, 'online');
-                            approvalStatus.textContent = '✅ Aceito!';
-                            approvalStatus.style.color = '#4caf50';
-                            setTimeout(() => approvalOverlay.classList.add('hidden'), 1000);
+                            if (approvalStatus) {
+                                approvalStatus.textContent = '✅ Aceito!';
+                                approvalStatus.style.color = '#4caf50';
+                            }
+                            setTimeout(() => {
+                                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                            }, 1000);
                         } else {
                             isWaitingApproval = false;
-                            approvalOverlay.classList.add('hidden');
+                            if (approvalOverlay) approvalOverlay.classList.add('hidden');
                             updateStatus(`Rejeitado em ${serverInfo.name}`, 'offline');
                             updateServerStatus(serverId, 'offline');
                             setInputEnabled(false);
@@ -2584,13 +2770,13 @@
                     if (err.type === 'peer-unavailable') {
                         showSystemMessage(`⚠️ ${serverInfo.name} não encontrado. Iniciando...`, false, true);
                         updateServerStatus(serverId, 'offline');
-                        approvalOverlay.classList.add('hidden');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
                         setTimeout(() => startAsServer(serverId), 1000);
                     } else if (!isConnected) {
                         updateStatus('Erro', 'offline');
                         setInputEnabled(false);
                         updateServerStatus(serverId, 'offline');
-                        approvalOverlay.classList.add('hidden');
+                        if (approvalOverlay) approvalOverlay.classList.add('hidden');
                     }
                 });
             });
@@ -2605,51 +2791,61 @@
         }
 
         function cleanup() {
-            if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
-            serverConnection = null;
-            clients = {};
-            pendingApprovals = {};
-            if (isRecording) stopRecording();
-            approvalOverlay.classList.add('hidden');
-            document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            try {
+                if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
+                serverConnection = null;
+                clients = {};
+                pendingApprovals = {};
+                if (isRecording) stopRecording();
+                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                document.querySelectorAll('.approval-buttons').forEach(btn => btn.remove());
+            } catch (e) {}
         }
 
         function selectServer(serverId) {
-            if (serverId === currentServer && isConnected) {
-                showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
-                return;
-            }
-            
-            messagesContainer.innerHTML = '';
-            messageHistory = [];
-            approvalOverlay.classList.add('hidden');
-            
-            const msg = document.createElement('div');
-            msg.className = 'system-msg';
-            msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
-            messagesContainer.appendChild(msg);
-            
-            connectAsClient(serverId);
-            
-            setTimeout(() => {
-                if (!isConnected && !isServer && !isWaitingApproval) {
-                    startAsServer(serverId);
+            try {
+                if (serverId === currentServer && isConnected) {
+                    showSystemMessage(`ℹ️ Já conectado ao ${SERVERS[serverId].name}`);
+                    return;
                 }
-            }, 5000);
+                
+                if (messagesContainer) messagesContainer.innerHTML = '';
+                messageHistory = [];
+                if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                
+                const msg = document.createElement('div');
+                msg.className = 'system-msg';
+                msg.textContent = `⚡ Conectando ao ${SERVERS[serverId].name}...`;
+                if (messagesContainer) messagesContainer.appendChild(msg);
+                
+                connectAsClient(serverId);
+                
+                setTimeout(() => {
+                    if (!isConnected && !isServer && !isWaitingApproval) {
+                        startAsServer(serverId);
+                    }
+                }, 5000);
+            } catch (e) {
+                console.error('Erro ao selecionar servidor:', e);
+            }
         }
 
         // ===== INICIALIZAR CHAT =====
         function initChat() {
-            Object.keys(SERVERS).forEach(id => updateServerStatus(parseInt(id), 'offline'));
-            
-            showSystemMessage('⚡ Selecione um servidor para entrar');
-            updateStatus('Selecione um servidor', 'offline');
-            setInputEnabled(false);
-            
-            const displayName = users[currentUser]?.displayName || currentUser;
-            showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
-            showSystemMessage(`💻 Dispositivo: ${deviceInfo.icon} ${deviceInfo.label}`, false, false, false, true);
-            updateHeaderAvatar(currentUser);
+            try {
+                Object.keys(SERVERS).forEach(id => updateServerStatus(parseInt(id), 'offline'));
+                
+                showSystemMessage('⚡ Selecione um servidor para entrar');
+                updateStatus('Selecione um servidor', 'offline');
+                setInputEnabled(false);
+                
+                const displayName = users[currentUser]?.displayName || currentUser;
+                showSystemMessage(`👤 Logado como: ${displayName}${isAdmin ? ' 👑' : ''}`, false, false, false, true);
+                showSystemMessage(`💻 Dispositivo: ${deviceInfo.icon} ${deviceInfo.label}`, false, false, false, true);
+                updateHeaderAvatar(currentUser);
+            } catch (e) {
+                console.error('Erro ao iniciar chat:', e);
+            }
         }
 
         // ===== EVENT LISTENERS DO CHAT =====
@@ -2660,38 +2856,47 @@
             });
         });
 
-        sendBtn.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
-        });
+        if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+        
+        if (messageInput) {
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+            });
+        }
 
-        audioBtn.addEventListener('click', () => {
-            if (isRecording) stopRecording();
-            else startRecording();
-        });
+        if (audioBtn) {
+            audioBtn.addEventListener('click', () => {
+                if (isRecording) stopRecording();
+                else startRecording();
+            });
+        }
 
-        cancelApprovalBtn.addEventListener('click', () => {
-            if (isWaitingApproval) {
-                approvalOverlay.classList.add('hidden');
-                showSystemMessage('❌ Solicitação cancelada', false, true);
-                updateStatus('Desconectado', 'offline');
-                setInputEnabled(false);
-                markServerActive(null);
-                cleanup();
-                setTimeout(() => {
-                    if (!isConnected && !isServer) {
-                        const serverId = currentServer;
-                        if (serverId) selectServer(serverId);
-                    }
-                }, 2000);
-            }
-        });
+        if (cancelApprovalBtn) {
+            cancelApprovalBtn.addEventListener('click', () => {
+                if (isWaitingApproval) {
+                    if (approvalOverlay) approvalOverlay.classList.add('hidden');
+                    showSystemMessage('❌ Solicitação cancelada', false, true);
+                    updateStatus('Desconectado', 'offline');
+                    setInputEnabled(false);
+                    markServerActive(null);
+                    cleanup();
+                    setTimeout(() => {
+                        if (!isConnected && !isServer) {
+                            const serverId = currentServer;
+                            if (serverId) selectServer(serverId);
+                        }
+                    }, 2000);
+                }
+            });
+        }
 
         // ===== VERIFICAÇÃO DE SAÚDE =====
         setInterval(() => {
-            if (!isServer && isConnected && serverConnection) {
-                try { serverConnection.send({ type: 'ping' }); } catch (e) {}
-            }
+            try {
+                if (!isServer && isConnected && serverConnection) {
+                    try { serverConnection.send({ type: 'ping' }); } catch (e) {}
+                }
+            } catch (e) {}
         }, 5000);
 
         // ===== INICIALIZAR =====
@@ -2700,11 +2905,14 @@
         console.log('🎨 Tema:', currentTheme);
         console.log('🎨 Cor:', currentColor);
 
-        loginScreen.classList.remove('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
         updateLoginTexts();
-        if (users['admin'].password) confirmPasswordGroup.style.display = 'none';
+        if (users['admin']?.password && confirmPasswordGroup) {
+            confirmPasswordGroup.style.display = 'none';
+        }
 
     })();
 </script>
+
 </body>
 </html>
