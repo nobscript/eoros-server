@@ -3,734 +3,1637 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>glitch - Chat P2P Real</title>
+    <title>Eoros - Servidor P2P</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-input: #f0f0f0;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent: #000000;
-            --accent-hover: #333333;
-            --border: #e0e0e0;
-            --shadow: rgba(0, 0, 0, 0.08);
+            --bg: #0c0c1a;
+            --bg2: #14142a;
+            --bg3: #1c1c3a;
+            --bg4: #24244a;
+            --text: #eaeaf0;
+            --text2: #a0a0c8;
+            --text3: #6a6a8a;
+            --border: #2a2a4a;
+            --gold: #fbbf24;
+            --gold2: #f59e0b;
+            --gold3: #fcd34d;
+            --gold-glow: rgba(251, 191, 36, 0.15);
+            --green: #22c55e;
+            --red: #ef4444;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2a2a2a;
-            --bg-input: #333333;
-            --text-primary: #ffffff;
-            --text-secondary: #999999;
-            --accent: #ffffff;
-            --accent-hover: #cccccc;
-            --border: #333333;
-            --shadow: rgba(255, 255, 255, 0.08);
+        [data-theme="light"] {
+            --bg: #f0f2f7;
+            --bg2: #ffffff;
+            --bg3: #e8eaef;
+            --bg4: #dde0e6;
+            --text: #1a1a2a;
+            --text2: #5a5a6a;
+            --text3: #8a8a9a;
+            --border: #d0d2d8;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --gold-glow: rgba(251, 191, 36, 0.1);
         }
-
-        [data-accent="blue"] { --accent: #0066ff; --accent-hover: #0052cc; }
-        [data-accent="green"] { --accent: #00cc66; --accent-hover: #00a352; }
-        [data-accent="red"] { --accent: #ff3333; --accent-hover: #cc0000; }
-        [data-accent="purple"] { --accent: #9933ff; --accent-hover: #7a00cc; }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
             overflow: hidden;
+            transition: var(--transition);
         }
 
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--bg-primary);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow);
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-            font-weight: 500;
+        /* ========== SCROLL ========== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 2px;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        .welcome-screen, .auth-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 300;
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-12px) rotate(3deg);
+            }
         }
 
-        .auth-screen { display: none; z-index: 100; }
-
-        .welcome-container, .auth-container {
-            background: var(--bg-primary);
-            border-radius: 30px;
-            padding: 50px 40px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .welcome-logo, .auth-logo {
-            font-family: 'Pacifico', cursive;
-            font-size: 4rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-
-        .welcome-tagline, .auth-subtitle {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-
-        .continue-button, .auth-button {
-            background: var(--accent);
-            color: var(--bg-primary);
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-            width: 100%;
-        }
-
-        .continue-button:hover, .auth-button:hover { background: var(--accent-hover); }
-
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            padding: 5px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .auth-tab.active { background: var(--accent); color: var(--bg-primary); }
-
-        .auth-form { display: flex; flex-direction: column; gap: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; text-align: left; }
-        .form-label { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
-
-        .form-input {
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-input);
-            color: var(--text-primary);
-            width: 100%;
-        }
-
-        .form-input:focus { outline: none; border-color: var(--accent); }
-
-        .home-screen {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-            background: var(--bg-primary);
-        }
-
-        .home-screen.active { display: flex; }
-
-        .home-header {
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .home-logo {
-            font-family: 'Pacifico', cursive;
-            font-size: 2rem;
-            color: var(--accent);
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .home-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .home-title {
-            font-family: 'Pacifico', cursive;
-            font-size: 5rem;
-            color: var(--accent);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-primary);
-            border-radius: 25px;
-            box-shadow: 0 8px 30px var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px 18px;
-            z-index: 50;
-            border: 1px solid var(--border);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 12px;
-            color: var(--text-secondary);
-            background: none;
-            border: none;
-        }
-
-        .nav-icon { font-size: 1.4rem; }
-        .nav-label { font-size: 0.7rem; font-weight: 600; }
-
-        .globe-fab {
-            position: fixed;
-            bottom: 85px;
-            left: 25px;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: var(--bg-primary);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px var(--shadow);
-            z-index: 40;
-            font-size: 1.2rem;
-        }
-
-        .servers-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .servers-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .servers-content-modal {
-            position: relative;
-            background: var(--bg-primary);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .server-option-card {
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border: 2px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        .server-option-card:hover { border-color: var(--accent); }
-        .server-option-card.active { border-color: var(--accent); background: var(--bg-input); }
-
-        .server-option-name { font-weight: 700; font-size: 1rem; }
-        .server-option-desc { font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px; }
-
-        .chat-screen {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-            background: var(--bg-primary);
-        }
-
-        .chat-screen.active { display: flex; }
-
-        .screen-header {
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.3rem;
-            color: var(--accent);
-        }
-
-        .header-logo {
-            font-family: 'Pacifico', cursive;
-            font-size: 1.8rem;
-            color: var(--accent);
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-left: auto;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ff4757;
-        }
-
-        .status-dot.connected {
-            background: #00d4aa;
-            animation: pulse 2s infinite;
+        @keyframes glow {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.2));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.4));
+            }
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            padding-bottom: 90px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
-        .message { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .message-content {
-            max-width: 70%;
-            padding: 10px 14px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+        @keyframes statusPulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
         }
-        .message-sent { align-items: flex-end; }
-        .message-sent .message-content { background: var(--accent); color: var(--bg-primary); }
-        .message-received { align-items: flex-start; }
-        .message-received .message-content { background: var(--bg-secondary); color: var(--text-primary); }
-        .message-meta { font-size: 0.65rem; color: var(--text-secondary); margin-top: 3px; }
 
-        .input-container {
-            padding: 15px 20px;
-            padding-bottom: 85px;
-            border-top: 1px solid var(--border);
+        /* ========== TELA DE APRESENTAÇÃO ========== */
+        .presentation {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .presentation.hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .presentation-content {
+            text-align: center;
+            max-width: 560px;
+            padding: 40px;
+            animation: fadeUp 0.8s ease;
+        }
+
+        .presentation-content .logo {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 12px;
+            animation: float 3s ease-in-out infinite, glow 2s infinite;
+        }
+
+        .presentation-content h1 {
+            font-size: 52px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold), var(--gold2), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            background-size: 200% 200%;
+            animation: glow 3s infinite;
+        }
+
+        .presentation-content .tagline {
+            font-size: 18px;
+            color: var(--text2);
+            margin: 8px 0 4px;
+            font-weight: 300;
+        }
+
+        .presentation-content .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0 32px;
+        }
+
+        .presentation-content .badges span {
+            background: var(--bg3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text2);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .presentation-content .badges span:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .presentation-content .badges .highlight {
+            background: var(--gold);
+            color: #0a0a12;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        .presentation-content .badges .highlight:hover {
+            background: var(--gold2);
+            border-color: var(--gold2);
+        }
+
+        .presentation-content .enter-btn {
+            padding: 16px 56px;
+            font-size: 18px;
+            font-weight: 600;
+            background: var(--gold);
+            color: #0a0a12;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        .presentation-content .enter-btn:hover {
+            background: var(--gold2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .presentation-content .version {
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        /* ========== TELA DE LOGIN ========== */
+        .login-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 900;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-screen.active {
+            display: flex;
+        }
+
+        .login-box {
+            background: var(--bg2);
+            padding: 40px 48px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            width: 420px;
+            max-width: 92%;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .login-box .icon {
+            font-size: 48px;
+            text-align: center;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .login-box .sub {
+            text-align: center;
+            color: var(--text2);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .login-box input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        .login-box input::placeholder {
+            color: var(--text3);
+        }
+
+        .login-box .options {
+            display: flex;
+            justify-content: flex-end;
+            margin: 6px 0 16px;
+        }
+
+        .login-box .options button {
+            background: none;
+            border: none;
+            color: var(--gold);
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .login-box .options button:hover {
+            color: var(--gold2);
+            text-decoration: underline;
+        }
+
+        .login-box .login-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background: var(--gold);
+            color: #0a0a12;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-box .login-btn:hover {
+            background: var(--gold2);
+            transform: translateY(-1px);
+        }
+
+        .login-box .error {
+            color: var(--red);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        /* ========== MODAL ESQUECEU SENHA ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg2);
+            padding: 32px 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            width: 380px;
+            max-width: 90%;
+            animation: fadeUp 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-box h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+
+        .modal-box p {
+            color: var(--text2);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .modal-box input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        .modal-box .actions {
             display: flex;
             gap: 10px;
         }
 
-        .message-input {
+        .modal-box .actions button {
             flex: 1;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 10px 16px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            resize: none;
-            min-height: 40px;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .send-button {
-            background: var(--accent);
-            color: var(--bg-primary);
-            border: none;
-            border-radius: 20px;
-            padding: 0 18px;
+        .modal-box .actions .btn-primary {
+            background: var(--gold);
+            color: #0a0a12;
+        }
+
+        .modal-box .actions .btn-primary:hover {
+            background: var(--gold2);
+        }
+
+        .modal-box .actions .btn-secondary {
+            background: var(--bg3);
+            color: var(--text2);
+        }
+
+        .modal-box .actions .btn-secondary:hover {
+            background: var(--bg4);
+        }
+
+        /* ========== APP ========== */
+        .app {
+            display: none;
+            height: 100vh;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .app.active {
+            display: flex;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 72px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            padding: 16px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .sidebar .server {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text2);
+            border: 2px solid transparent;
             cursor: pointer;
-            font-size: 0.85rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .sidebar .server:hover {
+            border-color: var(--gold);
+            border-radius: 14px;
+            transform: scale(1.05);
+        }
+
+        .sidebar .server.active {
+            border-color: var(--gold);
+            border-radius: 14px;
+            background: var(--gold);
+            color: #0a0a12;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .sidebar .server .count {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: var(--gold);
+            color: #0a0a12;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+            border: 2px solid var(--bg2);
+        }
+
+        .sidebar .server .status {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--bg2);
+        }
+
+        .sidebar .server .status.online {
+            background: var(--green);
+        }
+
+        .sidebar .server .status.full {
+            background: var(--red);
+            animation: statusPulse 1s infinite;
+        }
+
+        .sidebar .server .tooltip {
+            position: absolute;
+            left: 58px;
+            background: var(--bg2);
+            color: var(--text);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .sidebar .server:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* ========== MAIN ========== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Header */
+        .header {
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg2);
+            flex-wrap: wrap;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .header .left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .header .left .user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            padding: 4px 12px 4px 4px;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .header .left .user .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #0a0a12;
+        }
+
+        .header .left .channel {
+            font-size: 18px;
             font-weight: 600;
+        }
+
+        .header .left .channel::before {
+            content: '#';
+            color: var(--text3);
+            margin-right: 4px;
+        }
+
+        .header .left .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text3);
+            background: var(--bg3);
+            padding: 2px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .header .left .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .header .left .status-badge .dot.online {
+            background: var(--green);
+        }
+
+        .header .left .status-badge .dot.full {
+            background: var(--red);
+            animation: statusPulse 1s infinite;
+        }
+
+        .header .right {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .header .right button {
+            padding: 6px 14px;
+            background: var(--bg3);
+            border: none;
+            border-radius: 6px;
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .header .right button:hover {
+            background: var(--bg4);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        .header .right button .icon {
+            margin-right: 4px;
+        }
+
+        .header .right button.danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .header .right button.danger:hover {
+            background: #dc2626;
+        }
+
+        /* Search */
+        .search-bar {
+            padding: 10px 24px;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .search-bar .icon {
+            color: var(--text3);
+            font-size: 16px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 8px 14px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text3);
+        }
+
+        .search-bar .count {
+            font-size: 12px;
+            color: var(--text3);
+            white-space: nowrap;
+        }
+
+        /* Chat */
+        .chat {
+            flex: 1;
+            padding: 16px 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .msg {
+            display: flex;
+            gap: 12px;
+            padding: 4px 0;
+            animation: slideIn 0.3s ease;
+        }
+
+        .msg .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #0a0a12;
+            flex-shrink: 0;
+        }
+
+        .msg .content {
+            flex: 1;
+        }
+
+        .msg .content .user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .msg .content .user .time {
+            font-weight: 400;
+            font-size: 11px;
+            color: var(--text3);
+            margin-left: 8px;
+        }
+
+        .msg .content .text {
+            font-size: 14px;
+            color: var(--text2);
+            margin-top: 2px;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+
+        .msg.system {
+            background: var(--bg3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text2);
+            font-size: 13px;
+            margin: 4px 0;
+            border: 1px solid var(--border);
+        }
+
+        /* Input */
+        .input-area {
+            padding: 12px 24px;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 10px 16px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .input-area input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        .input-area input::placeholder {
+            color: var(--text3);
+        }
+
+        .input-area button {
+            padding: 10px 24px;
+            background: var(--gold);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: #0a0a12;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .input-area button:hover {
+            background: var(--gold2);
+            transform: scale(1.02);
+        }
+
+        .input-area .limit {
+            font-size: 12px;
+            color: var(--text3);
+            white-space: nowrap;
+        }
+
+        /* ========== MEMBERS SIDEBAR ========== */
+        .members {
+            width: 200px;
+            background: var(--bg2);
+            border-left: 1px solid var(--border);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .members .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .members .head h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text3);
+        }
+
+        .members .head .badge {
+            font-size: 11px;
+            color: var(--text3);
+            background: var(--bg3);
+            padding: 1px 10px;
+            border-radius: 12px;
+        }
+
+        .members .member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: default;
+            transition: var(--transition);
+        }
+
+        .members .member:hover {
+            background: var(--bg3);
+        }
+
+        .members .member .m-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #0a0a12;
+        }
+
+        .members .member .m-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .members .member .m-status.offline {
+            background: var(--text3);
+        }
+
+        .members .member .m-name {
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .members .member .m-role {
+            font-size: 10px;
+            color: var(--text3);
+            background: var(--bg3);
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        /* ========== NOTIFICAÇÃO ========== */
+        .notification {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg2);
+            padding: 12px 28px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 14px;
+            z-index: 999;
+            animation: fadeUp 0.3s ease;
+            box-shadow: var(--shadow);
+            max-width: 90%;
+            text-align: center;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .notification .emoji {
+            margin-right: 8px;
+        }
+
+        /* ========== RESPONSIVO ========== */
+        @media (max-width: 768px) {
+            .members {
+                display: none;
+            }
+            .sidebar {
+                width: 60px;
+            }
+            .sidebar .server {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            .header .left .status-badge {
+                display: none;
+            }
+            .input-area .limit {
+                display: none;
+            }
+            .login-box {
+                padding: 28px 24px;
+            }
+            .presentation-content h1 {
+                font-size: 36px;
+            }
+            .presentation-content .logo {
+                font-size: 60px;
+            }
+            .sidebar .server .tooltip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .presentation-content {
+                padding: 20px;
+            }
+            .presentation-content h1 {
+                font-size: 28px;
+            }
+            .presentation-content .enter-btn {
+                padding: 14px 36px;
+                font-size: 16px;
+            }
+            .header {
+                padding: 10px 12px;
+            }
+            .header .right button {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+            .header .left .user span {
+                display: none;
+            }
+            .search-bar {
+                padding: 8px 12px;
+            }
+            .chat {
+                padding: 12px;
+            }
+            .input-area {
+                padding: 8px 12px;
+            }
+            .input-area input {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+            .input-area button {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            .login-box {
+                padding: 20px 16px;
+            }
+            .modal-box {
+                padding: 24px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Welcome Screen -->
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-container">
-            <div class="welcome-logo">glitch</div>
-            <div class="welcome-tagline">Chat P2P entre dispositivos</div>
-            <button class="continue-button" id="continueButton" type="button">Continuar</button>
+
+    <!-- ========== TELA DE APRESENTAÇÃO ========== -->
+    <div class="presentation" id="presentation">
+        <div class="presentation-content">
+            <span class="logo">⚡</span>
+            <h1>EOROS</h1>
+            <p class="tagline">Servidor P2P para sua comunidade</p>
+            <div class="badges">
+                <span>⚡ Rápido</span>
+                <span>🏠 Local</span>
+                <span class="highlight">👥 Até 6 Pessoas</span>
+                <span>🔒 Privado</span>
+                <span>🌍 Público</span>
+                <span>⭐ Open Source</span>
+            </div>
+            <button class="enter-btn" onclick="showLogin()">⚡ Entrar no Eoros</button>
+            <div class="version">v2.0 · Servidor P2P</div>
         </div>
     </div>
 
-    <!-- Auth Screen -->
-    <div class="auth-screen" id="authScreen">
-        <div class="auth-container">
-            <div class="auth-logo">glitch</div>
-            <div class="auth-subtitle">Entre ou crie sua conta</div>
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login" type="button">Entrar</button>
-                <button class="auth-tab" data-tab="register" type="button">Criar Conta</button>
+    <!-- ========== TELA DE LOGIN ========== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <span class="icon">⚡</span>
+            <h2>Entrar no Eoros</h2>
+            <p class="sub">Digite suas credenciais para acessar</p>
+
+            <input type="text" id="loginUser" placeholder="Seu nome de usuário...">
+            <input type="password" id="loginPass" placeholder="Digite sua senha...">
+            <input type="password" id="loginConfirm" placeholder="Confirme sua senha...">
+
+            <div class="options">
+                <button onclick="openForgot()">Esqueceu a senha?</button>
             </div>
-            <form class="auth-form" id="loginForm">
-                <div class="form-group">
-                    <label class="form-label">Usuário</label>
-                    <input type="text" class="form-input" id="loginUsername" placeholder="Digite seu usuário">
+
+            <button class="login-btn" onclick="handleLogin()">⚡ Entrar</button>
+            <div class="error" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL ESQUECEU SENHA ========== -->
+    <div class="modal-overlay" id="forgotModal">
+        <div class="modal-box">
+            <h3>⚡ Recuperar Senha</h3>
+            <p>Digite seu usuário para receber instruções</p>
+            <input type="text" id="forgotUser" placeholder="Seu nome de usuário...">
+            <div class="actions">
+                <button class="btn-secondary" onclick="closeForgot()">Cancelar</button>
+                <button class="btn-primary" onclick="handleForgot()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL CRIAR SERVIDOR ========== -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal-box">
+            <span style="font-size:48px;display:block;margin-bottom:4px;">⚡</span>
+            <h3>Criar Servidor</h3>
+            <p class="sub">Configure seu servidor para até 6 pessoas</p>
+
+            <input type="text" id="serverName" placeholder="Nome do servidor...">
+
+            <div style="display:flex;gap:16px;margin:4px 0 12px;justify-content:center;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--text2);cursor:pointer;">
+                    <input type="radio" name="privacy" value="private" checked style="accent-color:#fbbf24;"> 🔒 Privado
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--text2);cursor:pointer;">
+                    <input type="radio" name="privacy" value="public" style="accent-color:#fbbf24;"> 🌍 Público
+                </label>
+            </div>
+
+            <input type="password" id="serverPassword" placeholder="Senha do servidor (opcional)">
+
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;font-size:13px;color:var(--text2);margin:12px 0 16px;">
+                👥 Máximo de <strong style="color:var(--gold);font-size:18px;">6</strong> usuários simultâneos
+            </div>
+
+            <div class="actions">
+                <button class="btn-secondary" onclick="closeCreate()">Cancelar</button>
+                <button class="btn-primary" onclick="createServer()">⚡ Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== APP PRINCIPAL ========== -->
+    <div class="app" id="app">
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- Servidores serão adicionados aqui via JS -->
+            <div class="server add" onclick="openCreate()" title="Criar novo servidor">
+                +
+                <span class="tooltip">Criar Servidor</span>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div class="main">
+
+            <!-- Header -->
+            <div class="header">
+                <div class="left">
+                    <div class="user">
+                        <div class="avatar" id="headerAvatar">U</div>
+                        <span id="headerUser">Usuário</span>
+                    </div>
+                    <span class="channel" id="channelName">geral</span>
+                    <span class="status-badge" id="serverStatus">
+                        <span class="dot online"></span>
+                        <span id="statusText">Online</span>
+                        <span id="userCount">(0/6)</span>
+                    </span>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" class="form-input" id="loginPassword" placeholder="Digite sua senha">
+                <div class="right">
+                    <button onclick="toggleTheme()" id="themeBtn" title="Alternar tema">🌙</button>
+                    <button onclick="copyInvite()" title="Copiar convite">📋 Convite</button>
+                    <button class="danger" onclick="logout()" title="Sair">🚪 Sair</button>
                 </div>
-                <button type="submit" class="auth-button">Entrar</button>
-            </form>
-            <form class="auth-form" id="registerForm" style="display:none;">
-                <div class="form-group">
-                    <label class="form-label">Usuário</label>
-                    <input type="text" class="form-input" id="registerUsername" placeholder="Escolha um usuário">
+            </div>
+
+            <!-- Search -->
+            <div class="search-bar">
+                <span class="icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Procurar servidores..." oninput="searchServers()">
+                <span class="count" id="resultsCount"></span>
+            </div>
+
+            <!-- Chat -->
+            <div class="chat" id="chatArea">
+                <div class="msg system">⚡ Bem-vindo ao Eoros!</div>
+                <div class="msg system">👥 Servidores suportam até 6 pessoas</div>
+                <div class="msg system">📋 Use o botão "Convite" para compartilhar</div>
+            </div>
+
+            <!-- Input -->
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Digite uma mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()">⚡ Enviar</button>
+                <span class="limit" id="userLimit">👥 0/6</span>
+            </div>
+        </div>
+
+        <!-- Members -->
+        <div class="members" id="membersSidebar">
+            <div class="head">
+                <h3>⚡ Membros</h3>
+                <span class="badge" id="memberCount">0/6</span>
+            </div>
+            <div id="membersList">
+                <div class="member">
+                    <div class="m-avatar" id="memberAvatar">U</div>
+                    <span class="m-status"></span>
+                    <span class="m-name" id="memberName">Você</span>
+                    <span class="m-role">👑 Host</span>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" class="form-input" id="registerPassword" placeholder="Crie uma senha">
-                </div>
-                <button type="submit" class="auth-button">Criar Conta</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Home Screen -->
-    <div class="home-screen" id="homeScreen">
-        <div class="home-header">
-            <button class="home-logo" type="button">glitch</button>
-        </div>
-        <div class="home-content">
-            <div class="home-title">glitch</div>
-        </div>
-        <div class="bottom-nav">
-            <button class="nav-item" id="chatOption" type="button"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></button>
-        </div>
-        <button class="globe-fab" id="globeFab" type="button">🌐</button>
-    </div>
-
-    <!-- Servers Modal -->
-    <div class="servers-modal" id="serversModal">
-        <div class="servers-overlay" id="serversOverlay"></div>
-        <div class="servers-content-modal">
-            <div style="font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--accent);margin-bottom:20px;text-align:center;">Salas de Chat</div>
-            <div class="server-option-card" data-server="glitch-sala-1">
-                <div class="server-option-name">💬 Sala 1</div>
-                <div class="server-option-desc">Entre e converse com todos na Sala 1</div>
-            </div>
-            <div class="server-option-card" data-server="glitch-sala-2">
-                <div class="server-option-name">💬 Sala 2</div>
-                <div class="server-option-desc">Entre e converse com todos na Sala 2</div>
-            </div>
-            <div style="margin-top:15px;padding:10px;background:var(--bg-secondary);border-radius:10px;font-size:0.75rem;color:var(--text-secondary);text-align:center;">
-                ✅ Funciona entre dispositivos diferentes em redes diferentes<br>
-                Sem precisar criar servidor!
             </div>
         </div>
     </div>
 
-    <!-- Chat Screen -->
-    <div class="chat-screen" id="chatScreen">
-        <div class="screen-header">
-            <button class="back-button" id="chatBackButton" type="button">←</button>
-            <button class="header-logo" type="button">glitch</button>
-            <span id="currentRoomName" style="font-size:0.8rem;color:var(--text-secondary);"></span>
-            <div class="connection-status">
-                <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">Offline</span>
-            </div>
-        </div>
-        <div class="chat-container" id="chatContainer">
-            <div class="message message-received"><div class="message-content">Conectando à sala P2P...</div><div class="message-meta">system</div></div>
-        </div>
-        <div class="input-container">
-            <textarea class="message-input" id="messageInput" placeholder="Digite sua mensagem..."></textarea>
-            <button class="send-button" id="sendButton" type="button">Enviar</button>
-        </div>
-    </div>
-
-    <!-- Trystero - P2P sem servidor -->
-    <script src="https://cdn.jsdelivr.net/npm/trystero@0.20.0/dist/trystero.min.js"></script>
-    
     <script>
-        const $ = (id) => document.getElementById(id);
-        
-        let currentUser = JSON.parse(localStorage.getItem('cu') || 'null');
-        let currentRoom = localStorage.getItem('currentRoom') || 'glitch-sala-1';
-        let room = null;
-        let peers = [];
-        
-        function showScreen(screenId) {
-            $('welcomeScreen').style.display = 'none';
-            $('authScreen').style.display = 'none';
-            $('serversModal').style.display = 'none';
-            ['homeScreen', 'chatScreen'].forEach(id => {
-                $(id).classList.remove('active');
-            });
-            
-            if (screenId === 'welcome') $('welcomeScreen').style.display = 'flex';
-            else if (screenId === 'auth') $('authScreen').style.display = 'flex';
-            else if (screenId === 'home') $('homeScreen').classList.add('active');
-            else if (screenId === 'chat') {
-                $('chatScreen').classList.add('active');
-                joinRoom();
-            }
+        // ============ CONSTANTES ============
+        const MAX_USERS = 6;
+
+        // ============ SERVIDORES PADRÃO ============
+        const DEFAULT_SERVERS = [
+            { name: 'Geral', privacy: 'public', password: null },
+            { name: 'Gaming', privacy: 'public', password: null }
+        ];
+
+        // ============ ESTADO ============
+        let currentUser = '';
+        let isDark = true;
+        let servers = [];
+        let currentServer = null;
+        let serverIdCounter = 0;
+        const users = {};
+
+        // ============ FUNÇÕES ============
+        function showLogin() {
+            document.getElementById('presentation').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('loginScreen').classList.add('active');
+            }, 400);
         }
-        
-        function joinRoom() {
-            $('currentRoomName').textContent = currentRoom === 'glitch-sala-1' ? '💬 Sala 1' : '💬 Sala 2';
-            
-            try {
-                // Join P2P room using Trystero
-                room = trystero.joinRoom({ appId: 'glitch-chat-app' }, currentRoom);
-                
-                // Listen for peers joining
-                room.onPeerJoin(function(peerId) {
-                    console.log('👋 Peer entrou:', peerId);
-                    peers.push(peerId);
-                    setStatus(true);
-                    addSystemMessage('👋 ' + peerId.substring(0, 8) + '... entrou na sala!');
-                    
-                    // Send welcome message to new peer
-                    room.send({
-                        type: 'message',
-                        content: '👋 ' + (currentUser?.name || currentUser?.username) + ' está online!',
-                        sender: currentUser?.name || currentUser?.username || 'Anônimo',
-                        userId: currentUser?.username || 'guest'
-                    }, peerId);
+
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value;
+            const confirm = document.getElementById('loginConfirm').value;
+            const error = document.getElementById('loginError');
+
+            if (!user) { error.textContent = '❌ Digite um nome!'; return; }
+            if (!pass) { error.textContent = '❌ Digite uma senha!'; return; }
+            if (pass !== confirm) { error.textContent = '❌ Senhas não coincidem!'; return; }
+            if (users[user] && users[user] !== pass) { error.textContent = '❌ Senha incorreta!'; return; }
+
+            users[user] = pass;
+            currentUser = user;
+            error.textContent = '';
+
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('app').classList.add('active');
+
+            document.getElementById('headerUser').textContent = user;
+            document.getElementById('headerAvatar').textContent = user.charAt(0).toUpperCase();
+            document.getElementById('memberAvatar').textContent = user.charAt(0).toUpperCase();
+            document.getElementById('memberName').textContent = user;
+
+            // Criar servidores padrão se não existirem
+            if (servers.length === 0) {
+                DEFAULT_SERVERS.forEach((def, index) => {
+                    const server = {
+                        id: 'server-' + (++serverIdCounter),
+                        name: def.name,
+                        privacy: def.privacy,
+                        password: def.password,
+                        members: index === 0 ? [currentUser] : [],
+                        messages: []
+                    };
+                    servers.push(server);
+                    if (index === 0) currentServer = server.id;
+                    addServerIcon(server);
                 });
-                
-                // Listen for peers leaving
-                room.onPeerLeave(function(peerId) {
-                    console.log('👋 Peer saiu:', peerId);
-                    peers = peers.filter(id => id !== peerId);
-                    addSystemMessage('👋 ' + peerId.substring(0, 8) + '... saiu da sala!');
-                    if (peers.length === 0) setStatus(false);
-                });
-                
-                // Listen for messages
-                room.onPeerData(function(data, peerId) {
-                    console.log('📨 Mensagem recebida de:', peerId);
-                    if (data.type === 'message' && data.content) {
-                        const isMine = data.userId === currentUser?.username;
-                        displayMessage(data.content, isMine, data.sender);
+                // Seleciona o primeiro servidor
+                switchServer(servers[0].id);
+            }
+
+            updateAll();
+            showNotification('⚡ Bem-vindo, ' + user + '!');
+        }
+
+        function addServerIcon(server) {
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.createElement('div');
+            icon.className = 'server';
+            icon.dataset.server = server.id;
+            icon.innerHTML = server.name.charAt(0).toUpperCase();
+
+            const status = document.createElement('span');
+            status.className = 'status online';
+            icon.appendChild(status);
+
+            const count = document.createElement('span');
+            count.className = 'count';
+            count.textContent = server.members.length || '0';
+            icon.appendChild(count);
+
+            const tooltip = document.createElement('span');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = server.name + ' (' + (server.members.length || 0) + '/6)';
+            icon.appendChild(tooltip);
+
+            icon.onclick = () => switchServer(server.id);
+            sidebar.insertBefore(icon, sidebar.lastElementChild);
+        }
+
+        function switchServer(serverId) {
+            const server = servers.find(s => s.id === serverId);
+            if (!server) return;
+
+            currentServer = serverId;
+            document.getElementById('channelName').textContent = server.name;
+
+            document.querySelectorAll('.sidebar .server').forEach(el => {
+                el.classList.toggle('active', el.dataset.server === serverId);
+            });
+
+            const chat = document.getElementById('chatArea');
+            chat.innerHTML = '';
+            if (server.messages && server.messages.length > 0) {
+                server.messages.forEach(msg => {
+                    if (msg.system) {
+                        addSystemMessage(msg.text);
+                    } else {
+                        addMessage(msg.user, msg.text, msg.color);
                     }
                 });
-                
-                setStatus(true);
-                addSystemMessage('✅ Conectado à ' + (currentRoom === 'glitch-sala-1' ? 'Sala 1' : 'Sala 2'));
-                addSystemMessage('👥 Aguardando outros usuários entrarem...');
-                
-            } catch(e) {
-                console.error('Erro ao entrar na sala:', e);
-                setStatus(false);
-                addSystemMessage('❌ Erro ao conectar. Tente novamente.');
+            } else {
+                addSystemMessage('⚡ Bem-vindo ao ' + server.name + '!');
+                addSystemMessage('👥 Capacidade: ' + server.members.length + '/' + MAX_USERS);
             }
+
+            updateAll();
+            showNotification('⚡ Entrou em: ' + server.name);
         }
-        
+
         function sendMessage() {
-            const content = $('messageInput').value.trim();
-            if (!content || !room) return;
-            
-            // Send to all peers in room
-            room.send({
-                type: 'message',
-                content: content,
-                sender: currentUser?.name || currentUser?.username || 'Anônimo',
-                userId: currentUser?.username || 'guest'
-            });
-            
-            displayMessage(content, true);
-            $('messageInput').value = '';
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const server = servers.find(s => s.id === currentServer);
+            if (!server) { showNotification('❌ Nenhum servidor!'); return; }
+
+            const msg = {
+                user: currentUser,
+                text: text,
+                time: new Date().toLocaleTimeString(),
+                color: '#fbbf24'
+            };
+            server.messages.push(msg);
+            addMessage(currentUser, text, '#fbbf24');
+            input.value = '';
+
+            // Simular respostas
+            setTimeout(() => {
+                if (server.members.length > 1) {
+                    const others = server.members.filter(m => m !== currentUser);
+                    if (others.length > 0 && Math.random() > 0.5) {
+                        const replies = ['⚡ Olá!', '👍 Legal!', '😄 Boa!', '👀 Interessante...', '🤝 Concordo!',
+                            '🎮 Bora!', '👋 Eaí!'
+                        ];
+                        const reply = replies[Math.floor(Math.random() * replies.length)];
+                        const other = others[Math.floor(Math.random() * others.length)];
+                        const colors = ['#22c55e', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        server.messages.push({ user: other, text: reply, color: color });
+                        addMessage(other, reply, color);
+                    }
+                }
+            }, 1200);
         }
-        
-        function displayMessage(content, sent, sender = null) {
+
+        function addMessage(user, text, color) {
+            const chat = document.getElementById('chatArea');
             const div = document.createElement('div');
-            div.className = 'message ' + (sent ? 'message-sent' : 'message-received');
-            div.innerHTML = '<div class="message-content">' + content + '</div><div class="message-meta">' + (sent ? 'Você' : sender || 'Peer') + '</div>';
-            $('chatContainer').appendChild(div);
-            $('chatContainer').scrollTop = $('chatContainer').scrollHeight;
+            div.className = 'msg';
+            div.innerHTML = `
+                <div class="avatar" style="background:${color}">${user.charAt(0).toUpperCase()}</div>
+                <div class="content">
+                    <div class="user">${user} <span class="time">${new Date().toLocaleTimeString()}</span></div>
+                    <div class="text">${text}</div>
+                </div>
+            `;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
         }
-        
+
         function addSystemMessage(text) {
+            const chat = document.getElementById('chatArea');
             const div = document.createElement('div');
-            div.style.textAlign = 'center';
-            div.style.fontSize = '0.75rem';
-            div.style.color = 'var(--text-secondary)';
-            div.style.margin = '10px 0';
-            div.textContent = text;
-            $('chatContainer').appendChild(div);
-            $('chatContainer').scrollTop = $('chatContainer').scrollHeight;
+            div.className = 'msg system';
+            div.textContent = '⚡ ' + text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
         }
-        
-        function setStatus(connected) {
-            $('statusDot').className = 'status-dot' + (connected ? ' connected' : '');
-            $('statusText').textContent = connected ? 'Online (' + peers.length + ' peers)' : 'Offline';
+
+        function updateAll() {
+            updateMembers();
+            updateServerStatus();
+            updateSearchResults();
+            updateCounts();
         }
-        
-        // Event Listeners
-        $('continueButton').addEventListener('click', () => {
-            $('welcomeScreen').style.display = 'none';
-            $('authScreen').style.display = 'flex';
-        });
-        
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                $('loginForm').style.display = this.dataset.tab === 'login' ? 'flex' : 'none';
-                $('registerForm').style.display = this.dataset.tab === 'register' ? 'flex' : 'none';
+
+        function updateMembers() {
+            const server = servers.find(s => s.id === currentServer);
+            const list = document.getElementById('membersList');
+            list.innerHTML = '';
+
+            const members = server ? server.members : [currentUser];
+            members.forEach((name, index) => {
+                const isYou = name === currentUser;
+                const div = document.createElement('div');
+                div.className = 'member';
+                div.innerHTML = `
+                    <div class="m-avatar">${name.charAt(0).toUpperCase()}</div>
+                    <span class="m-status ${isYou ? '' : 'offline'}"></span>
+                    <span class="m-name">${name}${isYou ? ' ⚡' : ''}</span>
+                    ${index === 0 ? '<span class="m-role">👑 Host</span>' : ''}
+                `;
+                list.appendChild(div);
             });
-        });
-        
-        $('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = $('loginUsername').value.trim();
-            const password = $('loginPassword').value;
-            
-            if (!username || !password) { alert('Preencha todos os campos'); return; }
-            
-            const users = JSON.parse(localStorage.getItem('gu') || '{}');
-            const user = users[username];
-            
-            if (!user) { alert('Usuário não encontrado'); return; }
-            if (user.password !== password) { alert('Senha inválida'); return; }
-            
-            currentUser = { username, ...user };
-            localStorage.setItem('cu', JSON.stringify(currentUser));
-            $('loginForm').reset();
-            showScreen('home');
-        });
-        
-        $('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = $('registerUsername').value.trim();
-            const password = $('registerPassword').value;
-            
-            if (!username) { alert('Usuário obrigatório'); return; }
-            
-            const users = JSON.parse(localStorage.getItem('gu') || '{}');
-            if (users[username]) { alert('Usuário já existe'); return; }
-            if (!password || password.length < 6) { alert('Senha mínima 6 caracteres'); return; }
-            
-            users[username] = { password, name: username };
-            localStorage.setItem('gu', JSON.stringify(users));
-            $('registerForm').reset();
-            
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelector('[data-tab="login"]').classList.add('active');
-            $('loginForm').style.display = 'flex';
-            $('registerForm').style.display = 'none';
-            $('loginUsername').value = username;
-            
-            alert('Conta criada! Faça login.');
-        });
-        
-        $('chatOption').addEventListener('click', () => showScreen('chat'));
-        $('chatBackButton').addEventListener('click', () => {
-            if (room) room.leave();
-            showScreen('home');
-        });
-        
-        $('globeFab').addEventListener('click', () => {
-            $('serversModal').style.display = 'flex';
-        });
-        
-        $('serversOverlay').addEventListener('click', () => {
-            $('serversModal').style.display = 'none';
-        });
-        
-        document.querySelectorAll('.server-option-card').forEach(card => {
-            card.addEventListener('click', function() {
-                currentRoom = this.dataset.server;
-                localStorage.setItem('currentRoom', currentRoom);
-                
-                document.querySelectorAll('.server-option-card').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                
-                $('serversModal').style.display = 'none';
-                showScreen('chat');
-            });
-        });
-        
-        $('sendButton').addEventListener('click', sendMessage);
-        $('messageInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-        });
-        
-        // Initialize
-        if (currentUser) {
-            showScreen('home');
+
+            const count = members.length;
+            document.getElementById('memberCount').textContent = count + '/' + MAX_USERS;
+            document.getElementById('userLimit').textContent = '👥 ' + count + '/' + MAX_USERS;
         }
-        
-        document.querySelectorAll('.server-option-card').forEach(card => {
-            card.classList.toggle('active', card.dataset.server === currentRoom);
+
+        function updateServerStatus() {
+            const server = servers.find(s => s.id === currentServer);
+            if (!server) {
+                document.getElementById('statusText').textContent = 'Offline';
+                document.querySelector('#serverStatus .dot').className = 'dot';
+                document.getElementById('userCount').textContent = '(0/6)';
+                return;
+            }
+
+            const count = server.members.length;
+            const isFull = count >= MAX_USERS;
+
+            document.getElementById('statusText').textContent = isFull ? 'Lotado' : 'Online';
+            document.querySelector('#serverStatus .dot').className = 'dot ' + (isFull ? 'full' : 'online');
+            document.getElementById('userCount').textContent = '(' + count + '/' + MAX_USERS + ')';
+        }
+
+        function updateCounts() {
+            document.querySelectorAll('.sidebar .server').forEach(el => {
+                const srv = servers.find(s => s.id === el.dataset.server);
+                if (srv) {
+                    const badge = el.querySelector('.count');
+                    if (badge) badge.textContent = srv.members.length;
+                    const tooltip = el.querySelector('.tooltip');
+                    if (tooltip) tooltip.textContent = srv.name + ' (' + srv.members.length + '/6)';
+                    const status = el.querySelector('.status');
+                    if (status) {
+                        status.className = 'status ' + (srv.members.length >= MAX_USERS ? 'full' : 'online');
+                    }
+                }
+            });
+        }
+
+        function searchServers() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const icons = document.querySelectorAll('.sidebar .server:not(.add)');
+            let visible = 0;
+
+            icons.forEach(el => {
+                const server = servers.find(s => s.id === el.dataset.server);
+                if (!server) { el.style.display = 'none'; return; }
+                const match = server.name.toLowerCase().includes(term);
+                el.style.display = match || term === '' ? 'flex' : 'none';
+                if (match || term === '') visible++;
+            });
+
+            document.getElementById('resultsCount').textContent =
+                term === '' ? servers.length + ' servidores' : visible + ' de ' + servers.length + ' encontrados';
+        }
+
+        function updateSearchResults() {
+            searchServers();
+        }
+
+        function openForgot() {
+            document.getElementById('forgotModal').classList.add('active');
+        }
+
+        function closeForgot() {
+            document.getElementById('forgotModal').classList.remove('active');
+        }
+
+        function handleForgot() {
+            const user = document.getElementById('forgotUser').value.trim();
+            if (!user) { showNotification('❌ Digite seu usuário!'); return; }
+            if (!users[user]) { showNotification('❌ Usuário não encontrado!'); return; }
+            showNotification('⚡ Instruções enviadas!');
+            closeForgot();
+        }
+
+        function openCreate() {
+            document.getElementById('createModal').classList.add('active');
+        }
+
+        function closeCreate() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('serverName').value = '';
+            document.getElementById('serverPassword').value = '';
+        }
+
+        function createServer() {
+            const name = document.getElementById('serverName').value.trim();
+            const privacy = document.querySelector('input[name="privacy"]:checked').value;
+            const password = document.getElementById('serverPassword').value;
+
+            if (!name) { showNotification('❌ Digite um nome!'); return; }
+
+            const server = {
+                id: 'server-' + (++serverIdCounter),
+                name: name,
+                privacy: privacy,
+                password: password || null,
+                members: [currentUser],
+                messages: []
+            };
+
+            servers.push(server);
+            addServerIcon(server);
+            switchServer(server.id);
+            closeCreate();
+
+            showNotification('⚡ Servidor "' + name + '" criado! (1/6)');
+            addSystemMessage('⚡ Servidor "' + name + '" criado!');
+            addSystemMessage('👥 Capacidade: 1/' + MAX_USERS);
+        }
+
+        function copyInvite() {
+            const server = servers.find(s => s.id === currentServer);
+            if (!server) { showNotification('❌ Nenhum servidor!'); return; }
+
+            const link = window.location.href.split('?')[0] +
+                '?join=' + btoa(JSON.stringify({
+                    server: server.id,
+                    name: server.name,
+                    max: MAX_USERS
+                }));
+
+            navigator.clipboard?.writeText(link).then(() => {
+                showNotification('⚡ Link copiado! Compartilhe com seus amigos.');
+            }).catch(() => {
+                showNotification('⚡ ' + link);
+            });
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function logout() {
+            if (!confirm('Tem certeza que deseja sair?')) return;
+            document.getElementById('app').classList.remove('active');
+            document.getElementById('loginScreen').classList.add('active');
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('loginConfirm').value = '';
+            document.getElementById('loginError').textContent = '';
+            showNotification('👋 Até logo!');
+        }
+
+        function showNotification(text) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+
+            const div = document.createElement('div');
+            div.className = 'notification';
+            div.innerHTML = text;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.3s';
+                setTimeout(() => div.remove(), 300);
+            }, 3000);
+        }
+
+        // ============ ENTER KEY ============
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login
+            document.getElementById('loginConfirm').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            document.getElementById('loginPass').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('loginConfirm').focus();
+            });
+            document.getElementById('loginUser').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('loginPass').focus();
+            });
+
+            // Forgot
+            document.getElementById('forgotUser').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleForgot();
+            });
+
+            // Create
+            document.getElementById('serverPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') createServer();
+            });
+            document.getElementById('serverName').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('serverPassword').focus();
+            });
+
+            // Theme
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                isDark = false;
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.getElementById('themeBtn').textContent = '☀️';
+            }
+
+            // Join from URL
+            const params = new URLSearchParams(window.location.search);
+            const join = params.get('join');
+            if (join) {
+                try {
+                    const data = JSON.parse(atob(join));
+                    setTimeout(() => {
+                        const server = servers.find(s => s.id === data.server);
+                        if (server && server.members.length < MAX_USERS) {
+                            if (!server.members.includes(currentUser)) {
+                                server.members.push(currentUser);
+                            }
+                            switchServer(server.id);
+                            showNotification('⚡ Entrou em: ' + server.name);
+                        } else if (server) {
+                            showNotification('❌ Servidor lotado! (' + MAX_USERS + '/6)');
+                        }
+                    }, 1500);
+                } catch (e) {}
+            }
+
+            console.log('⚡ Eoros v2.0 iniciado!');
+            console.log('👥 ' + MAX_USERS + ' usuários por servidor');
+            console.log('📋 2 servidores padrão: Geral e Gaming');
         });
-        
-        console.log('✅ App P2P inicializado com Trystero');
-        console.log('📌 Como funciona:');
-        console.log('1. Crie conta ou faça login');
-        console.log('2. Clique no globinho 🌐');
-        console.log('3. Escolha Sala 1 ou Sala 2');
-        console.log('4. Abra em outro dispositivo (celular/outro navegador)');
-        console.log('5. Entre na MESMA sala');
-        console.log('6. Converse em tempo real!');
-        console.log('');
-        console.log('✅ SEM precisar criar servidor!');
-        console.log('✅ Funciona entre dispositivos diferentes!');
-        console.log('✅ Funciona em redes diferentes (4G, WiFi, etc)!');
     </script>
+
 </body>
 </html>
